@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Contract;
+use App\Models\Customer;
 use App\Models\Service;
 use App\Repositories\ContractRepository;
 use Illuminate\Http\Request;
@@ -30,8 +31,10 @@ class ContractController extends Controller {
      */
     public function create() {
         $services = Service::all();
+        $customers = Customer::all();
 
-        return view('contracts.create', ['contract' => new Contract(), 'services' => $services]);
+        return view('contracts.create',
+            ['contract' => new Contract(), 'services' => $services, 'customers' => $customers]);
     }
 
     /**
@@ -89,7 +92,7 @@ class ContractController extends Controller {
             $contract->services()->attach($request->service_id);
         }
 
-        return redirect(route('contracts.edit', ['contract' => $contract]));
+        return redirect(route('contracts.show', ['contract' => $contract]));
     }
 
     /**

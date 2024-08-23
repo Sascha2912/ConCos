@@ -15,12 +15,21 @@
         <label>Email:</label>
         <input type="email" name="email" value="{{ $customer->email }}" required>
 
+        <label>Street:</label>
+        <input type="text" name="street" value="{{ $customer->street }}">
+
+        <label>House number:</label>
+        <input type="text" name="house_number" value="{{ $customer->house_number }}">
+
+        <label>Zip code:</label>
+        <input type="text" name="zip_code" value="{{ $customer->zip_code }}">
+
+        <label>City:</label>
+        <input type="text" name="city" value="{{ $customer->city }}">
+
         <label>Phone:</label>
         <input type="text" name="phone" value="{{ $customer->phone }}">
-
-        <label>Address:</label>
-        <textarea name="address">{{ $customer->address }}</textarea>
-
+        
         <label>Contracts:</label>
         <select name="contract_id[]" multiple>
             @foreach($contracts as $contract)

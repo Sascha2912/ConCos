@@ -68,7 +68,7 @@ class CustomerController extends Controller {
             ]);
         }
 
-        return view('customers.edit', ['customer' => $customer]);
+        return view('customers.show', ['customer' => $customer]);
     }
 
     /**

@@ -15,12 +15,21 @@
         <label>Email:</label>
         <input type="email" name="email" required>
 
+        <label>Street:</label>
+        <input type="text" name="street">
+
+        <label>House number:</label>
+        <input type="text" name="house_number">
+
+        <label>Zip Code:</label>
+        <input type="text" name="zip_code">
+
+        <label>City:</label>
+        <input type="text" name="city">
+
         <label>Phone:</label>
         <input type="text" name="phone">
-
-        <label>Address:</label>
-        <textarea name="address"></textarea>
-
+        
         <label>Contracts:</label>
         <select name="contract_id[]" multiple>
             @foreach($contracts as $contract)
