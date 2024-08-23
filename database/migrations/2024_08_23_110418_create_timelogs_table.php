@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('timelogs', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Customer::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Service::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(\App\Models\Contract::class)->constrained()->cascadeOnDelete();
+            $table->integer('hours');
+            $table->date('date');
             $table->timestamps();
         });
     }
