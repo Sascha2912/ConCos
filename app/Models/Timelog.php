@@ -10,7 +10,7 @@ class Timelog extends Model {
 
     protected $fillable = [
         'customer_id',
-        'services_id',
+        'service_id',
         'contract_id',
         'hours',
         'date',

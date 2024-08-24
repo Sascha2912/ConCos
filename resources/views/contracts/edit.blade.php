@@ -6,6 +6,8 @@
 
     <form method="POST" action="{{ route('contracts.update', $contract->id) }}">
         @csrf
+        @method('PUT')
+
         <label>Name:</label>
         <input type="text" name="name" value="{{ $contract->name }}">
 
@@ -24,17 +26,15 @@
         <label>End date:</label>
         <input type="date" name="end_date" value="{{ $contract->end_date }}">
 
+        <label>Services:</label>
+        <select name="service_id[]" multiple>
+            @foreach($services as $service)
+                <option value="{{ $service->id }}" @if($contract->services->contains($service->id))
+                    selected
+                        @endif>{{ $service->name }}</option>
+            @endforeach
+        </select>
+        
         <button type="submit">Save</button>
-
-        @if(isset($services) && !empty($services))
-            <label>Services:</label>
-            <select name="service_id[]" multiple>
-                @foreach($services as $service)
-                    <option value="{{ $service->id }}" @if($contract->services->contains($service->id))
-                        selected
-                            @endif>{{ $service->name }}</option>
-                @endforeach
-            </select>
-        @endif
     </form>
 </x-app-layout>

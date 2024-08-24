@@ -9,6 +9,11 @@
         @foreach($contracts as $contract)
             <li>
                 <a href="{{ route('contracts.show', $contract->id) }}" class="text-white">{{ $contract->name }}</a>
+                <form action="{{ route('contracts.destroy', $contract->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>
             </li>
         @endforeach
     </ul>

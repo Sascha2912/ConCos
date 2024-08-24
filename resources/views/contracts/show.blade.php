@@ -18,4 +18,6 @@
         @endforeach
     </ul>
 
+    <a href="{{ route('contracts.edit', $contract->id) }}">Edit Contract</a>
+
 </x-app-layout>
