@@ -6,6 +6,8 @@
 
     <form method="POST" action="{{ route('customers.update', $customer->id) }}">
         @csrf
+        @method('PUT')
+
         <label>Firstname:</label>
         <input type="text" name="firstname" value="{{ $customer->firstname }}" required>
 
@@ -29,7 +31,7 @@
 
         <label>Phone:</label>
         <input type="text" name="phone" value="{{ $customer->phone }}">
-        
+
         <label>Contracts:</label>
         <select name="contract_id[]" multiple>
             @foreach($contracts as $contract)
@@ -37,6 +39,6 @@
             @endforeach
         </select>
 
-        <button type="submit">Edit customer</button>
+        <button type="submit">Save</button>
     </form>
 </x-app-layout>

@@ -29,11 +29,11 @@
 
         <label>Phone:</label>
         <input type="text" name="phone">
-        
+
         <label>Contracts:</label>
         <select name="contract_id[]" multiple>
             @foreach($contracts as $contract)
-                <option value="{{ $contract->id }}">{{ $contract->id }}</option>
+                <option value="{{ $contract->id }}">{{ $contract->name }}</option>
             @endforeach
         </select>
 

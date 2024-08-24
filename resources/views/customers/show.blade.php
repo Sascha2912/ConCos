@@ -1,21 +1,27 @@
 <x-app-layout>
 
     <x-slot:header>
-        {{ $customer->firstname }}  {{ $customer->lastname }}
+        Overview for {{ $customer->firstname }}  {{ $customer->lastname }}
     </x-slot:header>
 
-    <p>Email: {{ $customer->email }}</p>
-    <p>Street: {{ $customer->street }}</p>
-    <p>House number: {{ $customer->house_number }}</p>
-    <p>Zip code: {{ $customer->zip_code }}</p>
-    <p>City: {{ $customer->city }}</p>
-    <p>Phone: {{ $customer->phone }}</p>
+    <p><strong>Contractually agreed hours:</strong> {{ $contractHours }}</p>
+    <p><strong>Hours used so far:</strong> {{ $usedHours }}</p>
+    <p><strong>Monthly costs:</strong> €{{ $monthlyCosts }}</p>
+    <p><strong>Extra costs:</strong> €{{ $extraCosts }}</p>
 
-    <h2>Contracts</h2>
+    <h2>Details of time recording</h2>
     <ul>
-        @foreach($customer->contracts as $contract)
-            <li>Contract ID: {{ $contract->id }}</li>
+        @foreach($customer->timelogs as $timelog)
+            <li>
+                Service: {{ $timelog->service->name }},
+                Hours: {{ $timelog->hours }},
+                Data: {{ $timelog->date }},
+                Costs: €{{ $timelog->service->cost_per_hour * $timelog->hours }}
+            </li>
         @endforeach
     </ul>
+
+    <a href="{{ route('customers.edit', $customer->id) }}">Edit Customer</a>
+    <a href="{{ route('invoice.create', $customer->id) }}">Print</a>
 
 </x-app-layout>

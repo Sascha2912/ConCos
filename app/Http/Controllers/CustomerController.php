@@ -13,7 +13,7 @@ class CustomerController extends Controller {
 
     public function __construct(CustomerRepository $customerRepository) {
         $this->customerRepository = $customerRepository;
-        //$this->authorizeResource(Customer::class);
+        // $this->authorizeResource(Customer::class);
     }
 
     /**
@@ -43,7 +43,7 @@ class CustomerController extends Controller {
         $customer = $this->customerRepository->updateOrCreate($data);
 
         if($request->contract_id){
-            $customer->contract()->attach($request->contract_id);
+            $customer->contracts()->attach($request->contract_id);
         }
 
         if($request->expectsJson()){
@@ -54,21 +54,50 @@ class CustomerController extends Controller {
             ]);
         }
 
-        return redirect(route('customers.edit', ['customer' => $customer]));
+        return redirect(route('customers.show', ['customer' => $customer]));
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request, Customer $customer) {
+        $usedHours = $customer->timelogs()->sum('hours');
+        $contractHours = $customer->contracts->sum('hours');
+        $monthlyCosts = $customer->contracts->sum('monthly_costs');
+
+        $extraCosts = 0;
+        foreach($customer->timelogs as $timelog){
+            $contract = $timelog->contract;
+            $service = $timelog->service;
+
+            if( !$contract || !$contract->services->contains($service->id)){
+                $extraCosts += $service->cost_per_hour * $timelog->hours;
+            }
+
+            if($usedHours > $contractHours){
+                $overtime = $usedHours - $contractHours;
+                $extraCosts += $overtime * $service->cost_per_hour;
+            }
+        }
+
         if($request->expectsJson()){
 
             return response([
-                'customer' => $customer,
+                'customer'      => $customer,
+                'usedHours'     => $usedHours,
+                'contractHours' => $contractHours,
+                'monthlyCosts'  => $monthlyCosts,
+                'extraCosts'    => $extraCosts,
             ]);
         }
 
-        return view('customers.show', ['customer' => $customer]);
+        return view('customers.show', [
+            'customer'      => $customer,
+            'usedHours'     => $usedHours,
+            'contractHours' => $contractHours,
+            'monthlyCosts'  => $monthlyCosts,
+            'extraCosts'    => $extraCosts,
+        ]);
     }
 
     /**
@@ -91,7 +120,7 @@ class CustomerController extends Controller {
             $customer->contracts()->sync($request->contract_id);
         }
 
-        return redirect(route('customers.edit', ['customer' => $customer]));
+        return redirect(route('customers.show', ['customer' => $customer]));
     }
 
     /**

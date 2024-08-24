@@ -9,6 +9,11 @@
         @foreach($customers as $customer)
             <li>
                 <a href="{{ route('customers.show', $customer->id) }}" class="text-white">{{ $customer->firstname }} {{ $customer->lastname }}</a>
+                <form action="{{ route('customers.destroy', $customer->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Delete</button>
+                </form>
             </li>
         @endforeach
     </ul>
