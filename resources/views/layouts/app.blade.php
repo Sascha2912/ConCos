@@ -12,6 +12,15 @@
 <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
 
     <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/customers">Customers</a>
+            <a href="/contracts">Contracts</a>
+            <a href="/services">Services</a>
+            <a href="/timelogs">Time logs</a>
+            <a href="/users">Users</a>
+        </nav>
+
         <div>
             <h1>{{ $header }}</h1>
         </div>

@@ -2,19 +2,23 @@
 
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/', function() {
     return view('home');
 });
 
+Route::get('customers/{customer}/invoice',
+    [InvoiceController::class, 'create'])->name('invoice.create');
+
 Route::resources([
-    'users' => UserController::class,
+    'users'     => UserController::class,
     'customers' => CustomerController::class,
-    'services' => ServiceController::class,
+    'services'  => ServiceController::class,
     'contracts' => ContractController::class,
-    'timelogs' => TimelogController::class,
+    'timelogs'  => TimelogController::class,
 ]);
