@@ -2,16 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contract;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ContractSeeder extends Seeder
-{
+class ContractSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        //
+    public function run(): void {
+        Contract::factory(5)->create();
     }
 }

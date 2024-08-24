@@ -14,7 +14,7 @@ class ContractController extends Controller {
 
     public function __construct(ContractRepository $contractRepository) {
         $this->contractRepository = $contractRepository;
-        // $this->authorizeResource(MaintenanceContract::class);
+        // $this->authorizeResource(Contract::class);
     }
 
     /**
@@ -56,7 +56,7 @@ class ContractController extends Controller {
             ]);
         }
 
-        return redirect(route('contracts.edit', ['contract' => $contract]));
+        return redirect(route('contracts.show', ['contract' => $contract]));
     }
 
     /**
@@ -70,15 +70,16 @@ class ContractController extends Controller {
             ]);
         }
 
-        return view('contracts.edit', ['contract' => $contract]);
+        return view('contracts.show', ['contract' => $contract]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Contract $contract) {
+        $services = Service::paginate();
 
-        return view('contracts.edit', ['contract' => $contract]);
+        return view('contracts.edit', ['contract' => $contract, 'services' => $services]);
     }
 
     /**

@@ -29,7 +29,7 @@ class Contract extends Model {
         ];
     }
 
-    public function customer() {
+    public function customers() {
 
         return $this->belongsToMany(Customer::class);
     }
