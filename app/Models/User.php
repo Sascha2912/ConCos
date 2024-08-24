@@ -28,9 +28,9 @@ class User extends Authenticatable {
         return [
             'firstname'          => 'required|bail|string|max:255',
             'lastname'           => 'required|bail|string|max:255',
-            'preferred_language' => 'required|bail|string|max:255',
+            'preferred_language' => 'nullable|string|max:255',
             'email'              => ($creating ? 'required|bail|' : '').'email|unique:users,email|string|max:255',
-            'password'           => 'required|bail|string|min:8|max:255',
+            'password'           => ($creating ? 'required|bail|' : '').'string|min:8|max:255',
         ];
     }
 
