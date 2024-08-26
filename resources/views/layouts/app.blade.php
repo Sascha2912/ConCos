@@ -4,27 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>KWV-Kunden-Wartungsverträge-Verwaltung</title>
+    <title>{{ __('app.app_title') }}</title>
 
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-<div>
-
-    <header>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/customers">Customers</a>
-            <a href="/contracts">Contracts</a>
-            <a href="/services">Services</a>
-            <a href="/timelogs">Time logs</a>
-            <a href="/users">Users</a>
-        </nav>
-
-        <div>
-            <h1>{{ $header }}</h1>
-        </div>
-    </header>
+<div class="wrapper">
+    <x-navigation></x-navigation>
+    @if (isset($header))
+        <header>
+            {{ $header }}
+        </header>
+    @endif
 
     <main>
         {{ $slot }}

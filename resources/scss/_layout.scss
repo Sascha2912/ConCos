@@ -1,3 +1,89 @@
 body {
-  @apply font-inter;
+  @apply m-0 p-0;
 }
+
+.wrapper {
+  @apply p-10 font-inter font-medium text-black bg-gray-50 text-base antialiased;
+}
+
+.nav-wrapper {
+  @apply max-w-full h-16 mb-10 bg-blue-400 border border-gray-300 text-white text-base text-center flex text-nowrap rounded shadow;
+
+  .nav-link-wrapper {
+    @apply w-full flex justify-around;
+
+    a {
+      @apply p-4;
+    }
+  }
+
+  .profile {
+    @apply w-full pr-10 flex justify-end gap-10 justify-items-center items-center;
+  }
+}
+
+header {
+  @apply max-w-full mx-auto py-0 sm:px-4 mb-4 flex justify-between items-center;
+
+  h1 {
+    @apply text-3xl text-blue-400;
+  }
+
+}
+
+main {
+  @apply sm:container sm:mx-auto min-h-screen grid grid-cols-1 place-items-center;
+
+  .index-wrapper {
+    @apply w-full;
+
+    button {
+      @apply place-items-end;
+    }
+
+    ul {
+      @apply rounded;
+
+      li {
+        @apply w-full flex bg-gray-300 mb-1 hover:bg-gray-200 rounded;
+
+        a {
+          @apply block w-full p-1.5;
+        }
+
+        button {
+          @apply ml-2 inline;
+        }
+      }
+    }
+  }
+}
+
+footer {
+
+}
+
+.action-btn-wrapper {
+  @apply flex justify-end;
+
+  .action-btn {
+    @apply min-h-11 inline-flex items-center px-3 py-2 border border-transparent shadow shadow-gray-400 leading-4 rounded-md text-white bg-gray-800 hover:bg-blue-400 hover:text-gray-200 focus:outline-none transition ease-in-out duration-150;
+
+    &.back {
+      @apply bg-gray-500 text-white hover:bg-gray-400;
+    }
+
+    &.delete {
+      @apply min-h-4 p-2;
+    }
+
+    &.edit {
+      @apply bg-green-500 text-white hover:bg-green-400;
+    }
+
+    &.create {
+      @apply bg-blue-500 text-white hover:bg-blue-400;
+    }
+  }
+}
+
