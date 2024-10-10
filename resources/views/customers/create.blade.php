@@ -6,37 +6,37 @@
 
     <form method="POST" action="{{ route('customers.store') }}">
         @csrf
-        <label>Firstname:</label>
+        <label>{{ __('app.firstname') }}:</label>
         <input type="text" name="firstname" required>
 
-        <label>Lastname:</label>
+        <label>{{ __('app.lastname') }}:</label>
         <input type="text" name="lastname" required>
 
-        <label>Email:</label>
+        <label>{{ __('app.email') }}:</label>
         <input type="email" name="email" required>
 
-        <label>Street:</label>
+        <label>{{ __('app.street') }}:</label>
         <input type="text" name="street">
 
-        <label>House number:</label>
+        <label>{{ __('app.house_number') }}:</label>
         <input type="text" name="house_number">
 
-        <label>Zip Code:</label>
+        <label>{{ __('app.zip_code') }}:</label>
         <input type="text" name="zip_code">
 
-        <label>City:</label>
+        <label>{{ __('app.city') }}:</label>
         <input type="text" name="city">
 
-        <label>Phone:</label>
+        <label>{{ __('app.phone') }}:</label>
         <input type="text" name="phone">
 
-        <label>Contracts:</label>
+        <label>{{ __('app.contracts') }}:</label>
         <select name="contract_id[]" multiple>
             @foreach($contracts as $contract)
                 <option value="{{ $contract->id }}">{{ $contract->name }}</option>
             @endforeach
         </select>
 
-        <button type="submit">Create customer</button>
+        <button type="submit">{{ __('app.create_customer') }}</button>
     </form>
 </x-app-layout>

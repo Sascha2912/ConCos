@@ -1,27 +1,33 @@
 <x-app-layout>
 
     <x-slot:header>
-        Overview for {{ $customer->firstname }}  {{ $customer->lastname }}
+        {{ __('app.overview_for') }} {{ $customer->firstname }}  {{ $customer->lastname }}
     </x-slot:header>
 
-    <p><strong>Contractually agreed hours:</strong> {{ $contractHours }}</p>
-    <p><strong>Hours used so far:</strong> {{ $usedHours }}</p>
-    <p><strong>Monthly costs:</strong> €{{ $monthlyCosts }}</p>
-    <p><strong>Extra costs:</strong> €{{ $extraCosts }}</p>
+    <p><strong>{{ __('app.contractually_agreed_hours') }}:</strong> {{ $contractHours }}</p>
+    <p><strong>{{ __('app.hours_used_so_far') }}:</strong> {{ $usedHours }}</p>
+    <p><strong>{{ __('app.monthly_costs') }}:</strong> €{{ $monthlyCosts }}</p>
+    <p><strong>{{ __('app.extra_costs') }}:</strong> €{{ $extraCosts }}</p>
 
-    <h2>Details of time recording</h2>
+    <h2>{{ __('app.details_of_time_recording') }}</h2>
     <ul>
         @foreach($customer->timelogs as $timelog)
             <li>
-                Service: {{ $timelog->service->name }},
-                Hours: {{ $timelog->hours }},
-                Data: {{ $timelog->date }},
-                Costs: €{{ $timelog->service->cost_per_hour * $timelog->hours }}
+                {{ __('app.service') }}: {{ $timelog->service->name }},
+                {{ __('app.hours') }}: {{ $timelog->hours }},
+                {{ __('app.date') }}: {{ $timelog->date }},
+                {{ __('app.costs') }}: €{{ $timelog->service->cost_per_hour * $timelog->hours }}
             </li>
         @endforeach
     </ul>
 
-    <a href="{{ route('customers.edit', $customer->id) }}">Edit Customer</a>
-    <a href="{{ route('invoice.create', $customer->id) }}">Print</a>
+    <x-partials.nav-link
+            href="/timelogs"
+            :active="request()->is('timelogs')"
+    >
+        {{ __('app.time_logs') }}
+    </x-partials.nav-link>
+    <a href="{{ route('customers.edit', $customer->id) }}">{{ __('app.edit_customer') }}</a>
+    <a href="{{ route('invoice.create', $customer->id) }}">{{ __('app.print') }}</a>
 
 </x-app-layout>
