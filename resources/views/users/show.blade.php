@@ -1,13 +1,13 @@
 <x-app-layout>
 
     <x-slot:header>
-        User
+        {{ __('app.user_overview')}}
     </x-slot:header>
 
-    <p>Firstname: {{ $user->firstname }}</p>
-    <p>Lastname: {{ $user->lastname }}</p>
-    <p>Email: {{ $user->email }}</p>
+    <p>{{ __('app.firstname') }}: {{ $user->firstname }}</p>
+    <p>{{ __('app.lastname') }}: {{ $user->lastname }}</p>
+    <p>{{ __('app.email') }}: {{ $user->email }}</p>
 
-    <a href="{{ route('users.edit', $user->id) }}">Edit user</a>
+    <a href="{{ route('users.edit', $user->id) }}">{{ __('app.') }}</a>
 
 </x-app-layout>
