@@ -10,10 +10,10 @@ body {
   @apply max-w-full h-16 mb-10 bg-blue-400 border border-gray-300 text-white text-base text-center flex text-nowrap rounded shadow;
 
   .nav-link-wrapper {
-    @apply w-full flex justify-around;
+    @apply w-full flex justify-around py-4;
 
     a {
-      @apply p-4;
+      @apply h-auto;
     }
   }
 
