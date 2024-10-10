@@ -23,12 +23,6 @@
         </x-partials.nav-link>
 
         <x-partials.nav-link
-                href="/timelogs"
-                :active="request()->is('timelogs')"
-        >
-            {{ __('app.time_logs') }}
-        </x-partials.nav-link>
-        <x-partials.nav-link
                 href="/users"
                 :active="request()->is('users')"
         >
@@ -37,8 +31,9 @@
     </nav>
 
     <div class="profile">
-        <div>Profile</div>
-        <div>Language</div>
-        <div>Log out</div>
+        <div>{{ __('app.profile') }}</div>
+        <div>{{ __('app.language') }}</div>
+        <div>{{ __('app.login') }}</div>
+        <div>{{ __('app.logout') }}</div>
     </div>
 </div>
