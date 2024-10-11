@@ -4,9 +4,9 @@
         {{ $service->name }}
     </x-slot:header>
 
-    <p>Description: {{ $service->description }}</p>
-    <p>Costs per hour: {{ $service->cost_per_hour }}€</p>
+    <p>{{ __('app.description') }}: {{ $service->description }}</p>
+    <p>{{ __('app.costs_per_hour') }}: {{ $service->cost_per_hour }}€</p>
 
-    <a href="{{ route('services.edit', $service->id) }}">Edit Service</a>
+    <a href="{{ route('services.edit', $service->id) }}">{{ __('app.edit_service_entry') }}</a>
 
 </x-app-layout>

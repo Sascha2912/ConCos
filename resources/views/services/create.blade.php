@@ -1,21 +1,21 @@
 <x-app-layout>
 
     <x-slot:header>
-        Create new Service
+        {{ __('app.create_new_service') }}
     </x-slot:header>
 
     <form method="POST" action="{{ route('services.store') }}">
         @csrf
 
-        <label>Name:</label>
+        <label>{{ __('app.name') }}:</label>
         <input type="text" name="name" required>
 
-        <label>Description:</label>
+        <label>{{ __('app.description') }}:</label>
         <textarea name="description"></textarea>
 
-        <label>Costs per hour:</label>
+        <label>{{ __('app.cost_per_hour') }}:</label>
         <input type="number" name="cost_per_hour" step="0.01" required>
 
-        <button type="submit">Create service</button>
+        <button type="submit">{{ __('app.create_service') }}</button>
     </form>
 </x-app-layout>
