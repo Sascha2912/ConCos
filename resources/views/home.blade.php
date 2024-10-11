@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <x-slot:header>
-        Home Page
+        {{ __('app.homepage') }}
     </x-slot:header>
 
 </x-app-layout>

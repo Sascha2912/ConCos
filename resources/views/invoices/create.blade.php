@@ -1,14 +1,14 @@
 <x-app-layout>
 
     <x-slot:header>
-        Invoice for {{ $customer->firstname }} {{ $customer->firstname }}
+        {{ __('app.invoice_for') }} {{ $customer->firstname }} {{ $customer->firstname }}
     </x-slot:header>
 
-    <p><strong>Contractually agreed hours:</strong> {{ $contractHours }}</p>
-    <p><strong>Hours used so far:</strong> {{ $usedHours }}</p>
-    <p><strong>Monthly costs:</strong> €{{ $monthlyCosts }}</p>
-    <p><strong>Extra costs:</strong> €{{ $extraCosts }}</p>
-    <p><strong>Total costs:</strong> €{{ $total }}</p>
+    <p><strong>{{ __('app.contractually_agreed_hours') }}:</strong> {{ $contractHours }}</p>
+    <p><strong>{{ __('app.hours_used_so_far') }}:</strong> {{ $usedHours }}</p>
+    <p><strong>{{ __('app.monthly_costs') }}:</strong> €{{ $monthlyCosts }}</p>
+    <p><strong>{{ __('app.extra_costs') }}:</strong> €{{ $extraCosts }}</p>
+    <p><strong>{{ __('app.total_costs') }}:</strong> €{{ $total }}</p>
 
-    <button onclick="window.print()">Print invoice</button>
+    <button onclick="window.print()">{{ __('app.print_invoice') }}</button>
 </x-app-layout>

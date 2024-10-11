@@ -1,7 +1,7 @@
 <x-app-layout>
 
     <x-slot:header>
-        Create new Customer
+        {{ __('app.create_new_customer') }}
     </x-slot:header>
 
     <form method="POST" action="{{ route('customers.store') }}">
