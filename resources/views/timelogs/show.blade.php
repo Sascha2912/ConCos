@@ -1,14 +1,14 @@
 <x-app-layout>
 
     <x-slot:header>
-        Time log
+        {{ __('app.time_log') }}
     </x-slot:header>
 
-    <p>Customer: {{ $timelog->customer->name }}</p>
-    <p>Service: {{ $timelog->service->name }}</p>
-    <p>Hours: {{ $timelog->hours }}</p>
-    <p>Date: {{ $timelog->date }}</p>
+    <p>{{ __('app.customer') }}: {{ $timelog->customer->name }}</p>
+    <p>{{ __('app.service') }}: {{ $timelog->service->name }}</p>
+    <p>{{ __('app.hours') }}: {{ $timelog->hours }}</p>
+    <p>{{ __('app.date') }}: {{ $timelog->date }}</p>
 
-    <a href="{{ route('timelogs.edit', $timelog->id) }}">Edit Time log</a>
+    <a href="{{ route('timelogs.edit', $timelog->id) }}">{{ __('app.edit_time_entry') }}</a>
 
 </x-app-layout>

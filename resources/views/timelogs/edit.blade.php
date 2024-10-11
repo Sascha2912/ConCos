@@ -1,14 +1,14 @@
 <x-app-layout>
 
     <x-slot:header>
-        Edit Time log
+        {{ __('app.edit_time_entry') }}
     </x-slot:header>
 
     <form method="POST" action="{{ route('timelogs.update', $timelog->id) }}">
         @csrf
         @method('PUT')
 
-        <label>Customer:</label>
+        <label>{{ __('app.customer') }}:</label>
         <select name="customer_id" required>
             @foreach($customers as $customer)
                 <option value="{{ $customer->id }}"
@@ -16,7 +16,7 @@
             @endforeach
         </select>
 
-        <label>Service:</label>
+        <label>{{ __('app.service') }}:</label>
         <select name="service_id" required>
             @foreach($services as $service)
                 <option value="{{ $service->id }}"
@@ -26,12 +26,12 @@
 
         <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
-        <label>Hours:</label>
+        <label>{{ __('app.hours') }}:</label>
         <input type="number" name="hours" value="{{ $timelog->hours }}" required>
 
-        <label>Date:</label>
+        <label>{{ __('app.date') }}:</label>
         <input type="date" name="date" value="{{ $timelog->date }}" required>
 
-        <button type="submit">Save</button>
+        <button type="submit">{{ __('app.save') }}</button>
     </form>
 </x-app-layout>
