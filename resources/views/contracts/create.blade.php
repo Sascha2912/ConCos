@@ -1,38 +1,39 @@
 <x-app-layout>
 
     <x-slot:header>
-        Create new Contract
+        {{ __('app.create_new_contract') }}
     </x-slot:header>
 
     <form method="POST" action="{{ route('contracts.store') }}">
         @csrf
-        <select name="customer_id">
-            <option>without customer</option>
+        <label for="customer_id">{{ __('app.customer') }}:</label>
+        <select name="customer_id" id="customer_id">
+            <option>{{ __('app.without_customer') }}</option>
             @foreach($customers as $customer)
                 <option value="{{ $customer->id }}">{{ $customer->firstname }} {{ $customer->lastname }}</option>
             @endforeach
         </select>
 
-        <label>Name:</label>
+        <label>{{ __('app.name') }}:</label>
         <input type="text" name="name" required>
 
-        <label>Hours:</label>
+        <label>{{ __('app.hours') }}:</label>
         <input type="number" name="hours">
 
-        <label>Monthly costs:</label>
+        <label>{{ __('app.monthly_costs') }}:</label>
         <input type="number" name="monthly_costs">
 
-        <label>Flatrate:</label>
+        <label>{{ __('app.flatrate') }}:</label>
         <input type="checkbox" name="flatrate">
 
-        <label>Start date:</label>
+        <label>{{ __('app.start_date') }}:</label>
         <input type="date" name="start_date" required>
 
-        <label>End date:</label>
+        <label>{{ __('app.end_date') }}:</label>
         <input type="date" name="end_date">
 
         @if(isset($services) && !empty($services))
-            <label>Services:</label>
+            <label>{{ __('app.services') }}:</label>
             <select name="service_id[]" multiple>
                 @foreach($services as $service)
                     <option value="{{ $service->id }}">{{ $service->name }}</option>
@@ -41,6 +42,6 @@
             </select>
         @endif
 
-        <button type="submit">Create contract</button>
+        <button type="submit">{{ __('app.create_contract') }}</button>
     </form>
 </x-app-layout>
