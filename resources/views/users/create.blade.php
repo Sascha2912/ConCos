@@ -1,31 +1,57 @@
 <x-app-layout>
-
-    <x-slot:header>
-        {{ __('app.create_new_user') }}
-    </x-slot:header>
-
     <form method="POST" action="{{ route('users.store') }}">
         @csrf
-        <label>{{ __('app.firstname') }}:</label>
-        <input type="text" name="firstname" required>
 
-        <label>{{ __('app.lastname') }}:</label>
-        <input type="text" name="lastname" required>
+        <div class="form-input-wrapper">
+            <h1>{{ __('app.create_new_user') }}</h1>
+            <div class="edit-wrapper">
 
-        <label>{{ __('app.email') }}:</label>
-        <input type="email" name="email" required>
+                <x-forms.field>
+                    <x-forms.label for="firstname">{{ __('app.firstname') }}:</x-forms.label>
+                    <div class="mt-2">
+                        <x-forms.input name="firstname" id="firstname" value="{{ $user->firstname }}" required/>
 
-        <label for="password">{{ __('app.password') }}</label>
-        <input id="password" class="block mt-1 w-full"
-               type="password"
-               name="password"
-               required autocomplete="new-password"/>
+                        <x-forms.error name="firstname"/>
+                    </div>
+                </x-forms.field>
 
-        <label for="password_confirmation">{{ __('app.password_confirmed') }}</label>
-        <input id="password_confirmation" class="block mt-1 w-full"
-               type="password"
-               name="password_confirmation" required autocomplete="new-password"/>
+                <x-forms.field>
+                    <x-forms.label for="lastname">{{ __('app.lastname') }}:</x-forms.label>
+                    <div class="mt-2">
+                        <x-forms.input name="lastname" id="lastname" value="{{ $user->lastname }}" required/>
 
-        <button type="submit">{{ __('app.create_user') }}</button>
+                        <x-forms.error name="lastname"/>
+                    </div>
+                </x-forms.field>
+
+                <x-forms.field>
+                    <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
+                    <div class="mt-2">
+                        <x-forms.input name="email" id="email" type="email" value="{{ $user->email }}"
+                                       required/>
+
+                        <x-forms.error name="email"/>
+                    </div>
+                </x-forms.field>
+
+                <x-forms.field>
+                    <x-forms.label for="email">{{ __('app.password') }}:</x-forms.label>
+                    <div class="mt-2">
+                        <x-forms.input name="password" id="password" type="password"
+                                       value="{{ $user->password }}"
+                                       required/>
+
+                        <x-forms.error name="password"/>
+                    </div>
+                </x-forms.field>
+
+            </div>
+        </div>
+
+        <div class="button-bar">
+            <x-partials.action-link href="/users"
+                                    class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
+            <x-forms.button>{{ __('app.create_user') }}</x-forms.button>
+        </div>
     </form>
 </x-app-layout>
