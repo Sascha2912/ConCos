@@ -1,4 +1,4 @@
-@props(['align' => 'right', 'width' => '48', 'contentClasses' => 'py-1 bg-white dark:bg-gray-700'])
+@props(['align' => 'left', 'width' => '48', 'contentClasses' => ''])
 
 @php
     $alignmentClasses = match ($align) {
@@ -14,7 +14,7 @@
 @endphp
 
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
-    <div @click="open = ! open">
+    <div @click="open = ! open; event.stopPropagation();">
         {{ $trigger }}
     </div>
 
