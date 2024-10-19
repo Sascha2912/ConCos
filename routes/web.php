@@ -7,7 +7,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\UserController;
-use App\Livewire\CustomerEdit;
+use App\Livewire\Customers\Edit;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function() {
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-    Route::get('customers/{customer}/edit', CustomerEdit::class)->name('customers.edit');
+    Route::get('customers/{customer}/edit', Edit::class)->name('customers.edit');
     // Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
