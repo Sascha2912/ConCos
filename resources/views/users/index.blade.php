@@ -5,27 +5,30 @@
             <h1>
                 {{ __('app.users') }}
             </h1>
-
-            <x-partials.action-button
-                    href="{{ route('users.create') }}">{{ __('app.create_new_user') }}
-            </x-partials.action-button>
         </x-slot:header>
 
         <ul>
+            <li class="flex gap-10 p-1.5 bg-blue-400 text-white">
+                <p class="column-entry">{{ __('app.firstname') }}</p>
+                <p class="column-entry">{{ __('app.lastname') }}</p>
+                <p class="column-entry">{{ __('app.user_role') }}</p>
+            </li>
             @foreach($users as $user)
                 <li>
                     <a href="{{ route('users.show', $user->id) }}">
-                        {{ $user->firstname }} {{ $user->lastname }}</a>
-                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <x-partials.action-button type="submit"
-                                                  class="delete">{{ __('app.delete') }}
-                        </x-partials.action-button>
-                    </form>
+                        <p class="column-entry">{{ $user->firstname }}</p>
+                        <p class="column-entry">{{ $user->lastname }}</p>
+                        <p class="column-entry">todo</p>
+                    </a>
                 </li>
             @endforeach
         </ul>
+
+        <div class="button-bar">
+            <x-partials.action-link
+                    href="{{ route('users.create') }}">{{ __('app.create_new_user') }}
+            </x-partials.action-link>
+        </div>
     </div>
 
 </x-app-layout>

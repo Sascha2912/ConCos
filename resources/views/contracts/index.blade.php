@@ -4,28 +4,34 @@
             <h1>
                 {{ __('app.contracts') }}
             </h1>
-
-            <x-partials.action-button
-                    href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}
-            </x-partials.action-button>
         </x-slot:header>
 
         <ul>
+            <li class="flex gap-10 p-1.5 bg-blue-400 text-white">
+                <p class="column-entry">{{ __('app.contract_name') }}</p>
+                <p class="column-entry">{{ __('app.monthly_costs') }}</p>
+                <p class="column-entry">{{ __('app.start_date') }}</p>
+                <p class="column-entry">{{ __('app.end_date') }}</p>
+                <p class="column-entry">{{ __('app.contract_number') }}</p>
+            </li>
             @foreach($contracts as $contract)
                 <li>
                     <a href="{{ route('contracts.show', $contract->id) }}">
-                        {{ $contract->name }}</a>
-                    <form action="{{ route('contracts.destroy', $contract->id) }}" method="POST"
-                          style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <x-partials.action-button type="submit"
-                                                  class="delete">{{ __('app.delete') }}
-                        </x-partials.action-button>
-                    </form>
+                        <p class="column-entry">{{ $contract->name }}</p>
+                        <p class="column-entry">{{ $contract->monthly_costs }}</p>
+                        <p class="column-entry">{{ $contract->start_date }}</p>
+                        <p class="column-entry">{{ $contract->end_date }}</p>
+                        <p class="column-entry">{{ $contract->id }}</p>
+                    </a>
                 </li>
             @endforeach
         </ul>
+
+        <div class="button-bar">
+            <x-partials.action-link
+                    href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}
+            </x-partials.action-link>
+        </div>
     </div>
 
 </x-app-layout>
