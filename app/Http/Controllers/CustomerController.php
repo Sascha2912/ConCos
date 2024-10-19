@@ -20,13 +20,13 @@ class CustomerController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $customers = Customer::paginate(50);
+        $customers = Customer::paginate(30);
 
         return view('customers.index', ['customers' => $customers]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the forms for creating a new resource.
      */
     public function create() {
         $contracts = Contract::paginate();
@@ -42,6 +42,11 @@ class CustomerController extends Controller {
         $data = $this->validate($request, Customer::validationRules(true));
         $customer = $this->customerRepository->updateOrCreate($data);
 
+        if($request->routeIs('customer.contracts.destroy')){
+            $customer->contracts()->attach($request->contract_id);
+
+            return redirect()->back()->with('success', 'Vertrag wurde dem Kunden erfolgreich hinzugefügt.');
+        }
         if($request->contract_id){
             $customer->contracts()->attach($request->contract_id);
         }
@@ -54,13 +59,16 @@ class CustomerController extends Controller {
             ]);
         }
 
-        return redirect(route('customers.show', ['customer' => $customer]));
+        return redirect(route('customers.edit', ['customer' => $customer]));
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request, Customer $customer) {
+        $customerContracts = $customer->contracts()->get();
+        $contracts = Contract::all();
+
         $usedHours = $customer->timelogs()->sum('hours');
         $contractHours = $customer->contracts->sum('hours');
         $monthlyCosts = $customer->contracts->sum('monthly_costs');
@@ -83,25 +91,28 @@ class CustomerController extends Controller {
         if($request->expectsJson()){
 
             return response([
-                'customer'      => $customer,
-                'usedHours'     => $usedHours,
-                'contractHours' => $contractHours,
-                'monthlyCosts'  => $monthlyCosts,
-                'extraCosts'    => $extraCosts,
+                'customer'          => $customer,
+                'customerContracts' => $customerContracts,
+                'usedHours'         => $usedHours,
+                'contractHours'     => $contractHours,
+                'monthlyCosts'      => $monthlyCosts,
+                'extraCosts'        => $extraCosts,
+                'contracts'         => $contracts,
             ]);
         }
 
-        return view('customers.show', [
+        return view('customers.edit', [
             'customer'      => $customer,
             'usedHours'     => $usedHours,
             'contractHours' => $contractHours,
             'monthlyCosts'  => $monthlyCosts,
             'extraCosts'    => $extraCosts,
+            'contracts'     => $contracts,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the forms for editing the specified resource.
      */
     public function edit(Customer $customer) {
         $contracts = $customer->contracts()->get();
@@ -120,15 +131,23 @@ class CustomerController extends Controller {
             $customer->contracts()->sync($request->contract_id);
         }
 
-        return redirect(route('customers.show', ['customer' => $customer]));
+        return redirect(route('customers.edit', ['customer' => $customer]));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer) {
-        $customer->delete();
+    public function destroy(Request $request, Customer $customer, Contract $contract = null) {
 
-        return redirect(route('customers.index'));
+        if($request->routeIs('customer.contracts.destroy')){
+            $customer->contracts()->detach($contract->id);
+
+            return redirect()->back()->with('success', 'Vertrag wurde erfolgreich vom Kunden entfernt.');
+        }else{
+            $customer->delete();
+
+            return redirect(route('customers.index'));
+        }
+
     }
 }

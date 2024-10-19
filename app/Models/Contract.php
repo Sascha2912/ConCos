@@ -12,7 +12,6 @@ class Contract extends Model {
         'name',
         'hours',
         'monthly_costs',
-        'monthly_costs',
         'start_date',
         'end_date',
     ];

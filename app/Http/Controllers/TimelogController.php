@@ -28,7 +28,7 @@ class TimelogController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the forms for creating a new resource.
      */
     public function create() {
         $contracts = Contract::paginate();
@@ -59,25 +59,33 @@ class TimelogController extends Controller {
             ]);
         }
 
-        return redirect(route('timelogs.show', ['timelog' => $timelog]));
+        return redirect(route('timelogs.edit', ['timelog' => $timelog]));
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request, Timelog $timelog) {
+        $contracts = Contract::paginate();
+        $customers = Customer::paginate();
+        $services = Service::paginate();
+
         if($request->expectsJson()){
 
             return response([
-                'timelog' => $timelog,
+                'timelog'   => $timelog,
+                'contracts' => $contracts,
+                'customers' => $customers,
+                'services'  => $services,
             ]);
         }
 
-        return view('timelogs.show', ['timelog' => $timelog]);
+        return view('timelogs.edit',
+            ['timelog' => $timelog, 'contracts' => $contracts, 'customers' => $customers, 'services' => $services]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the forms for editing the specified resource.
      */
     public function edit(Timelog $timelog) {
         $contracts = Contract::paginate();
@@ -95,7 +103,7 @@ class TimelogController extends Controller {
         $data = $this->validate($request, Timelog::validationRules());
         $timelog = $this->timelogRepository->updateOrCreate($data, $timelog);
 
-        return redirect(route('timelogs.show', ['timelog' => $timelog]));
+        return redirect(route('timelogs.edit', ['timelog' => $timelog]));
     }
 
     /**

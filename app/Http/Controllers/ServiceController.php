@@ -24,7 +24,7 @@ class ServiceController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the forms for creating a new resource.
      */
     public function create() {
 
@@ -46,7 +46,7 @@ class ServiceController extends Controller {
             ]);
         }
 
-        return redirect(route('services.show', ['service' => $service]));
+        return redirect(route('services.edit', ['service' => $service]));
     }
 
     /**
@@ -60,11 +60,11 @@ class ServiceController extends Controller {
             ]);
         }
 
-        return view('services.show', ['service' => $service]);
+        return view('services.edit', ['service' => $service]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the forms for editing the specified resource.
      */
     public function edit(Service $service) {
 
@@ -78,7 +78,7 @@ class ServiceController extends Controller {
         $data = $this->validate($request, Service::validationRules());
         $service = $this->serviceRepository->updateOrCreate($data);
 
-        return redirect(route('services.show', ['service' => $service]));
+        return redirect(route('services.edit', ['service' => $service]));
     }
 
     /**

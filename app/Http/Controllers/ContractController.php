@@ -27,7 +27,7 @@ class ContractController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the forms for creating a new resource.
      */
     public function create() {
         $services = Service::all();
@@ -56,25 +56,27 @@ class ContractController extends Controller {
             ]);
         }
 
-        return redirect(route('contracts.show', ['contract' => $contract]));
+        return redirect(route('contracts.edit', ['contract' => $contract]));
     }
 
     /**
      * Display the specified resource.
      */
     public function show(Request $request, Contract $contract) {
+        $services = Service::paginate();
         if($request->expectsJson()){
 
             return response([
                 'contract' => $contract,
+                'services' => $services,
             ]);
         }
 
-        return view('contracts.show', ['contract' => $contract]);
+        return view('contracts.edit', ['contract' => $contract, 'services' => $services]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the forms for editing the specified resource.
      */
     public function edit(Contract $contract) {
         $services = Service::paginate();
@@ -93,7 +95,7 @@ class ContractController extends Controller {
             $contract->services()->attach($request->service_id);
         }
 
-        return redirect(route('contracts.show', ['contract' => $contract]));
+        return redirect(route('contracts.edit', ['contract' => $contract]));
     }
 
     /**
