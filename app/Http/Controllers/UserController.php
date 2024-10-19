@@ -25,9 +25,15 @@ class UserController extends Controller {
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the forms for creating a new resource.
      */
-    public function create() {
+    public function create(Request $request) {
+
+        if($request->routeIs('register_create')){
+
+
+            return view('auth.register', ['user' => new User()]);
+        }
 
         return view('users.create', ['user' => new User()]);
     }
@@ -47,9 +53,13 @@ class UserController extends Controller {
             ]);
         }
 
-        Auth::login($user);
+        if($request->routeIs('register_store')){
+            Auth::login($user);
 
-        return redirect(route('users.show', ['user' => $user]));
+            return redirect(route('customers.index', ['user' => $user]));
+        }
+
+        return redirect(route('users.index'));
     }
 
     /**
@@ -63,11 +73,11 @@ class UserController extends Controller {
             ]);
         }
 
-        return view('users.show', ['user' => $user]);
+        return view('users.edit', ['user' => $user]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the forms for editing the specified resource.
      */
     public function edit(User $user) {
 
@@ -81,11 +91,11 @@ class UserController extends Controller {
         if($request->email === $user->email){
             unset($request['email']);
         }
-        
+
         $data = $this->validate($request, User::validationRules());
         $user = $this->userRepository->updateOrCreate($data, $user);
 
-        return redirect(route('users.show', ['user' => $user]));
+        return redirect(route('users.edit', ['user' => $user]));
     }
 
     /**
