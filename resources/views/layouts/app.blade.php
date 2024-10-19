@@ -7,18 +7,22 @@
     <title>{{ __('app.app_title') }}</title>
 
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 <body>
 <div class="wrapper">
     <x-navigation></x-navigation>
-    @if (isset($header))
-        <header>
-            {{ $header }}
-        </header>
-    @endif
 
     <main>
-        {{ $slot }}
+        <div class="wrapper">
+            @if (isset($header))
+                <header>
+                    {{ $header }}
+                </header>
+            @endif
+            {{ $slot }}
+            @livewireScripts
+        </div>
     </main>
 
     <footer>
