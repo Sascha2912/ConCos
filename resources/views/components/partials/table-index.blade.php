@@ -13,7 +13,7 @@
 <div class="container">
     <h1 class="text-2xl font-bold mb-4">{{ $title }}</h1>
 
-    <x-action-button href="{{ $createUrl }}" class="create">{{ $createLabel }}</x-action-button>
+    <x-action-link href="{{ $createUrl }}" class="create">{{ $createLabel }}</x-action-link>
 
     <div class="min-w-full bg-white dark:bg-gray-300 text-black dark:text-white mt-4 rounded">
 

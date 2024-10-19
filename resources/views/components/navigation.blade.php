@@ -31,9 +31,14 @@
     </nav>
 
     <div class="profile">
-        <div>{{ __('app.profile') }}</div>
         <div>{{ __('app.language') }}</div>
-        <div>{{ __('app.login') }}</div>
-        <div>{{ __('app.logout') }}</div>
+        
+        @auth()
+            <form method="POST" action="/logout">
+                @csrf
+                <x-forms.button>{{ __('app.logout') }}</x-forms.button>
+            </form>
+
+        @endauth
     </div>
 </div>
