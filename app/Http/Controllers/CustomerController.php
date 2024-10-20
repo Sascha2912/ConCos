@@ -138,16 +138,8 @@ class CustomerController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, Customer $customer, Contract $contract = null) {
+        $customer->delete();
 
-        if($request->routeIs('customer.contracts.destroy')){
-            $customer->contracts()->detach($contract->id);
-
-            return redirect()->back()->with('success', 'Vertrag wurde erfolgreich vom Kunden entfernt.');
-        }else{
-            $customer->delete();
-
-            return redirect(route('customers.index'));
-        }
-
+        return redirect(route('customers.index'));
     }
 }
