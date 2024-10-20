@@ -46,7 +46,6 @@ return [
     'contract_name'                  => 'Vertragsname',
     'contract_number'                => 'Vertragsnummer',
     'linked_contracts'               => 'Verknüpfte Verträge',
-    'current_contracts'              => 'Aktuelle Verträge',
     'hourly_quota'                   => 'Stundenkontingent',
     'name'                           => 'Name',
     'firstname'                      => 'Vorname',
@@ -76,6 +75,9 @@ return [
     'start_date'                     => 'Startdatum',
     'end_date'                       => 'Enddatum',
     'current'                        => 'Laufend',
+    'current_contracts'              => 'Aktuelle Verträge',
+    'current_services'               => 'Aktuelle Services',
+    'current_timelogs'               => 'Aktuelle Zeitprotokolle',
     'address'                        => 'Adresse',
     'street'                         => 'Straße',
     'house_number'                   => 'Hausnummer',
@@ -114,4 +116,5 @@ return [
     'invoice_for'                    => 'Rechnung für',
     'print_invoice'                  => 'Rechnung drucken',
     'incorrect_password'             => 'Das eingegebene Passwort ist falsch.',
+    'are_you_sure'                   => 'Sind Sie sicher, dass Sie dies löschen möchten?',
 ];

@@ -75,9 +75,9 @@ return [
     'start_date'                     => 'Start date',
     'end_date'                       => 'End date',
     'current'                        => 'Current',
-    'current_contract'               => 'Current contracts',
-    'current_service'                => 'Current Services',
-    'current_timelog'                => 'Current time logs',
+    'current_contracts'              => 'Current contracts',
+    'current_services'               => 'Current Services',
+    'current_timelogs'               => 'Current time logs',
     'address'                        => 'Address',
     'street'                         => 'Street',
     'house_number'                   => 'House number',
@@ -116,5 +116,6 @@ return [
     'invoice_for'                    => 'Invoice for',
     'print_invoice'                  => 'Print invoice',
     'incorrect_password'             => 'The provided password is incorrect.',
+    'are_you_sure'                   => 'Are you sure you want to delete this?',
 
 ];
