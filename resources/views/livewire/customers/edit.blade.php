@@ -84,9 +84,40 @@
                         @error('zip_code') <span class="error">{{ $message }}</span> @enderror
                     </div>
                 </x-forms.field>
+
+                <!-- Contracts Dropdown -->
+                <x-forms.field>
+                    <x-forms.label>{{ __('app.add_contract') }}:</x-forms.label>
+                    <div class="mt-2">
+                        <select class="dropdown" wire:model="selectedContractId" wire:key="contract-select-{{ now() }}"
+                                wire:change="addContract($event.target.value)">
+                            <option value="default"></option>
+                            @foreach($availableContracts as $contract)
+                                <option value="{{ $contract->id }}">{{ $contract->name }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                </x-forms.field>
             </div>
-            <!-- Relation Manager für Verträge -->
-            <livewire:relation-manager :model="$customer" relatedModel="contracts"/>
+
+            <div>
+                <h2 class="mb-2 px-1 text-lg">{{ __('app.current_contracts') }}:</h2>
+                <!-- Selected Contracts -->
+                <ul class="item-wrapper grid grid-cols-4 gap-2">
+                    @foreach($tmpContracts as $contract)
+                        <li class="item hover:bg-gray-200" wire:key="contract-{{ $contract['id'] }}">
+                            <a class="w-full py-2" href="{{ route('contracts.edit', $contract['id']) }}">
+                                {{ $contract['name'] }}
+                            </a>
+                            <x-forms.delete-button
+                                    class=" m-1 text-xl text-gray-600 hover:text-red-700 hover:font-bold h-6 w-6 hover:border border-gray-400 grid place-content-center text-center pb-0.5 rounded"
+                                    type="button" wire:click="removeContract({{ $contract['id'] }})"/>
+
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
 
             <!-- Submit Button -->
             <div class="button-bar">
