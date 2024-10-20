@@ -46,18 +46,19 @@ class Edit extends Component {
 
             // Entferne den hinzugefügten Vertrag aus der Liste der verfügbaren Verträge
             $this->availableContracts = $this->availableContracts->filter(function($contract) use ($contractId) {
+
                 return $contract->id != $contractId;
             });
 
             // Setze die Dropdown-Auswahl zurück
             $this->reset('selectedContractId');
-
         }
     }
 
     public function removeContract($contractId) {
         // Entferne das Vertragmodell aus der temporären Liste
         $this->tmpContracts = array_filter($this->tmpContracts, function($contract) use ($contractId) {
+
             return $contract['id'] != $contractId; // Entferne den Vertrag mit der angegebenen ID
         });
 
@@ -100,6 +101,16 @@ class Edit extends Component {
         session()->flash('message', 'Customer updated successfully.');
 
         return redirect()->route('customers.edit', $this->customer);
+    }
+
+    public function deleteCustomer($customerId) {
+        $customer = Customer::findOrFail($customerId);
+
+        // Löschaktion durchführen
+        $customer->delete();
+
+        // Optional: Weiterleitung nach dem Löschen
+        return redirect()->route('customers.index')->with('message', 'Customer deleted successfully.');
     }
 
     public function render() {

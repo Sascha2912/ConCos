@@ -7,7 +7,6 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\UserController;
-use App\Livewire\Customers\Edit;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function() {
@@ -28,15 +27,22 @@ Route::middleware('auth')->group(function() {
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-    Route::get('customers/{customer}/edit', Edit::class)->name('customers.edit');
-    // Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::get('customers/{customer}/edit', App\Livewire\Customers\Edit::class)->name('customers.edit');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
+    Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
+    Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
+    Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
+    Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+    Route::get('contracts/{contract}/edit', App\Livewire\Contracts\Edit::class)->name('contracts.edit');
+    Route::put('/contracts/{contract}', [ContractController::class, 'update'])->name('contracts.update');
+    Route::delete('/contracts/{contract}', [ContractController::class, 'destroy'])->name('contracts.destroy');
+
     Route::resources([
-        'users'     => UserController::class,
-        'services'  => ServiceController::class,
-        'contracts' => ContractController::class,
-        'timelogs'  => TimelogController::class,
+        'users'    => UserController::class,
+        'services' => ServiceController::class,
+        'timelogs' => TimelogController::class,
     ]);
 
 });
