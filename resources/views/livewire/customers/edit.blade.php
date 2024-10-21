@@ -12,7 +12,7 @@
                     {{ __('app.time_logs') }}
                 </x-partials.action-link>
                 <x-partials.action-link
-                        href="{{ route('invoice.create', $customer->id) }}">{{ __('app.print') }}</x-partials.action-link>
+                        href="{{ route('invoice.create', $this->customer->id) }}">{{ __('app.print') }}</x-partials.action-link>
 
                 <!-- Form Input Fields -->
 
