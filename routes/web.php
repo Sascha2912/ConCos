@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function() {
 
 
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::get('/customers/create', App\Livewire\Customers\Create::class)->name('customers.create');
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::get('customers/{customer}/edit', App\Livewire\Customers\Edit::class)->name('customers.edit');
@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function() {
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
     Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
-    Route::get('/contracts/create', [ContractController::class, 'create'])->name('contracts.create');
+    Route::get('/contracts/create', App\Livewire\Contracts\Create::class)->name('contracts.create');
     Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
     Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
     Route::get('contracts/{contract}/edit', App\Livewire\Contracts\Edit::class)->name('contracts.edit');
