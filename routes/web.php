@@ -8,49 +8,58 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\SetUserLocale;
 
 Route::middleware('auth')->group(function() {
 
-    Route::view('/', 'layouts.app')->name('app');
+    Route::middleware(SetUserLocale::class)->group(function() {
 
-    Route::get('customers/{customer}/invoice',
-        [InvoiceController::class, 'create'])->name('invoice.create');
+        Route::redirect('/', '/customers');
+
+        Route::resources([
+            'users'    => UserController::class,
+            'services' => ServiceController::class,
+            'timelogs' => TimelogController::class,
+        ]);
+
+        Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
+
+        Route::put('/users/{user}/language', [UserController::class, 'update'])->name('users.update.language');
+
+        Route::get('customers/{customer}/invoice',
+            [InvoiceController::class, 'create'])->name('invoice.create');
 
 
-    Route::post('customers/{customer}/contracts',
-        [\App\Models\Customer::class, 'store'])->name('customer.contracts.store');
-    Route::delete('customers/{customer}/contracts{contract}',
-        [CustomerController::class, 'destroy'])->name('customer.contracts.destroy');
+        Route::post('customers/{customer}/contracts',
+            [\App\Models\Customer::class, 'store'])->name('customer.contracts.store');
+        Route::delete('customers/{customer}/contracts{contract}',
+            [CustomerController::class, 'destroy'])->name('customer.contracts.destroy');
 
 
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/create', App\Livewire\Customers\Create::class)->name('customers.create');
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-    Route::get('customers/{customer}/edit', App\Livewire\Customers\Edit::class)->name('customers.edit');
-    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
-    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+        Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+        Route::get('/customers/create', App\Livewire\Customers\Create::class)->name('customers.create');
+        Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+        Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+        Route::get('customers/{customer}/edit',
+            App\Livewire\Customers\Edit::class)->name('customers.edit');
+        Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+        Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
-    Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
-    Route::get('/contracts/create', App\Livewire\Contracts\Create::class)->name('contracts.create');
-    Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
-    Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
-    Route::get('contracts/{contract}/edit', App\Livewire\Contracts\Edit::class)->name('contracts.edit');
-    Route::put('/contracts/{contract}', [ContractController::class, 'update'])->name('contracts.update');
-    Route::delete('/contracts/{contract}', [ContractController::class, 'destroy'])->name('contracts.destroy');
+        Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
+        Route::get('/contracts/create', App\Livewire\Contracts\Create::class)->name('contracts.create');
+        Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
+        Route::get('/contracts/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+        Route::get('contracts/{contract}/edit', App\Livewire\Contracts\Edit::class)->name('contracts.edit');
+        Route::put('/contracts/{contract}', [ContractController::class, 'update'])->name('contracts.update');
+        Route::delete('/contracts/{contract}', [ContractController::class, 'destroy'])->name('contracts.destroy');
 
-    Route::resources([
-        'users'    => UserController::class,
-        'services' => ServiceController::class,
-        'timelogs' => TimelogController::class,
-    ]);
+    });
 
 });
 
 // Auth
-Route::get('/register', [UserController::class, 'create'])->name('register_create')->middleware('guest');
-Route::post('/register', [UserController::class, 'store'])->name('register_store')->middleware('guest');
 
 Route::get('/login', [SessionController::class, 'create'])->name('login')->middleware('guest');
-Route::post('/login', [SessionController::class, 'store'])->middleware('guest');
+Route::post('/login', [SessionController::class, 'store'])->name('login')->middleware('guest');
 Route::post('/logout', [SessionController::class, 'destroy']);
