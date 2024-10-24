@@ -28,7 +28,7 @@
          class="absolute z-50 mt-2 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}"
          style="display: none;"
          @click="open = false">
-        <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
+        <div class="rounded-md grid grid-cols-1 gap-y-0.5 ring-1 ring-white ring-opacity-5 bg-gray-100 {{ $contentClasses }}">
             {{ $content }}
         </div>
     </div>

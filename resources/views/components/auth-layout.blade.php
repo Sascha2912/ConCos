@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 
 <div class="min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 flex items-center justify-center">
+    <div class="w-full max-w-xl bg-white shadow-md rounded-lg p-6 flex items-center justify-center">
         {{ $slot }}
     </div>
 </div>
