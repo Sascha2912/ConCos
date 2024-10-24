@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->decimal('cost_per_hour');
+            $table->decimal('costs_per_hour');
             $table->timestamps();
         });
 

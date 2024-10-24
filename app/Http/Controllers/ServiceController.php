@@ -35,7 +35,7 @@ class ServiceController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        $data = $this->validate($request, Service::validationRules(true));
+        $data = $this->validate($request, Service::validationRules());
         $service = $this->serviceRepository->updateOrCreate($data);
 
         if($request->expectsJson()){
@@ -76,7 +76,7 @@ class ServiceController extends Controller {
      */
     public function update(Request $request, Service $service) {
         $data = $this->validate($request, Service::validationRules());
-        $service = $this->serviceRepository->updateOrCreate($data);
+        $service = $this->serviceRepository->updateOrCreate($data, $service);
 
         return redirect(route('services.edit', ['service' => $service]));
     }

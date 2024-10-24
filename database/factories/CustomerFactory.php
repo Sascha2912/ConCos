@@ -13,16 +13,16 @@ class CustomerFactory extends Factory {
 
     public function definition(): array {
         return [
-            'firstname'    => $this->faker->firstName,
-            'lastname'     => $this->faker->lastName,
-            'email'        => $this->faker->unique()->safeEmail,
-            'street'       => $this->faker->optional()->streetName,
-            'house_number' => $this->faker->optional()->buildingNumber,
-            'zip_code'     => $this->faker->optional()->postcode,
-            'city'         => $this->faker->optional()->city,
-            'phone'        => $this->faker->optional()->phoneNumber,
-            'created_at'   => now(),
-            'updated_at'   => now(),
+            'name'              => $this->faker->company(),
+            'managing_director' => $this->faker->name,
+            'phone'             => $this->faker->optional()->phoneNumber,
+            'email'             => $this->faker->unique()->safeEmail,
+            'street'            => $this->faker->optional()->streetName,
+            'house_number'      => $this->faker->optional()->buildingNumber,
+            'zip_code'          => $this->faker->optional()->postcode,
+            'city'              => $this->faker->optional()->city,
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ];
     }
 }
