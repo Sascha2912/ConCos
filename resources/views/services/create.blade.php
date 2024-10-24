@@ -6,40 +6,37 @@
             <h1>{{ __('app.create_new_service') }}</h1>
             <div class="edit-wrapper">
 
-                <x-forms.field>
-                    <x-forms.label for="name">{{ __('app.service') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="name">{{ __('app.service') }}:</x-forms.label>
                         <x-forms.input name="name" id="name" required/>
+                    </x-forms.field>
+                    <x-forms.error name="name"/>
+                </div>
 
-                        <x-forms.error name="name"/>
-                    </div>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="description">{{ __('app.description') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="description">{{ __('app.description') }}:</x-forms.label>
                         <x-forms.textarea name="description"
                                           id="description"></x-forms.textarea>
+                    </x-forms.field>
+                    <x-forms.error name="description"/>
+                </div>
 
-                        <x-forms.error name="description"/>
-                    </div>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="costs_per_hour">{{ __('app.costs_per_hour') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="costs_per_hour">{{ __('app.costs_per_hour') }}:</x-forms.label>
                         <x-forms.input name="costs_per_hour" id="costs_per_hour"
                                        required/>
 
-                        <x-forms.error name="costs_per_hour"/>
-                    </div>
-                </x-forms.field>
-
-                <div class="button-bar">
-                    <x-partials.action-link href="/services"
-                                            class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-                    <x-forms.button>{{ __('app.save') }}</x-forms.button>
+                    </x-forms.field>
+                    <x-forms.error name="costs_per_hour"/>
                 </div>
+            </div>
+            <div class="button-bottom-bar">
+                <x-partials.action-link href="/services"
+                                        class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
+                <x-forms.button>{{ __('app.save') }}</x-forms.button>
             </div>
         </div>
     </form>
