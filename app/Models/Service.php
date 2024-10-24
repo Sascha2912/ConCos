@@ -11,21 +11,21 @@ class Service extends Model {
     protected $fillable = [
         'name',
         'description',
-        'cost_per_hour',
+        'costs_per_hour',
     ];
 
     public static function validationRules() {
 
         return [
-            'name'          => 'required|bail|string|max:255',
-            'description'   => 'nullable|bail|string',
-            'cost_per_hour' => 'required|bail|numeric',
+            'name'           => 'required|bail|string|max:255',
+            'description'    => 'nullable|bail|string|max:999',
+            'costs_per_hour' => 'required|bail|numeric',
         ];
     }
 
     public function contracts() {
 
-        return $this->belongsToMany(Contract::class);
+        return $this->belongsToMany(Contract::class, 'contract_service')->withPivot('hours')->withTimestamps();
     }
 
     public function timelogs() {

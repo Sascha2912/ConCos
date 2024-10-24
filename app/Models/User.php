@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable {
     use HasFactory, Notifiable;
 
+    const ROLE_VIEWER = 'viewer';
+    const ROLe_EDITOR = 'editor';
+    const ROLE_ADMIN = 'admin';
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +21,7 @@ class User extends Authenticatable {
     protected $fillable = [
         'firstname',
         'lastname',
+        'role',
         'preferred_language',
         'email',
         'password',
@@ -28,10 +32,15 @@ class User extends Authenticatable {
         return [
             'firstname'          => 'required|bail|string|max:255',
             'lastname'           => 'required|bail|string|max:255',
+            'role'               => 'required|bail|string|in:viewer,editor,admin',
             'preferred_language' => 'nullable|string|max:255',
             'email'              => ($creating ? 'required|bail|' : '').'email|unique:users,email|string|max:255',
-            'password'           => ($creating ? 'required|bail|' : '').'string|min:8|max:255',
+            'password'           => ($creating ? 'required|bail|' : 'nullable|').'string|min:8|confirmed',
+            'current_password'   => 'nullable|string|min:8', // Aktuelles Passwort ist erforderlich
+            'new_password'       => 'nullable|string|min:8|confirmed', // Neues Passwort
+
         ];
+
     }
 
     /**
@@ -54,5 +63,20 @@ class User extends Authenticatable {
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    public function isViewer() {
+
+        return $this->role === self::ROLE_VIEWER;
+    }
+
+    public function isEditor() {
+
+        return $this->role === self::ROLe_EDITOR;
+    }
+
+    public function isAdmin() {
+
+        return $this->role === self::ROLE_ADMIN;
     }
 }

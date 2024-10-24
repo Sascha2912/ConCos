@@ -10,33 +10,33 @@ class Contract extends Model {
 
     protected $fillable = [
         'name',
-        'hours',
         'monthly_costs',
         'flatrate',
-        'start_date',
-        'end_date',
     ];
+
+    // Standardwert auf 0 setzen, falls kein Wert angegeben wurde
+    public function setMonthlyCostAttribute($value) {
+        $this->attributes['monthly_cost'] = $value ?? 0;
+    }
 
     public static function validationRules() {
 
         return [
             'name'          => 'required|bail|string|max:255',
-            'hours'         => 'nullable|int',
             'monthly_costs' => 'nullable|numeric',
             'flatrate'      => 'nullable|boolean',
-            'start_date'    => 'required|bail|date',
-            'end_date'      => 'nullable|date',
         ];
     }
 
     public function customers() {
 
-        return $this->belongsToMany(Customer::class);
+        return $this->belongsToMany(Customer::class)->withPivot('create_date', 'start_date',
+            'end_date')->withTimestamps();
     }
 
     public function services() {
 
-        return $this->belongsToMany(Service::class);
+        return $this->belongsToMany(Service::class, 'contract_service')->withPivot('hours')->withTimestamps();
     }
 
     public function timelogs() {
