@@ -8,61 +8,80 @@
             <div class="edit-wrapper">
 
                 <!-- Button-Top-Bar -->
-                <x-partials.action-link href="/timelogs" :active="request()->is('timelogs')">
-                    {{ __('app.time_logs') }}
-                </x-partials.action-link>
-                <x-partials.action-link
-                        href="{{ route('invoice.create', $this->customer->id) }}">{{ __('app.print') }}</x-partials.action-link>
+                <div class="button-top-bar">
+                    <x-partials.action-link href="/timelogs" :active="request()->is('timelogs')">
+                        {{ __('app.time_logs') }}
+                    </x-partials.action-link>
+                    <x-partials.action-link
+                            href="{{ route('invoice.create', $this->customer->id) }}">{{ __('app.print') }}</x-partials.action-link>
+                </div>
 
                 <!-- Form Input Fields -->
 
-                <x-forms.field>
-                    <x-forms.label for="firstname">{{ __('app.firstname') }}:</x-forms.label>
-                    <x-forms.input wire:model="firstname" name="firstname" id="firstname" required/>
-                    <x-forms.error name="firstname"/>
-                </x-forms.field>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="name">{{ __('app.company_name') }}:</x-forms.label>
+                        <x-forms.input wire:model="name" name="name" id="name" required/>
+                    </x-forms.field>
+                    <x-forms.error name="name"/>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="lastname">{{ __('app.lastname') }}:</x-forms.label>
-                    <x-forms.input wire:model="lastname" name="lastname" id="lastname" requried/>
-                    <x-forms.error name="lastname"/>
-                </x-forms.field>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="managing_director">{{ __('app.managing_director') }}:</x-forms.label>
+                        <x-forms.input wire:model="managing_director" name="managing_director" id="managing_director"
+                                       requried/>
+                    </x-forms.field>
+                    <x-forms.error name="managing_director"/>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
-                    <x-forms.input wire:model="email" name="email" id="email" type="email" required/>
-                    <x-forms.error name="email"/>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="phone">{{ __('app.phone') }}:</x-forms.label>
-                    <x-forms.input wire:model="phone" name="phone" id="phone"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="phone">{{ __('app.phone') }}:</x-forms.label>
+                        <x-forms.input wire:model="phone" name="phone" id="phone"/>
+                    </x-forms.field>
                     <x-forms.error name="phone"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="street">{{ __('app.street') }}:</x-forms.label>
-                    <x-forms.input wire:model="street" name="street" id="street"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
+                        <x-forms.input wire:model="email" name="email" id="email" type="email" required/>
+                    </x-forms.field>
+                    <x-forms.error name="email"/>
+                </div>
+
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="street">{{ __('app.street') }}:</x-forms.label>
+                        <x-forms.input wire:model="street" name="street" id="street"/>
+                    </x-forms.field>
                     <x-forms.error name="street"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="house_number">{{ __('app.house_number') }}:</x-forms.label>
-                    <x-forms.input wire:model.="house_number" name="house_number" id="house_number"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="house_number">{{ __('app.house_number') }}:</x-forms.label>
+                        <x-forms.input wire:model.="house_number" name="house_number" id="house_number"/>
+                    </x-forms.field>
                     <x-forms.error name="house_number"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="city">{{ __('app.city') }}:</x-forms.label>
-                    <x-forms.input wire:model="city" name="city" id="city"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="city">{{ __('app.city') }}:</x-forms.label>
+                        <x-forms.input wire:model="city" name="city" id="city"/>
+                    </x-forms.field>
                     <x-forms.error name="city"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="zip_code">{{ __('app.zip_code') }}:</x-forms.label>
-                    <x-forms.input wire:model="zip_code" name="street" id="zip_code"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="zip_code">{{ __('app.zip_code') }}:</x-forms.label>
+                        <x-forms.input wire:model="zip_code" name="street" id="zip_code"/>
+                    </x-forms.field>
                     <x-forms.error name="zip_code"/>
-                </x-forms.field>
+                </div>
 
                 <!-- Contracts Dropdown -->
                 <x-forms.field>
@@ -83,20 +102,53 @@
                 <h2 class="item-heading">{{ __('app.current_contracts') }}:</h2>
                 <ul class="item-wrapper">
                     @foreach($tmpContracts as $contract)
-                        <li class="item" wire:key="contract-{{ $contract['id'] }}">
-                            <a class="item-link" href="{{ route('contracts.edit', $contract['id']) }}">
-                                {{ $contract['name'] }}
-                            </a>
-                            <x-dropdown.delete-button class="item-delete-button" type="button"
-                                                      wire:click="removeContract({{ $contract['id'] }})"/>
+                        <li class="item-col" wire:key="contract-{{ $contract['id'] }}">
+                            <!-- Contract Information -->
+                            <div class="item">
+                                <span class="item-text">{{ $contract['name'] }}</span>
+                            </div>
+                            <div class="item-edit">
+                                <label for="create_date_{{ $contract['id'] }}"
+                                       class="item-label">
+                                    {{ __('app.create_date') }}:
+                                </label>
+                                <input wire:model="contractDates.{{ $contract['id'] }}.create_date" name="create_date"
+                                       id="create_date_{{ $contract['id'] }}"
+                                       type="date"
+                                       class="item-input"/>
+                                <x-forms.error name="create_date"/>
 
+                                <label for="start_date_{{ $contract['id'] }}"
+                                       class="item-label">
+                                    {{ __('app.start_date') }}:
+                                </label>
+                                <input wire:model="contractDates.{{ $contract['id'] }}.start_date" name="start_date"
+                                       id="start_date_{{ $contract['id'] }}"
+                                       type="date"
+                                       class="item-input" required/>
+                                <x-forms.error name="start_date"/>
+
+                                <label for="end_date_{{ $contract['id'] }}"
+                                       class="item-label">
+                                    {{ __('app.end_date') }}:
+                                </label>
+                                <input wire:model="contractDates.{{ $contract['id'] }}.end_date" name="end_date"
+                                       id="end_date_{{ $contract['id'] }}"
+                                       type="date"
+                                       class="item-input"/>
+                                <x-forms.error name="end_date"/>
+
+                                <!-- Delete Button -->
+                                <x-dropdown.delete-button
+                                        wire:click="removeContract({{ $contract['id'] }})"/>
+                            </div>
                         </li>
                     @endforeach
                 </ul>
             </div>
 
             <!-- Button-Bottom-Bar -->
-            <div class="button-bar">
+            <div class="button-bottom-bar">
                 <x-partials.action-link href="/customers"
                                         class="back ">{{ __('app.back') }}</x-partials.action-link>
                 <livewire.delete-button class="delete-button"

@@ -8,22 +8,23 @@
         </x-slot:header>
 
         <ul>
-            <li class="flex gap-10 p-1.5 bg-blue-400 text-white">
-                <p class="column-entry">{{ __('app.firstname') }}</p>
-                <p class="column-entry">{{ __('app.lastname') }}</p>
+            <li class="grid grid-cols-3 place-content-between j p-1.5 bg-blue-400 text-white">
+                <p class="column-entry">{{ __('app.company_name') }}</p>
+                <p class="column-entry">{{ __('app.managing_director') }}</p>
                 <p class="column-entry">{{ __('app.customer_number') }}</p>
             </li>
             @foreach($customers as $customer)
                 <li>
-                    <a href="{{ route('customers.edit', $customer->id) }}">
-                        <p class="column-entry">{{ $customer->firstname }}</p>
-                        <p class="column-entry">{{ $customer->lastname }}</p>
+                    <a class="grid grid-cols-3 place-content-between"
+                       href="{{ route('customers.edit', $customer->id) }}">
+                        <p class="column-entry">{{ $customer->name }}</p>
+                        <p class="column-entry">{{ $customer->managing_director }}</p>
                         <p class="column-entry">{{ $customer->id }}</p>
                     </a>
                 </li>
             @endforeach
         </ul>
-        <div class="button-bar">
+        <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('customers.create') }}">{{ __('app.create_new_customer') }}
             </x-partials.action-link>
