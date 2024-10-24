@@ -4,6 +4,7 @@ use App\Models\Contract;
 use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -14,11 +15,8 @@ return new class extends Migration {
         Schema::create('contracts', function(Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('hours')->nullable();
-            $table->decimal('monthly_costs', 8, 2)->nullable();
+            $table->decimal('monthly_costs', 8, 2)->default(0);
             $table->boolean('flatrate')->default(false);
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
             $table->timestamps();
         });
 
@@ -26,8 +24,14 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Customer::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Contract::class)->constrained()->cascadeOnDelete();
+            $table->date('create_date');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
         });
+
+        // Setze den Startwert der Auto-Inkrement-Spalte auf 123456
+        DB::statement("ALTER TABLE contract_customer AUTO_INCREMENT = 98765432;");
     }
 
     /**
