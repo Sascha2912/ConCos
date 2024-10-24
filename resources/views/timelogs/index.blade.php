@@ -19,7 +19,7 @@
             @endforeach
         </ul>
 
-        <div class="button-bar">
+        <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('timelogs.create') }}">{{ __('app.create_new_time_log') }}
             </x-partials.action-link>

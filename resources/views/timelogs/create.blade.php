@@ -30,28 +30,26 @@
 
                 <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
-                <x-forms.field>
-                    <x-forms.label for="hours">{{ __('app.hours') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="hours">{{ __('app.hours') }}:</x-forms.label>
                         <x-forms.input name="hours" id="hours" value="{{ $timelog->hours }}"/>
+                    </x-forms.field>
+                    <x-forms.error name="hours"/>
+                </div>
 
-                        <x-forms.error name="hours"/>
-                    </div>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="date">{{ __('app.date') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="date">{{ __('app.date') }}:</x-forms.label>
                         <x-forms.input name="date" id="date" value="{{ $timelog->date }}"/>
-
-                        <x-forms.error name="date"/>
-                    </div>
-                </x-forms.field>
+                    </x-forms.field>
+                    <x-forms.error name="date"/>
+                </div>
 
             </div>
         </div>
 
-        <div class="button-bar">
+        <div class="button-bottom-bar">
             <x-partials.action-link href="/timelogs"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
             <x-forms.button>{{ __('app.log') }}</x-forms.button>
