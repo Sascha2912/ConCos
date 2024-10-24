@@ -8,29 +8,35 @@ use Livewire\Component;
 abstract class FormBase extends Component {
 
     public $name;
-    public $hours;
     public $monthly_costs;
     public $flatrate;
-    public $start_date;
-    public $end_date;
     public $tmpServices = [];
+    public $serviceHours = []; // Stunden für jeden Service
     public $availableServices;
     public $selectedServiceId = null;
 
     public function mountBase($contract = null) {
         if($contract){
             $this->name = $contract->name;
-            $this->hours = $contract->hours;
             $this->monthly_costs = $contract->monthly_costs;
             $this->flatrate = $contract->flatrate;
-            $this->start_date = $contract->start_date;
-            $this->end_date = $contract->end_date;
 
-            $this->tmpServices = $contract->services->toArray();
+            $this->tmpServices = $contract->services()->withPivot('hours')->get()->map(function($service) {
+                return [
+                    'id'    => $service->id,
+                    'name'  => $service->name,
+                    'hours' => $service->pivot->hours, // Lade die Stunden aus der Pivot-Tabelle
+                ];
+            })->toArray();
             $this->availableServices = Service::whereNotIn('id', array_column($this->tmpServices, 'id'))->get();
         }else{
             // Falls es keinen Vertrag gibt, sind alle Services verfügbar.
             $this->availableServices = Service::all();
+        }
+
+        // Initialisiere die Stunden für jeden Service im Array $serviceHours
+        foreach($this->tmpServices as $service){
+            $this->serviceHours[$service['id']] = $service['hours'];
         }
     }
 
@@ -60,11 +66,8 @@ abstract class FormBase extends Component {
     public function validateContract() {
         $this->validate([
             'name'          => 'required|bail|string|max:255',
-            'hours'         => 'nullable|int',
             'monthly_costs' => 'nullable|numeric',
             'flatrate'      => 'nullable|boolean',
-            'start_date'    => 'required|bail|date',
-            'end_date'      => 'nullable|date',
         ]);
     }
 

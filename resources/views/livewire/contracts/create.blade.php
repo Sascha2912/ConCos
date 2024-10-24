@@ -8,42 +8,30 @@
             <div class="edit-wrapper">
 
                 <!-- Form Input Fields -->
-                <x-forms.field>
-                    <x-forms.label for="name">{{ __('app.contract_name') }}:</x-forms.label>
-                    <x-forms.input wire:model="name" name="name" id="name" required/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="name">{{ __('app.contract_name') }}:</x-forms.label>
+                        <x-forms.input wire:model="name" name="name" id="name" required/>
+                    </x-forms.field>
                     <x-forms.error name="name"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="hours">{{ __('app.hours') }}:</x-forms.label>
-                    <x-forms.input wire:model="hours" name="hours" id="hours"/>
-                    <x-forms.error name="hours"/>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="monthly_costs">{{ __('app.monthly_costs') }}:</x-forms.label>
-                    <x-forms.input wire:model="monthly_costs" name="monthly_costs" id="monthly_costs"
-                                   type="monthly_costs"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="monthly_costs">{{ __('app.monthly_price') }}: €</x-forms.label>
+                        <x-forms.input wire:model="monthly_costs" name="monthly_costs" id="monthly_costs"
+                                       type="monthly_costs"/>
+                    </x-forms.field>
                     <x-forms.error name="monthly_costs"/>
-                </x-forms.field>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="flatrate">{{ __('app.flatrate') }}:</x-forms.label>
-                    <x-forms.input wire:model="flatrate" name="flatrate" id="flatrate" type="checkbox"/>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="flatrate">{{ __('app.flatrate') }}:</x-forms.label>
+                        <input wire:model="flatrate" name="flatrate" id="flatrate" type="checkbox"/>
+                    </x-forms.field>
                     <x-forms.error name="flatrate"/>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="start_date">{{ __('app.start_date') }}:</x-forms.label>
-                    <x-forms.input wire:model="start_date" name="start_date" id="start_date" type="date" required/>
-                    <x-forms.error name="start_date"/>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="end_date">{{ __('app.end_date') }}:</x-forms.label>
-                    <x-forms.input wire:model="end_date" name="end_date" id="end_date" type="date"/>
-                    <x-forms.error name="end_date"/>
-                </x-forms.field>
+                </div>
 
                 <!-- Contracts Dropdown -->
                 <x-forms.field>
@@ -57,26 +45,44 @@
                         @endforeach
                     </select>
                 </x-forms.field>
+
             </div>
 
             <div>
                 <!-- Selected Contracts -->
                 <h2 class="item-heading">{{ __('app.current_services') }}:</h2>
-                <ul class="item-wrapper">
+                <ul class="space-y-4">
                     @foreach($tmpServices as $service)
-                        <li class="item" wire:key="service-{{ $service['id'] }}">
-                            <a class="item-link" href="{{ route('services.edit', $service['id']) }}">
-                                {{ $service['name'] }}
-                            </a>
-                            <x-dropdown.delete-button class="item-delete-button" type="button"
-                                                      wire:click="removeService({{ $service['id'] }})"/>
+                        <li class="flex items-center justify-between p-4 bg-white shadow-md rounded-lg"
+                            wire:key="service-{{ $service['id'] }}">
+                            <!-- Service Information -->
+                            <div class="flex flex-col">
+                                <span class="text-lg font-semibold text-gray-800">{{ $service['name'] }}</span>
+                            </div>
+
+                            <!-- Delete Button and Input for Service Hours -->
+                            <div class="flex items-center space-x-4">
+                                <label for="service_hours_{{ $service['id'] }}"
+                                       class="block text-sm font-medium text-gray-700">
+                                    {{ __('app.service_hours') }}:
+                                </label>
+                                <input wire:model="serviceHours.{{ $service['id'] }}"
+                                       name="service_hours"
+                                       id="service_hours_{{ $service['id'] }}"
+                                       type="text" required
+                                       class="block w-24 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+
+                                <!-- Delete Button -->
+                                <x-dropdown.delete-button class="text-red-600 hover:text-red-800"
+                                                          wire:click="removeService({{ $service['id'] }})"/>
+                            </div>
                         </li>
                     @endforeach
                 </ul>
             </div>
 
             <!-- Button-Bottom-Bar -->
-            <div class="button-bar">
+            <div class="button-bottom-bar">
                 <x-partials.action-link href="/contracts" class="back">{{ __('app.back') }}</x-partials.action-link>
                 <x-forms.button>{{ __('app.save') }}</x-forms.button>
             </div>

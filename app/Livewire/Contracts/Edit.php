@@ -5,11 +5,13 @@ namespace App\Livewire\Contracts;
 use App\Models\Contract;
 
 class Edit extends FormBase {
+
     public $contract;
 
     public function mount(Contract $contract) {
         $this->contract = $contract;
         $this->mountBase($contract); // Lädt den bestehenden Vertrag und die Services.
+
     }
 
     public function save() {
@@ -17,15 +19,16 @@ class Edit extends FormBase {
 
         $this->contract->update([
             'name'          => $this->name,
-            'hours'         => $this->hours,
             'monthly_costs' => $this->monthly_costs,
             'flatrate'      => $this->flatrate,
-            'start_date'    => $this->start_date,
-            'end_date'      => $this->end_date,
         ]);
 
-        $serviceIds = array_column($this->tmpServices, 'id');
-        $this->contract->services()->sync($serviceIds);
+        // Prepare services with hours for the pivot table
+        $servicesWithHours = [];
+        foreach($this->tmpServices as $service){
+            $servicesWithHours[$service['id']] = ['hours' => $this->serviceHours[$service['id']] ?? 0];
+        }
+        $this->contract->services()->sync($servicesWithHours);
 
         session()->flash('message', 'Contract updated successfully.');
 

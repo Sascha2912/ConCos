@@ -16,15 +16,16 @@ class Create extends FormBase {
 
         $contract = Contract::create([
             'name'          => $this->name,
-            'hours'         => $this->hours,
             'monthly_costs' => $this->monthly_costs,
             'flatrate'      => $flatrateValue,
-            'start_date'    => $this->start_date,
-            'end_date'      => $this->end_date,
         ]);
-
-        $serviceIds = array_column($this->tmpServices, 'id');
-        $contract->services()->sync($serviceIds);
+        
+        // Bereite Services mit den entsprechenden Stunden für die Pivot-Tabelle vor
+        $servicesWithHours = [];
+        foreach($this->tmpServices as $service){
+            $servicesWithHours[$service['id']] = ['hours' => $this->serviceHours[$service['id']] ?? 0];
+        }
+        $contract->services()->sync($servicesWithHours);
 
         session()->flash('message', 'Contract created successfully.');
 
