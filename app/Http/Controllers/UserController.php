@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
     protected UserRepository $userRepository;
@@ -29,12 +31,6 @@ class UserController extends Controller {
      */
     public function create(Request $request) {
 
-        if($request->routeIs('register_create')){
-
-
-            return view('auth.register', ['user' => new User()]);
-        }
-
         return view('users.create', ['user' => new User()]);
     }
 
@@ -53,12 +49,6 @@ class UserController extends Controller {
             ]);
         }
 
-        if($request->routeIs('register_store')){
-            Auth::login($user);
-
-            return redirect(route('customers.index', ['user' => $user]));
-        }
-
         return redirect(route('users.index'));
     }
 
@@ -66,33 +56,74 @@ class UserController extends Controller {
      * Display the specified resource.
      */
     public function show(Request $request, User $user) {
+        $roles = ['viewer', 'editor', 'admin'];
+
         if($request->expectsJson()){
 
             return response([
-                'user' => $user,
+                'user'  => $user,
+                'roles' => $roles,
             ]);
         }
 
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', [
+            'user'  => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**
      * Show the forms for editing the specified resource.
      */
     public function edit(User $user) {
+        $roles = ['viewer', 'editor', 'admin'];
 
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', [
+            'user'  => $user,
+            'roles' => $roles,
+        ]);
+    }
+
+    public function editProfile(Request $request) {
+        $user = Auth::user();
+
+        return view('users.edit', ['user' => $user, 'roles' => [$user->role]]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user) {
+
         if($request->email === $user->email){
             unset($request['email']);
         }
 
-        $data = $this->validate($request, User::validationRules());
+        if($request->routeIs('users.update.language') && $request->has('preferred_language')){
+            $data = $this->validate($request, [
+                'preferred_language' => 'required|in:en,de',
+            ]);
+            $this->userRepository->updateOrCreate($data, $user);
+
+            // Stelle sicher, dass die Seite neu geladen wird, ohne Umleitung
+            return back();
+        }else{
+            $data = $this->validate($request, User::validationRules());
+
+            // Neues Passwort festlegen, falls angegeben
+            if( !empty($data['new_password'])){
+                // Überprüfen, ob das aktuelle Passwort korrekt ist
+                if( !Hash::check($request->current_password, $user->password)){
+                    return back()->withErrors(['current_password' => 'Das aktuelle Passwort ist nicht korrekt.']);
+                }else{
+                    $data['password'] = bcrypt($data['new_password']); // Passwort verschlüsseln
+                }
+
+            }else{
+                unset($data['password']); // Passwort nicht aktualisieren, wenn es nicht gesetzt ist
+            }
+        }
+
         $user = $this->userRepository->updateOrCreate($data, $user);
 
         return redirect(route('users.edit', ['user' => $user]));

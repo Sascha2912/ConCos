@@ -8,54 +8,89 @@
             <h1>{{ __('app.edit_user') }}</h1>
             <div class="edit-wrapper">
 
-                <x-forms.field>
-                    <x-forms.label for="firstname">{{ __('app.firstname') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="firstname">{{ __('app.firstname') }}:</x-forms.label>
                         <x-forms.input name="firstname" id="firstname" value="{{ $user->firstname }}" required/>
+                    </x-forms.field>
+                    <x-forms.error name="firstname"/>
+                </div>
 
-                        <x-forms.error name="firstname"/>
-                    </div>
-                </x-forms.field>
-
-                <x-forms.field>
-                    <x-forms.label for="lastname">{{ __('app.lastname') }}:</x-forms.label>
-                    <div class="mt-2">
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="lastname">{{ __('app.lastname') }}:</x-forms.label>
                         <x-forms.input name="lastname" id="lastname" value="{{ $user->lastname }}" required/>
+                    </x-forms.field>
+                    <x-forms.error name="lastname"/>
+                </div>
 
-                        <x-forms.error name="lastname"/>
-                    </div>
-                </x-forms.field>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
+                        <x-forms.input name="email" id="email" type="email" value="{{ $user->email }}" required/>
+                    </x-forms.field>
+                    <x-forms.error name="email"/>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
-                    <div class="mt-2">
-                        <x-forms.input name="email" id="email" type="email" value="{{ $user->email }}"
-                                       required/>
+                <!-- Dropdown für Rolle -->
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="role">{{ __('app.role') }}:</x-forms.label>
+                        <select name="role" id="role" class="form-select">
+                            <!-- Aktuelle Rolle anzeigen, aber nicht in den Optionen -->
+                            <option value="{{ $user->role }}" selected>{{ $user->role }}</option>
+                            @foreach ($roles as $role)
+                                @if ($role !== $user->role)
+                                    <option value="{{ $role }}">{{ $role }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </x-forms.field>
+                    <x-forms.error name="role"/>
+                </div>
 
-                        <x-forms.error name="email"/>
-                    </div>
-                </x-forms.field>
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="current_password">{{ __('app.current_password') }}:</x-forms.label>
+                        <x-forms.input name="current_password" id="current_password" type="password"/>
+                    </x-forms.field>
+                    <x-forms.error name="current_password"/>
+                </div>
 
-                <x-forms.field>
-                    <x-forms.label for="email">{{ __('app.password') }}:</x-forms.label>
-                    <div class="mt-2">
-                        <x-forms.input name="password" id="password" type="password"
-                                       value="{{ $user->password }}"
-                                       required/>
+                <div></div>
 
-                        <x-forms.error name="password"/>
-                    </div>
-                </x-forms.field>
+                <!-- Passwort ändern -->
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="new_password">{{ __('app.new_password') }}:</x-forms.label>
+                        <x-forms.input name="new_password" id="new_password" type="password"/>
+                    </x-forms.field>
+                    <x-forms.error name="new_password"/>
+                </div>
+
+                <div>
+                    <x-forms.field>
+                        <x-forms.label for="new_password_confirmation">{{ __('app.confirm_password') }}:</x-forms.label>
+                        <x-forms.input name="new_password_confirmation" id="new_password_confirmation" type="password"/>
+                    </x-forms.field>
+                    <x-forms.error name="new_password_confirmation"/>
+                </div>
 
             </div>
         </div>
 
-        <div class="button-bar">
+        <div class="button-bottom-bar">
             <x-partials.action-link href="/users"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-            <x-forms.delete-button :route="route('users.destroy', $user->id)"
-                                   class="delete-button">{{ __('app.delete') }}</x-forms.delete-button>
+            <button class="delete-button" form="delete-form">
+                {{ $slot ?? __('app.delete') }}
+            </button>
             <x-forms.button>{{ __('app.save') }}</x-forms.button>
         </div>
+    </form>
+
+    <form class="hidden" method="POST" action="/users/{{ $user->id }}" id="delete-form">
+        @csrf
+        @method('DELETE')
     </form>
 </x-app-layout>
