@@ -75,19 +75,20 @@ class UserController extends Controller {
     /**
      * Show the forms for editing the specified resource.
      */
-    public function edit(User $user) {
+    public function edit(Request $request, User $user) {
+
+        if($request->routeIs('user.profile.edit')){
+            $user = Auth::user();
+
+            return view('users.edit', ['user' => $user, 'roles' => [$user->role]]);
+        }
+
         $roles = ['viewer', 'editor', 'admin'];
 
         return view('users.edit', [
             'user'  => $user,
             'roles' => $roles,
         ]);
-    }
-
-    public function editProfile(Request $request) {
-        $user = Auth::user();
-
-        return view('users.edit', ['user' => $user, 'roles' => [$user->role]]);
     }
 
     /**

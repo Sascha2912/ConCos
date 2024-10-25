@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function() {
             'timelogs' => TimelogController::class,
         ]);
 
-        Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('user.profile.edit');
+        Route::get('/profile/edit', [UserController::class, 'edit'])->name('user.profile.edit');
 
         Route::put('/users/{user}/language', [UserController::class, 'update'])->name('users.update.language');
 

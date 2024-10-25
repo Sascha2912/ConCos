@@ -33,21 +33,8 @@
                 </div>
 
                 <!-- Dropdown für Rolle -->
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="role">{{ __('app.role') }}:</x-forms.label>
-                        <select name="role" id="role" class="form-select">
-                            <!-- Aktuelle Rolle anzeigen, aber nicht in den Optionen -->
-                            <option value="{{ $user->role }}" selected>{{ $user->role }}</option>
-                            @foreach ($roles as $role)
-                                @if ($role !== $user->role)
-                                    <option value="{{ $role }}">{{ $role }}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </x-forms.field>
-                    <x-forms.error name="role"/>
-                </div>
+                <x-forms.select name="role" label="{{ __('app.role') }}" :options="$roles"
+                                selected="{{ $user->role }}"/>
 
                 <div>
                     <x-forms.field>
