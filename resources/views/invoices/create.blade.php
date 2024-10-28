@@ -10,5 +10,5 @@
     <p><strong>{{ __('app.extra_costs') }}:</strong> €{{ $extraCosts }}</p>
     <p><strong>{{ __('app.total_costs') }}:</strong> €{{ $total }}</p>
 
-    <button onclick="window.print()">{{ __('app.print_invoice') }}</button>
+    <button onclick="window.print()">{{ __('app.print') }}</button>
 </x-app-layout>

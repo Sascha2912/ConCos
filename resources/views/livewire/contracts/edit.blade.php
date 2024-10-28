@@ -1,96 +1,80 @@
-<div>
-    <form wire:submit.prevent="save">
+<div class="wrapper">
+    <h1>{{ __('app.edit_contract') }}</h1>
+    <form wire:submit.prevent="save" id="contract-form">
         @csrf
+        <!-- Form Input Fields -->
+        <x-forms.input-field
+                name="name"
+                label="{{ __('app.contract_name') }}"
+                type="text"
+                :required="true"
+                wireModel="name"/>
 
-        <div class="form-input-wrapper">
-            <h1>{{ __('app.edit_contract') }}</h1>
+        <x-forms.input-field
+                name="monthly_costs"
+                label="{{ __('app.monthly_price') }}"
+                type="text"
+                :required="true"
+                wireModel="monthly_costs"/>
 
-            <div class="edit-wrapper">
+        <x-forms.input-field
+                name="flatrate"
+                label="{{ __('app.flatrate') }}"
+                type="checkbox"
 
-                <!-- Form Input Fields -->
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="name">{{ __('app.contract_name') }}:</x-forms.label>
-                        <x-forms.input wire:model="name" name="name" id="name" required/>
-                    </x-forms.field>
-                    <x-forms.error name="name"/>
-                </div>
+                wireModel="flatrate"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="flatrate">{{ __('app.flatrate') }}:</x-forms.label>
-                        <input wire:model="flatrate" name="flatrate" id="flatrate" type="checkbox"
-                               @if($contract->flatrate) checked @endif/>
-                    </x-forms.field>
-                    <x-forms.error name="flatrate"/>
-                </div>
+        <!-- Service Dropdown -->
+        <x-forms.select-field
+                name="dropdown"
+                label="{{ __('app.add_service') }}"
+                :options="$availableServices"
+                selected="{{ $selectedServiceId }}"
+                wireModel="selectedServiceId"
+                wireKey="service-select-{{ now() }}"
+                wireChange="addService($event.target.value)"
+        />
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="monthly_costs">{{ __('app.monthly_price') }}: €</x-forms.label>
-                        <x-forms.input wire:model="monthly_costs" name="monthly_costs" id="monthly_costs" required/>
-                    </x-forms.field>
-                    <x-forms.error name="monthly_costs"/>
-                </div>
-
-                <!-- Service Dropdown -->
-                <x-forms.field>
-                    <x-forms.label for="dropdown">{{ __('app.add_service') }}:</x-forms.label>
-                    <select class="dropdown" id="dropdown" wire:model="selectedServiceId"
-                            wire:key="service-select-{{ now() }}"
-                            wire:change="addService($event.target.value)">
-                        <option value="default"></option>
-                        @foreach($availableServices as $service)
-                            <option class="text-black" value="{{ $service->id }}">{{ $service->name }}</option>
-                        @endforeach
-                    </select>
-                </x-forms.field>
-            </div>
-
-            <div>
-                <!-- Selected Services -->
-                <h2 class="item-heading">{{ __('app.current_services') }}:</h2>
-                <ul class="item-wrapper">
-                    @foreach($tmpServices as $service)
-                        <li class="item-col"
-                            wire:key="service-{{ $service['id'] }}">
-                            <!-- Service Information -->
-                            <div class="item">
-                                <span class="item-text">{{ $service['name'] }}</span>
-                            </div>
-
-                            <!-- Delete Button and Input for Service Hours -->
-                            <div class="item-edit">
-                                <label for="service_hours_{{ $service['id'] }}"
-                                       class="item-label">
-                                    {{ __('app.service_hours') }}:
-                                </label>
-                                <input wire:model="serviceHours.{{ $service['id'] }}"
-                                       name="service_hours"
-                                       id="service_hours_{{ $service['id'] }}"
-                                       type="text" required
-                                       class="item-input"/>
-
-                                <!-- Delete Button -->
-                                <x-dropdown.delete-button
-                                        wire:click="removeService({{ $service['id'] }})"/>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <!-- Button-Bottom-Bar -->
-            <div class="button-bottom-bar">
-                <x-partials.action-link href="/contracts" class="back">{{ __('app.back') }}</x-partials.action-link>
-                <livewire.delete-button class="delete-button"
-                                        onclick="return confirm('{{ __('app.are_you_sure') }}');"
-                                        wire:click="deleteContract({{ $contract->id }})">
-                    {{ __('app.delete') }}
-                </livewire.delete-button>
-                <x-forms.button>{{ __('app.save') }}</x-forms.button>
-            </div>
-
-        </div>
     </form>
+
+    <div>
+        <!-- Selected Services -->
+        <h2 class="item-heading">{{ __('app.current_services') }}:</h2>
+        <ul class="item-wrapper">
+            @foreach($tmpServices as $service)
+                <li
+                        wire:key="service-{{ $service['id'] }}">
+                    <!-- Service Information -->
+                    <div>
+                        <span class="item-text">{{ $service['name'] }}</span>
+                    </div>
+
+                    <!-- Delete Button and Input for Service Hours -->
+                    <div class="item-edit">
+                        <x-forms.input-field
+                                name="service_hours"
+                                id="service_hours_{{ $service['id'] }}"
+                                label="{{ __('app.service_hours') }}"
+                                type="text"
+                                :required="true"
+                                wireModel="serviceHours.{{ $service['id'] }}"/>
+
+                        <!-- Delete Button -->
+                        <x-item.delete-button
+                                wire:click="removeService({{ $service['id'] }})"/>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+    <!-- Button-Bottom-Bar -->
+    <div class="button-bottom-bar">
+        <x-partials.action-link href="/contracts" class="back">{{ __('app.back') }}</x-partials.action-link>
+        <button class="delete"
+                onclick="return confirm('{{ __('app.are_you_sure') }}');"
+                wire:click="deleteContract({{ $contract->id }})">
+            {{ __('app.delete') }}
+        </button>
+        <button form="contract-form">{{ __('app.save') }}</button>
+    </div>
 </div>

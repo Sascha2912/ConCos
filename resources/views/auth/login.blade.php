@@ -1,30 +1,27 @@
 <x-auth-layout>
-
-    <form class="py-20" method="POST" action="/login">
-        @csrf
+    <main>
 
         <h1>{{ __('app.login') }}</h1>
-        <div class="login-wrapper">
+        <form class="grid-cols-1" method="POST" action="/login">
+            @csrf
 
-            <div>
-                <x-forms.field>
-                    <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
-                    <x-forms.input name="email" id="email" type="email" :value="old('email')" required/>
-                </x-forms.field>
-                <x-forms.error name="email"/>
+            <x-forms.input-field
+                    name="email"
+                    label="{{ __('app.email') }}"
+                    type="email"
+                    :required="true"
+            />
+            <x-forms.input-field
+                    name="password"
+                    label="{{ __('app.password') }}"
+                    type="password"
+                    :required="true"
+            />
+            <div class="button-bottom-bar">
+                <button>{{ __('app.login') }}</button>
             </div>
+        </form>
 
-            <div>
-                <x-forms.field>
-                    <x-forms.label for="password">{{ __('app.password') }}:</x-forms.label>
-                    <x-forms.input name="password" id="password" type="password" required/>
-                </x-forms.field>
-                <x-forms.error name="password"/>
-            </div>
-        </div>
+    </main>
 
-        <div class="button-bottom-bar">
-            <x-forms.button>{{ __('app.login') }}</x-forms.button>
-        </div>
-    </form>
 </x-auth-layout>

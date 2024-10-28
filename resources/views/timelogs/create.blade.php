@@ -1,58 +1,43 @@
 <x-app-layout>
-    <form method="POST" action="{{ route('timelogs.store') }}">
-        @csrf
+    <div class="wrapper">
 
-        <div class="form-input-wrapper">
-            <h1>{{ __('app.create_new_time_log') }}</h1>
-            <div class="edit-wrapper">
-                <x-forms.label for="customer_id[]">{{ __('app.customer') }}:</x-forms.label>
-                <select name="customer_id" required>
-                    @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}"
-                                @if($timelog->customer_id == $customer->id) selected @endif>{{ $customer->firstname }} {{ $customer->lastname }}</option>
-                    @endforeach
-                </select>
+        <h1>{{ __('app.create_new_time_log') }}</h1>
 
-                <x-forms.label>{{ __('app.contract') }}:</x-forms.label>
-                <select name="contract_id" required>
-                    @foreach($contracts as $contract)
-                        <option value="{{ $contract->id }}">{{ $contract->name }}</option>
-                    @endforeach
-                </select>
+        <form method="POST" action="{{ route('timelogs.store') }}" id="timelog-form">
+            @csrf
+            <x-forms.select-field
+                    name="customer_id[]"
+                    label="{{ __('app.customer') }}"
+                    :options="$customers"
+                    :required="true"
+            />
 
-                <x-forms.label for="service_id[]">{{ __('app.service') }}:</x-forms.label>
-                <select name="service_id" required>
-                    @foreach($services as $service)
-                        <option value="{{ $service->id }}"
-                                @if($timelog->service_id == $service->id) selected @endif>{{ $service->name }}</option>
-                    @endforeach
-                </select>
+            <x-forms.select-field
+                    name="service_id[]"
+                    label="{{ __('app.service') }}"
+                    :options="$services"
+                    :required="true"
+            />
 
-                <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
+            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="hours">{{ __('app.hours') }}:</x-forms.label>
-                        <x-forms.input name="hours" id="hours" value="{{ $timelog->hours }}"/>
-                    </x-forms.field>
-                    <x-forms.error name="hours"/>
-                </div>
+            <x-forms.input-field
+                    name="hours"
+                    label="{{ __('app.hours') }}"
+                    type="text"
+                    :required="true"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="date">{{ __('app.date') }}:</x-forms.label>
-                        <x-forms.input name="date" id="date" value="{{ $timelog->date }}"/>
-                    </x-forms.field>
-                    <x-forms.error name="date"/>
-                </div>
+            <x-forms.input-field
+                    name="date"
+                    label="{{ __('app.date') }}"
+                    type="date"
+                    :required="true"/>
 
-            </div>
-        </div>
-
+        </form>
         <div class="button-bottom-bar">
             <x-partials.action-link href="/timelogs"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-            <x-forms.button>{{ __('app.log') }}</x-forms.button>
+            <button form="timelog-form">{{ __('app.log') }}</button>
         </div>
-    </form>
+    </div>
 </x-app-layout>

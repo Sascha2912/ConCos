@@ -10,25 +10,17 @@
     @livewireStyles
 </head>
 <body>
-<div class="wrapper">
-    <x-navigation></x-navigation>
 
-    <main>
-        <div class="wrapper">
-            @if (isset($header))
-                <header>
-                    {{ $header }}
-                </header>
-            @endif
-            {{ $slot }}
-            @livewireScripts
-        </div>
-    </main>
+<x-navigation/>
 
-    <footer>
-        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-    </footer>
+<main>
+    {{ $slot }}
+    @livewireScripts
+</main>
 
-</div>
+<footer>
+    Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+</footer>
+
 </body>
 </html>

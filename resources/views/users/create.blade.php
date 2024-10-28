@@ -1,53 +1,43 @@
 <x-app-layout>
-    <form method="POST" action="{{ route('users.store') }}">
-        @csrf
+    <div class="wrapper">
+        <h1>{{ __('app.create_new_user') }}</h1>
+        <form method="POST" action="{{ route('users.store') }}" id="user-form">
+            @csrf
 
-        <div class="form-input-wrapper">
-            <h1>{{ __('app.create_new_user') }}</h1>
-            <div class="edit-wrapper">
+            <x-forms.input-field
+                    name="firstname"
+                    label="{{ __('app.firstname') }}"
+                    type="text"
+                    :required="true"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="firstname">{{ __('app.firstname') }}:</x-forms.label>
-                        <x-forms.input name="firstname" id="firstname" value="{{ $user->firstname }}" required/>
-                    </x-forms.field>
-                    <x-forms.error name="firstname"/>
-                </div>
+            <x-forms.input-field
+                    name="lastname"
+                    label="{{ __('app.lastname') }}"
+                    type="text"
+                    :required="true"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="lastname">{{ __('app.lastname') }}:</x-forms.label>
-                        <x-forms.input name="lastname" id="lastname" value="{{ $user->lastname }}" required/>
-                    </x-forms.field>
-                    <x-forms.error name="lastname"/>
-                </div>
+            <x-forms.input-field
+                    name="email"
+                    label="{{ __('app.email') }}"
+                    type="text"
+                    :required="true"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="email">{{ __('app.email') }}:</x-forms.label>
-                        <x-forms.input name="email" id="email" type="email" value="{{ $user->email }}"
-                                       required/>
-                    </x-forms.field>
-                    <x-forms.error name="email"/>
-                </div>
+            <!-- Dropdown für Rolle -->
+            <x-forms.select-field
+                    name="role"
+                    label="{{ __('app.role') }}"
+                    :options="$roles"/>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="email">{{ __('app.password') }}:</x-forms.label>
-                        <x-forms.input name="password" id="password" type="password"
-                                       value="{{ $user->password }}"
-                                       required/>
+            <x-forms.input-field
+                    name="password"
+                    label="{{ __('app.password') }}"
+                    type="password"/>
 
-                    </x-forms.field>
-                    <x-forms.error name="password"/>
-                </div>
-            </div>
-        </div>
-
+        </form>
         <div class="button-bottom-bar">
             <x-partials.action-link href="/users"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-            <x-forms.button>{{ __('app.create_user') }}</x-forms.button>
+            <button form="user-form">{{ __('app.create_user') }}</button>
         </div>
-    </form>
+    </div>
 </x-app-layout>

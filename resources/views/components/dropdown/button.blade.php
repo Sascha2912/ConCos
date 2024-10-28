@@ -1,5 +1,5 @@
 <button @click="open = !open; event.stopPropagation();" type="button"
-        class="flex gap-2 content-center p-1 rounded-md sm:max-w-md leading-6">
+        class="dropdown">
     {{ $slot }}
     <div class="ms-1 block flex-1 border-0 bg-transparent py-0.5 px-0 text-white placeholder:text-gray-400 sm:text-sm sm:leading-6">
         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg"

@@ -1,61 +1,57 @@
 <x-app-layout>
-    <form method="POST" action="{{ route('timelogs.update', $timelog->id) }}">
-        @csrf
-        @method('PUT')
+    <div class="wrapper">
 
-        <div class="form-input-wrapper">
-            <h1>{{ __('app.edit_time_entry') }}</h1>
-            <div class="edit-wrapper">
-                <x-forms.label for="customer_id[]">{{ __('app.customer') }}:</x-forms.label>
-                <select name="customer_id" required>
-                    @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}"
-                                @if($timelog->customer_id == $customer->id) selected @endif>{{ $customer->firstname }} {{ $customer->lastname }}</option>
-                    @endforeach
-                </select>
+        <h1>{{ __('app.edit_time_entry') }}</h1>
 
-                <x-forms.label>{{ __('app.contract') }}:</x-forms.label>
-                <select name="contract_id" required>
-                    @foreach($contracts as $contract)
-                        <option value="{{ $contract->id }}">{{ $contract->name }}</option>
-                    @endforeach
-                </select>
+        <form method="POST" action="{{ route('timelogs.update', $timelog->id) }}" id="timelog-form">
+            @csrf
+            @method('PUT')
 
-                <x-forms.label for="service_id[]">{{ __('app.service') }}:</x-forms.label>
-                <select name="service_id" required>
-                    @foreach($services as $service)
-                        <option value="{{ $service->id }}"
-                                @if($timelog->service_id == $service->id) selected @endif>{{ $service->name }}</option>
-                    @endforeach
-                </select>
+            <x-forms.select-field
+                    name="customer_id[]"
+                    label="{{ __('app.customer') }}"
+                    :options="$customers"
+                    selected="{{ $timelog->customer_id }}"
+                    :required="true"
+            />
 
-                <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
+            <x-forms.select-field
+                    name="service_id[]"
+                    label="{{ __('app.service') }}"
+                    :options="$services"
+                    selected="{{ $timelog->service->id }}"
+                    :required="true"
+            />
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="hours">{{ __('app.hours') }}:</x-forms.label>
-                        <x-forms.input name="hours" id="hours" value="{{ $timelog->hours }}"/>
-                    </x-forms.field>
-                    <x-forms.error name="hours"/>
-                </div>
+            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
-                <div>
-                    <x-forms.field>
-                        <x-forms.label for="date">{{ __('app.date') }}:</x-forms.label>
-                        <x-forms.input name="date" id="date" value="{{ $timelog->date }}"/>
-                    </x-forms.field>
-                    <x-forms.error name="date"/>
-                </div>
+            <x-forms.input-field
+                    name="hours"
+                    label="{{ __('app.hours') }}"
+                    value="{{ $timelog->hours }}"
+                    type="text"
+                    :required="true"/>
 
-            </div>
-        </div>
+            <x-forms.input-field
+                    name="date"
+                    label="{{ __('app.date') }}"
+                    value="{{ $timelog->date }}"
+                    type="date"
+                    :required="true"/>
+        </form>
 
         <div class="button-bottom-bar">
             <x-partials.action-link href="/timelogs"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-            <x-forms.delete-button :route="route('timelogs.destroy', $timelog->id)"
-                                   class="delete-button">{{ __('app.delete') }}</x-forms.delete-button>
-            <x-forms.button>{{ __('app.save') }}</x-forms.button>
+            <button class="delete" form="delete-form">
+                {{ __('app.delete') }}
+            </button>
+            <button form="timelog-form">{{ __('app.save') }}</button>
         </div>
-    </form>
+
+        <form action="{{ route('timelogs.destroy', $timelog->id) }}" method="POST" id="delete-form">
+            @csrf
+            @method('DELETE')
+        </form>
+    </div>
 </x-app-layout>

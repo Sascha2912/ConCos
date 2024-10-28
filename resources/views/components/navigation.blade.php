@@ -1,6 +1,5 @@
-<div class="nav-wrapper">
-
-    <nav class="nav-link-wrapper">
+<nav>
+    <div class="nav-links">
         <x-partials.nav-link
                 href="/customers"
                 :active="request()->is('customers*')"
@@ -28,11 +27,12 @@
         >
             {{ __('app.users') }}
         </x-partials.nav-link>
-    </nav>
+    </div>
 
     <div class="user-area">
         <div class="dropdown-wrapper">
-            <form method="POST" action="{{ route('users.update.language', auth()->user()->id) }}" x-data
+            <form class="block" method="POST" action="{{ route('users.update.language', auth()->user()->id) }}"
+                  x-data
                   @submit.prevent="$refs.languageForm.submit()" x-ref="languageForm">
                 @csrf
                 @method('PUT')
@@ -59,11 +59,10 @@
                                              @click="$refs.languageInput.value = 'de'">{{ __('app.de') }}</x-dropdown.link>
                         @endif
                     </x-slot>
-                </x-dropdown.field>
-                <input type="hidden" name="preferred_language" x-ref="languageInput"
-                       value="{{ auth()->user()->preferred_language }}">
-            </form>
 
+                </x-dropdown.field>
+
+            </form>
             <x-partials.nav-link
                     href="{{ route('user.profile.edit') }}"
                     :active="request()->routeIs('user.profile.edit')"
@@ -72,12 +71,12 @@
             </x-partials.nav-link>
 
             @auth()
-                <form method="POST" action="/logout">
+                <form class="block" method="POST" action="/logout">
                     @csrf
-                    <x-forms.button>{{ __('app.logout') }}</x-forms.button>
+                    <button>{{ __('app.logout') }}</button>
                 </form>
 
             @endauth
         </div>
     </div>
-</div>
+</nav>
