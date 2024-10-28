@@ -101,7 +101,7 @@ class CustomerController extends Controller {
             ]);
         }
 
-        return view('customers.edit', [
+        return view('customers.show', [
             'customer'      => $customer,
             'usedHours'     => $usedHours,
             'contractHours' => $contractHours,

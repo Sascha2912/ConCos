@@ -21,10 +21,13 @@ class TimelogController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index() {
-        $timelogs = Timelog::paginate(50);
+    public function index(Customer $customer) {
+        $timelogs = $customer->timelogs()->orderBy('created_at', 'desc')->simplePaginate(5);
 
-        return view('timelogs.index', ['timelogs' => $timelogs]);
+        return view('timelogs.index', [
+            'timelogs' => $timelogs,
+            'customer' => $customer,
+        ]);
     }
 
     /**

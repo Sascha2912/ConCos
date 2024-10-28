@@ -20,7 +20,6 @@ Route::middleware('auth')->group(function() {
         Route::resources([
             'users'    => UserController::class,
             'services' => ServiceController::class,
-            'timelogs' => TimelogController::class,
         ]);
 
         Route::get('/profile/edit', [UserController::class, 'edit'])->name('user.profile.edit');
@@ -30,13 +29,7 @@ Route::middleware('auth')->group(function() {
         Route::get('customers/{customer}/invoice',
             [InvoiceController::class, 'create'])->name('invoice.create');
 
-
-        Route::post('customers/{customer}/contracts',
-            [\App\Models\Customer::class, 'store'])->name('customer.contracts.store');
-        Route::delete('customers/{customer}/contracts{contract}',
-            [CustomerController::class, 'destroy'])->name('customer.contracts.destroy');
-
-
+        // ########## Customer Routes ##########
         Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('/customers/create', App\Livewire\Customers\Create::class)->name('customers.create');
         Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
@@ -46,6 +39,7 @@ Route::middleware('auth')->group(function() {
         Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
         Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 
+        // ########## Contract Routes ##########
         Route::get('/contracts', [ContractController::class, 'index'])->name('contracts.index');
         Route::get('/contracts/create', App\Livewire\Contracts\Create::class)->name('contracts.create');
         Route::post('/contracts', [ContractController::class, 'store'])->name('contracts.store');
@@ -53,6 +47,21 @@ Route::middleware('auth')->group(function() {
         Route::get('contracts/{contract}/edit', App\Livewire\Contracts\Edit::class)->name('contracts.edit');
         Route::put('/contracts/{contract}', [ContractController::class, 'update'])->name('contracts.update');
         Route::delete('/contracts/{contract}', [ContractController::class, 'destroy'])->name('contracts.destroy');
+
+        // ########## Customer-Contract Routes ##########
+        Route::post('customers/{customer}/contracts',
+            [\App\Models\Customer::class, 'store'])->name('customer.contracts.store');
+        Route::delete('customers/{customer}/contracts{contract}',
+            [CustomerController::class, 'destroy'])->name('customer.contracts.destroy');
+
+        // ########## Timelog Routes ##########
+        Route::get('/customers/{customer}/timelogs', [TimelogController::class, 'index'])->name('timelogs.index');
+        Route::get('/timelogs/create', [TimelogController::class, 'create'])->name('timelogs.create');
+        Route::post('/timelogs', [TimelogController::class, 'store'])->name('timelogs.store');
+        Route::get('/timelogs/{timelog}', [TimelogController::class, 'show'])->name('timelogs.show');
+        Route::get('timelogs/{timelog}/edit', [TimelogController::class, 'edit'])->name('timelogs.edit');
+        Route::put('/timelogs/{timelog}', [TimelogController::class, 'update'])->name('timelogs.update');
+        Route::delete('/timelogs/{timelog}', [TimelogController::class, 'destroy'])->name('timelogs.destroy');
 
     });
 

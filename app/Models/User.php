@@ -35,7 +35,7 @@ class User extends Authenticatable {
             'role'               => 'required|bail|string|in:viewer,editor,admin',
             'preferred_language' => 'nullable|string|max:255',
             'email'              => ($creating ? 'required|bail|' : '').'email|unique:users,email|string|max:255',
-            'password'           => ($creating ? 'required|bail|' : 'nullable|').'string|min:8|confirmed',
+            'password'           => ($creating ? 'required|bail|' : 'nullable|').'string|min:8',
             'current_password'   => 'nullable|string|min:8', // Aktuelles Passwort ist erforderlich
             'new_password'       => 'nullable|string|min:8|confirmed', // Neues Passwort
 

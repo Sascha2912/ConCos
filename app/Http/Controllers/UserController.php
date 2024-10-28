@@ -30,8 +30,9 @@ class UserController extends Controller {
      * Show the forms for creating a new resource.
      */
     public function create(Request $request) {
+        $roles = ['viewer', 'editor', 'admin'];
 
-        return view('users.create', ['user' => new User()]);
+        return view('users.create', ['user' => new User(), 'roles' => $roles]);
     }
 
     /**
