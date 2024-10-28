@@ -27,7 +27,6 @@
                     name="description"
                     label="{{ __('app.description') }}"
                     value="{{ $service->description }}"
-                    :required="true"
                     rows="9"
             />
         </form>

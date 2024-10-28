@@ -12,7 +12,7 @@
             </li>
             @foreach($services as $service)
                 <li>
-                    <a href="{{ route('services.show', $service->id) }}">
+                    <a class="index-link" href="{{ route('services.show', $service->id) }}">
                         <p>{{ $service->name }}</p>
                         <p>{{ $service->costs_per_hour }} €</p>
                         <p>{{ $service->id }}</p>

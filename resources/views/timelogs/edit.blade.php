@@ -7,13 +7,8 @@
             @csrf
             @method('PUT')
 
-            <x-forms.select-field
-                    name="customer_id[]"
-                    label="{{ __('app.customer') }}"
-                    :options="$customers"
-                    selected="{{ $timelog->customer_id }}"
-                    :required="true"
-            />
+            <input type="number" name="customer_id" value="{{ $timelog->customer_id }}" hidden>
+            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
             <x-forms.select-field
                     name="service_id[]"
@@ -22,8 +17,6 @@
                     selected="{{ $timelog->service->id }}"
                     :required="true"
             />
-
-            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
             <x-forms.input-field
                     name="hours"
@@ -38,6 +31,13 @@
                     value="{{ $timelog->date }}"
                     type="date"
                     :required="true"/>
+
+            <x-forms.textarea-field
+                    name="description"
+                    label="{{ __('app.description') }}"
+                    value="{{ $timelog->description }}"
+                    rows="9"
+            />
         </form>
 
         <div class="button-bottom-bar">

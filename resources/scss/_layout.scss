@@ -92,15 +92,19 @@ ul {
     @apply flex items-center justify-between p-4 gap-12 bg-white shadow-md rounded-lg hover:bg-gray-100;
 
     &.index-header {
-      @apply grid grid-cols-3 place-content-around bg-blue-400 text-white;
+      @apply w-full grid grid-cols-3 items-center p-4 gap-12 bg-blue-400 text-white;
     }
 
-    a {
-      @apply w-full flex items-center justify-between p-4 gap-12;
+    &.index-header-4 {
+      @apply w-full grid grid-cols-4 items-center p-4 gap-12 bg-blue-400 text-white;
+    }
 
-      p {
-        @apply w-full;
-      }
+    .index-link {
+      @apply w-full p-0 grid grid-cols-3 items-center gap-12;
+    }
+
+    .index-link-4 {
+      @apply w-full p-0 grid grid-cols-4 items-center gap-12;
     }
   }
 }

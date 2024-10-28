@@ -37,6 +37,8 @@
                 @csrf
                 @method('PUT')
 
+                <input type="hidden" name="preferred_language" x-ref="languageInput">
+
                 <x-dropdown.field align="left" width="48">
                     <x-slot name="trigger">
                         <x-dropdown.button>
@@ -59,7 +61,6 @@
                                              @click="$refs.languageInput.value = 'de'">{{ __('app.de') }}</x-dropdown.link>
                         @endif
                     </x-slot>
-
                 </x-dropdown.field>
 
             </form>

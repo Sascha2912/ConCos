@@ -13,7 +13,7 @@
             </li>
             @foreach($users as $user)
                 <li>
-                    <a href="{{ route('users.show', $user->id) }}">
+                    <a class="index-link" href="{{ route('users.show', $user->id) }}">
                         <p>{{ $user->firstname }}</p>
                         <p>{{ $user->lastname }}</p>
                         <p>{{ $user->role }}</p>

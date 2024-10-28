@@ -14,6 +14,7 @@ class Timelog extends Model {
         'contract_id',
         'hours',
         'date',
+        'description',
     ];
 
     public static function validationRules() {
@@ -24,21 +25,22 @@ class Timelog extends Model {
             'contract_id' => 'required|integer|exists:contracts,id',
             'hours'       => 'required|integer|between:1,24',
             'date'        => 'required|date',
+            'description' => 'nullable|string|max:255',
         ];
     }
 
+    // Beziehung zu Customer
     public function customer() {
-
         return $this->belongsTo(Customer::class);
     }
 
+    // Beziehung zu Contract
     public function contract() {
-
         return $this->belongsTo(Contract::class);
     }
 
+    // Beziehung zu Service
     public function service() {
-
         return $this->belongsTo(Service::class);
     }
 }

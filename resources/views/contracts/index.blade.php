@@ -11,7 +11,7 @@
             </li>
             @foreach($contracts as $contract)
                 <li>
-                    <a href="{{ route('contracts.edit', $contract->id) }}">
+                    <a class="index-link" href="{{ route('contracts.edit', $contract->id) }}">
                         <p>{{ $contract->name }}</p>
                         <p>{{ $contract->monthly_costs }} €</p>
                         <p>{{ $contract->id }}</p>

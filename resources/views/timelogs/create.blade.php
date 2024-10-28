@@ -5,12 +5,9 @@
 
         <form method="POST" action="{{ route('timelogs.store') }}" id="timelog-form">
             @csrf
-            <x-forms.select-field
-                    name="customer_id[]"
-                    label="{{ __('app.customer') }}"
-                    :options="$customers"
-                    :required="true"
-            />
+
+            <input type="number" name="customer_id" value="{{ $timelog->customer_id }}" hidden>
+            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
 
             <x-forms.select-field
                     name="service_id[]"
@@ -18,9 +15,6 @@
                     :options="$services"
                     :required="true"
             />
-
-            <input type="number" name="contract_id" value="{{ $timelog->contract_id }}" hidden>
-
             <x-forms.input-field
                     name="hours"
                     label="{{ __('app.hours') }}"
@@ -32,6 +26,13 @@
                     label="{{ __('app.date') }}"
                     type="date"
                     :required="true"/>
+
+            <x-forms.textarea-field
+                    name="description"
+                    label="{{ __('app.description') }}"
+                    value="{{ $tiemlog->description }}"
+                    rows="9"
+            />
 
         </form>
         <div class="button-bottom-bar">

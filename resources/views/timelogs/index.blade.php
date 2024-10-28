@@ -10,7 +10,7 @@
             </x-partials.nav-link>
 
             <x-partials.nav-link href="{{ route('timelogs.index', $customer->id) }}"
-                                 :active="request()->is('timelogs')">
+                                 :active="request()->routeIs('timelogs.index')">
                 {{ __('app.time_logs') }}
             </x-partials.nav-link>
 
@@ -24,18 +24,20 @@
         </nav>
 
         <ul>
-            <li class="index-header">
+            <li class="index-header-4">
                 <p>{{ __('app.name') }}</p>
                 <p>{{ __('app.service') }}</p>
                 <p>{{ __('app.hours') }}</p>
+                <p>{{ __('app.date') }}</p>
             </li>
             @foreach($timelogs as $timelog)
                 <li>
-                    <a href="{{ route('timelogs.show', $timelog->id) }}">
-                        {{ __('app.customer') }}
-                        : {{ $timelog->customer->name }} {{ $timelog->customer->managing_director }}
-                        {{ __('app.service') }}: {{ $timelog->service->name }}
-                        {{ __('app.hours') }}: {{ $timelog->hours }}
+                    <a class="index-link-4"
+                       href="{{ route('timelogs.show', $timelog->id) }}">
+                        <p>{{ $timelog->customer->name }}</p>
+                        <p>{{ $timelog->service->name }}</p>
+                        <p>{{ $timelog->hours }}</p>
+                        <p>{{ $timelog->date }}</p>
                     </a>
                 </li>
             @endforeach

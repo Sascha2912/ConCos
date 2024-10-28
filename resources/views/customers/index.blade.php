@@ -12,7 +12,7 @@
             </li>
             @foreach($customers as $customer)
                 <li>
-                    <a href="{{ route('customers.show', $customer->id) }}">
+                    <a class="index-link" href="{{ route('customers.show', $customer->id) }}">
                         <p>{{ $customer->name }}</p>
                         <p>{{ $customer->managing_director }}</p>
                         <p>{{ $customer->id }}</p>

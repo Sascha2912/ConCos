@@ -25,6 +25,7 @@ class TimelogFactory extends Factory {
             'contract_id' => $randomContract->id,
             'hours'       => $this->faker->numberBetween(1, 8),
             'date'        => $this->faker->date(),
+            'description' => $this->faker->text(),
             'created_at'  => now(),
             'updated_at'  => now(),
         ];
