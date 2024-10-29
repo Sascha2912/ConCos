@@ -56,10 +56,12 @@ Route::middleware('auth')->group(function() {
 
         // ########## Timelog Routes ##########
         Route::get('/customers/{customer}/timelogs', [TimelogController::class, 'index'])->name('timelogs.index');
-        Route::get('/timelogs/create', [TimelogController::class, 'create'])->name('timelogs.create');
+        Route::get('/customers/{customer}/timelogs/create',
+            App\Livewire\Timelogs\Create::class)->name('timelogs.create');
         Route::post('/timelogs', [TimelogController::class, 'store'])->name('timelogs.store');
         Route::get('/timelogs/{timelog}', [TimelogController::class, 'show'])->name('timelogs.show');
-        Route::get('timelogs/{timelog}/edit', [TimelogController::class, 'edit'])->name('timelogs.edit');
+        Route::get('timelogs/{timelog}/edit',
+            App\Livewire\Timelogs\Edit::class)->name('timelogs.edit');
         Route::put('/timelogs/{timelog}', [TimelogController::class, 'update'])->name('timelogs.update');
         Route::delete('/timelogs/{timelog}', [TimelogController::class, 'destroy'])->name('timelogs.destroy');
 

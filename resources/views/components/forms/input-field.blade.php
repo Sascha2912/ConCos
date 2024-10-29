@@ -5,6 +5,8 @@
     'type' => 'text',
     'value' => null,
     'required' => false,
+    'readonly' => false,
+    'disabled' => false,
     'wireModel' => null,
 ])
 
@@ -16,6 +18,8 @@
                id="{{ $id ?? $name }}"
                type="{{ $type }}"
                value="{{ $value ?? old($name) }}" {{ $required ? 'required' : '' }}
+               @if($readonly) readonly @endif
+               @if($disabled) disabled @endif
                @if($wireModel) wire:model="{{ $wireModel }}" @endif/>
     </div>
     @error($name)

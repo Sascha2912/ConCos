@@ -22,6 +22,7 @@ return new class extends Migration {
 
         Schema::create('contract_service', function(Blueprint $table) {
             $table->id();
+            $table->unique(['contract_id', 'service_id'], 'unique_contract_service');
             $table->foreignIdFor(Contract::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Service::class)->constrained()->cascadeOnDelete();
             $table->integer('hours')->nullable();

@@ -69,34 +69,60 @@ class TimelogController extends Controller {
      * Display the specified resource.
      */
     public function show(Request $request, Timelog $timelog) {
-        $contracts = Contract::paginate();
-        $customers = Customer::paginate();
-        $services = Service::paginate();
+        $customer = $timelog->customer;
+        $contract = $timelog->contract;
+
+
+        $contracts = $customer ? $customer->contracts()->get() : collect();
+        $services = $contract->services->get();
 
         if($request->expectsJson()){
 
             return response([
+
                 'timelog'   => $timelog,
+                'customer'  => $customer,
                 'contracts' => $contracts,
-                'customers' => $customers,
                 'services'  => $services,
+
             ]);
         }
 
-        return view('timelogs.edit',
-            ['timelog' => $timelog, 'contracts' => $contracts, 'customers' => $customers, 'services' => $services]);
+        return view('timelogs.show',
+            [
+                'timelog'   => $timelog,
+                'customer'  => $customer,
+                'contracts' => $contracts,
+                'services'  => $services,
+            ]);
     }
 
     /**
      * Show the forms for editing the specified resource.
      */
     public function edit(Timelog $timelog) {
-        $contracts = Contract::paginate();
-        $customers = Customer::paginate();
-        $services = Service::paginate();
+        $customer = $timelog->customer;
+        $contract = $timelog->contract;
+
+
+        $contracts = $customer->contracts;
+        $services = $contract->services;
+
+        // Erzeuge ein Mapping von Service-ID zu Contract-ID
+        $serviceContractMap = $contracts->flatMap(function($contract) {
+            return $contract->services->mapWithKeys(function($service) use ($contract) {
+                return [$service->id => $contract->id];
+            });
+        });
 
         return view('timelogs.edit',
-            ['timelog' => $timelog, 'contracts' => $contracts, 'customers' => $customers, 'services' => $services]);
+            [
+                'timelog'            => $timelog,
+                'customer'           => $customer,
+                'contracts'          => $contracts,
+                'services'           => $services,
+                'serviceContractMap' => $serviceContractMap,
+            ]);
     }
 
     /**

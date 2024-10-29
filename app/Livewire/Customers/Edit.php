@@ -57,6 +57,12 @@ class Edit extends FormBase {
         return redirect()->route('customers.edit', $this->customer);
     }
 
+    public function deleteCustomer() {
+        $this->customer->delete();
+
+        return redirect(route('customers.index'));
+    }
+
     public function render() {
         return view('livewire.customers.edit')->layout('layouts.app');
     }

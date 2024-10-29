@@ -33,7 +33,7 @@
             @foreach($timelogs as $timelog)
                 <li>
                     <a class="index-link-4"
-                       href="{{ route('timelogs.show', $timelog->id) }}">
+                       href="{{ route('timelogs.edit', $timelog->id) }}">
                         <p>{{ $timelog->customer->name }}</p>
                         <p>{{ $timelog->service->name }}</p>
                         <p>{{ $timelog->hours }}</p>
@@ -45,7 +45,7 @@
 
         <div class="button-bottom-bar">
             <x-partials.action-link
-                    href="{{ route('timelogs.create') }}">{{ __('app.create_new_time_log') }}
+                    href="{{ route('timelogs.create', $customer->id) }}">{{ __('app.create_new_time_log') }}
             </x-partials.action-link>
         </div>
     </div>

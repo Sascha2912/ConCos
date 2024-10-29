@@ -47,14 +47,27 @@ class DatabaseSeeder extends Seeder {
                     ],
                 );
 
+                // Speichere bereits zugewiesene Service-IDs
+                $assignedServices = [];
+
                 // Zufällige Services zu jedem Vertrag hinzufügen
-                $selectedServices = $services->random(rand(1, 3));
+                $numServices = rand(1, min(3, $services->count())); // Maximal 3 oder weniger, je nach Verfügbarkeit
+                $selectedServices = $services->random($numServices);
+
                 foreach($selectedServices as $service){
-                    $contract->services()->attach($service->id, [
-                        'hours'      => rand(10, 100), // Zufällige Stunden pro Service
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                    // Stelle sicher, dass der Service noch nicht zugewiesen wurde
+                    if( !in_array($service->id, $assignedServices)){
+                        // Überprüfe, ob die Kombination bereits existiert
+                        if( !$contract->services()->where('service_id', $service->id)->exists()){
+                            $contract->services()->attach($service->id, [
+                                'hours'      => rand(10, 100), // Zufällige Stunden pro Service
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                            // Füge den Service zur Liste der zugewiesenen Services hinzu
+                            $assignedServices[] = $service->id;
+                        }
+                    }
                 }
             }
         });

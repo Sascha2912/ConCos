@@ -35,6 +35,12 @@ class Edit extends FormBase {
         return redirect()->route('contracts.edit', $this->contract);
     }
 
+    public function deleteContract() {
+        $this->contract->delete();
+
+        return redirect(route('contracts.index'));
+    }
+
     public function render() {
         return view('livewire.contracts.edit')->layout('layouts.app');
     }
