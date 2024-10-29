@@ -26,8 +26,9 @@ Route::middleware('auth')->group(function() {
 
         Route::put('/users/{user}/language', [UserController::class, 'update'])->name('users.update.language');
 
-        Route::get('customers/{customer}/invoice',
-            [InvoiceController::class, 'create'])->name('invoice.create');
+        // ########## Monthly Report ##########
+        Route::get('/customers/{customerId}/monthly-report/{month}/{year}',
+            App\Livewire\Customers\MonthlyReport::class)->name('customers.monthly-report');
 
         // ########## Customer Routes ##########
         Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');

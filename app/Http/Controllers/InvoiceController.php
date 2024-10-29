@@ -29,7 +29,7 @@ class InvoiceController extends Controller {
 
         $total = $monthlyCosts + $extraCosts;
 
-        return view('invoices.create', [
+        return view('reports.create', [
             'customer'      => $customer,
             'usedHours'     => $usedHours,
             'contractHours' => $contractHours,
