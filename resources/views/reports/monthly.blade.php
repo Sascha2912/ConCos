@@ -2,136 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ __('app.monthly_report_for'). ' ' . $customer->name }}</title>
+    <title>{{ __('app.monthly_report_for') . ' - ' . $month . '/' . $year }}</title>
     <style>
-        /* Grundstil für die gesamte Seite */
         body {
             font-family: Arial, sans-serif;
-            color: #333;
+            font-size: 12px;
+            margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
+            color: #333;
         }
 
-        h1, h2, h3 {
-            color: #333;
-            margin-bottom: 8px;
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         h1 {
-            font-size: 1.8em;
-            margin-bottom: 16px;
+            font-size: 24px;
             text-align: center;
+            margin-bottom: 10px;
         }
 
         h2 {
-            font-size: 1.5em;
-            margin: 0;
-            padding: 0;
+            font-size: 18px;
             text-align: center;
+            margin: 0;
+            padding: 5px;
         }
 
         h3 {
-            font-size: 1.3em;
-            margin-top: 44px;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 10px;
         }
 
-        /* Tabelle */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
-            margin-bottom: 8px;
+            margin-top: 10px;
         }
 
         th, td {
-            padding: 10px;
+            padding: 8px;
             border: 1px solid #ddd;
             text-align: center;
         }
 
         th {
-            background-color: #f0f0f0;
+            background-color: #f4f4f4;
             font-weight: bold;
         }
 
-        tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-
-        /* Rahmen für Abschnitte */
-        .contract-section {
-            margin-bottom: 24px;
-        }
-
-        .monthly-cost {
-            text-align: right;
-            font-size: 1.1em;
-            font-weight: bold;
-            margin-top: 8px;
-            color: #444;
-        }
-
-        /* Download-Button */
-        .button-bottom-bar {
+        .text-center {
             text-align: center;
-            margin-top: 20px;
+        }
+
+        .text-start {
+            text-align: start;
+        }
+
+        .total-row {
+            font-weight: bold;
+            border-top: 2px solid #000;
+        }
+
+        .border-none {
+            border: none;
+        }
+
+        .border-right-none {
+            border-right: none;
+        }
+
+        .border-top {
+            border-top: 1px solid #ddd;
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid #ddd;
         }
 
         .button-bottom-bar button {
             padding: 10px 20px;
-            font-size: 1em;
+            font-size: 14px;
+            background-color: #4CAF50;
             color: #fff;
-            background-color: #333;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
 
         .button-bottom-bar button:hover {
-            background-color: #555;
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-<h1>{{ __('app.monthly_report_for') }} {{ $month }}/{{ $year }}</h1>
-<h2>{{ __('app.customer') }}:</h2>
-<h2>{{ $customer->name }}</h2>
+<div class="wrapper">
+    <h1>{{ __('app.monthly_report_for') . ' - ' . $month . '/' . $year }}</h1>
+    <h2>{{ __('app.customer') }}: {{ $customer->name }}</h2>
 
-@foreach($reportData['contracts'] as $contract)
-    <div class="contract-section">
-        <h3>{{ __('app.contract') }}: {{ $contract['contract_name'] }}</h3>
+    @if(isset($reportData['contracts']) && count($reportData['contracts']) > 0)
+        @foreach($reportData['contracts'] as $contract)
+            <h3>{{ __('app.contract') }}: {{ $contract['contract_name'] }}</h3>
 
-        <table>
-            <thead>
-            <tr>
-                <th>{{ __('app.service') }}</th>
-                <th>{{ __('app.agreed_hours') }}</th>
-                <th>{{ __('app.used_hours') }}</th>
-                <th>{{ __('app.additional_hours') }}</th>
-                <th>{{ __('app.additional_cost') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($contract['services'] as $service)
+            <table>
+                <thead>
                 <tr>
-                    <td>{{ $service['service_name'] }}</td>
-                    <td>{{ $service['agreed_hours'] }}</td>
-                    <td>{{ $service['used_hours'] }}</td>
-                    <td>{{ $service['additional_hours'] }}</td>
-                    <td>{{ number_format($service['additional_cost'], 2) }} €</td>
+                    <td class="border-right-none">
+                        {{ __('app.contract_costs') }}
+                    </td>
+                    <td class="border-none border-top"></td>
+                    <td class="border-none border-top"></td>
+                    <td class="border-none border-top"></td>
+                    <td class="border-none border-top"></td>
+                    <td class="text-center">
+                        {{ number_format($contract['monthly_costs'], 2) }} €
+                    </td>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                <tr>
+                    <th>{{ __('app.service') }}</th>
+                    <th>{{ __('app.agreed_hours') }}</th>
+                    <th>{{ __('app.used_hours') }}</th>
+                    <th>{{ __('app.additional_hours') }}</th>
+                    <th>{{ __('app.costs_per_hour') }}</th>
+                    <th>{{ __('app.additional_cost') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($contract['services'] as $service)
+                    <tr>
+                        <td>{{ $service['service_name'] }}</td>
+                        <td>{{ $service['agreed_hours'] }}</td>
+                        <td>{{ $service['used_hours'] }}</td>
+                        <td>{{ $service['additional_hours'] }}</td>
+                        <td>{{ number_format($service['costs_per_hour'], 2) }} €</td>
+                        <td>{{ number_format($service['additional_cost'], 2) }} €</td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <th class="border-right-none">{{ __('app.total_contract_costs') }}:</th>
+                    <th class="border-none border-bottom"></th>
+                    <th class="border-none border-bottom"></th>
+                    <th class="border-none border-bottom"></th>
+                    <th class="border-none border-bottom"></th>
+                    <th>{{ number_format($contract['contract_total_cost'], 2) }} €</th>
+                </tr>
+                </tbody>
+            </table>
+        @endforeach
 
-        <p class="monthly-cost">
-            {{ __('app.monthly_costs') }}: {{ number_format($contract['monthly_costs'], 2) }} €
-        </p>
-    </div>
-@endforeach
-
+        <div class="total-row" style="margin-top: 40px;">
+            <h2>{{ __('app.total_monthly_costs') }}: {{ number_format($totalCost, 2) }} €</h2>
+        </div>
+    @else
+        <h2>{{ __('app.no_contracts_available') }}</h2>
+    @endif
+</div>
 </body>
 </html>
