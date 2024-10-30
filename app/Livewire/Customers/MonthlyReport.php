@@ -13,6 +13,7 @@ class MonthlyReport extends Component {
     public $month;
     public $year;
     public $reportData = [];
+    public $totalCost = 0;
 
     public function mount($customerId, $month, $year) {
         $this->customer = Customer::findOrfail($customerId);
@@ -26,13 +27,18 @@ class MonthlyReport extends Component {
         $endDate = Carbon::create($this->year, $this->month, 1)->endOfMonth();
 
         $this->reportData = [];
+        $this->totalCost = 0; // Gesamtkosten auf 0 setzen, um Duplikationen zu vermeiden
 
         foreach($this->customer->contracts as $contract){
+            // Basis-Vertragsdaten
             $contractData = [
                 'contract_name' => $contract->name,
-                'monthly_costs' => $contract->monthly_cost,
+                'monthly_costs' => $contract->monthly_costs,
                 'services'      => [],
             ];
+
+            // Setze die Vertragskosten für diesen Vertrag in einer separaten Variable
+            $contractTotalCost = $contract->monthly_costs;
 
             foreach($contract->services as $service){
                 $timelogHours = $this->customer->timelogs()
@@ -50,10 +56,20 @@ class MonthlyReport extends Component {
                     'used_hours'       => $timelogHours,
                     'additional_hours' => $additionalHours,
                     'additional_cost'  => $additionalCost,
+                    'costs_per_hour'   => $service->costs_per_hour,
                 ];
+
+                // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
+                $contractTotalCost += $additionalCost;
             }
 
+            //Speichern der Gesamtkosten für diesen Vertrag in 'contractData
+            $contractData['contract_total_cost'] = $contractTotalCost;
+
+            // Füge die Vertragsdaten dem Report hinzu
             $this->reportData['contracts'][] = $contractData;
+            // Nur einmal die berechneten Gesamtkosten des Vertrags zu den totalen Gesamtkosten hinzufügen
+            $this->totalCost += $contractTotalCost;
         }
     }
 
@@ -63,6 +79,7 @@ class MonthlyReport extends Component {
             'customer'   => $this->customer,
             'month'      => $this->month,
             'year'       => $this->year,
+            'totalCost'  => $this->totalCost,
         ])->setPaper('a4', 'portrait')
             ->setWarnings(false)
             ->setOptions(['isHtml5ParserEnabled' => true, 'isPhpEnabled' => true]);;

@@ -28,9 +28,8 @@
             </x-partials.nav-link>
 
         </nav>
-        <div class="info-box">
-            <livewire:customers.monthly-report :customerId="$customer->id" :month="$month" :year="$year"/>
-        </div>
+
+        <livewire:customers.monthly-report :customerId="$customer->id" :month="$month" :year="$year"/>
     </div>
-    
+
 </x-app-layout>

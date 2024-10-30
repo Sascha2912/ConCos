@@ -23,12 +23,6 @@
     <form wire:submit.prevent="save" id="customer-form">
         @csrf
 
-        <!-- Button-Top-Bar -->
-        <div class="button-top-bar">
-            <x-partials.action-link
-                    href="{{ route('invoice.create', $this->customer->id) }}">{{ __('app.print') }}</x-partials.action-link>
-        </div>
-
         <!-- Form Input Fields -->
         <x-forms.input-field
                 name="name"
