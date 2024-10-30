@@ -41,7 +41,7 @@ nav {
   @apply flex gap-10 max-w-full h-16 mb-10 bg-blue-400 border border-gray-300 text-white text-base text-center text-nowrap rounded-lg shadow;
 
   &.customer-nav {
-    @apply flex items-center justify-around w-full h-auto mx-auto p-4 shadow-md rounded-lg bg-blue-400 text-white;
+    @apply flex items-center justify-around w-full h-auto mx-auto p-4 mb-16 shadow-md rounded-lg bg-blue-400 text-white;
   }
 
   .nav-links {
@@ -55,6 +55,14 @@ nav {
       @apply w-full flex items-center justify-end gap-12;
     }
   }
+}
+
+table {
+  @apply min-w-full;
+}
+
+th, td {
+  @apply px-4 py-2 text-center;
 }
 
 form {
@@ -89,14 +97,14 @@ ul {
   @apply space-y-4 mb-8;
 
   li {
-    @apply flex items-center justify-between p-4 gap-12 bg-white shadow-md rounded-lg hover:bg-gray-100;
+    @apply flex items-center justify-between p-4 gap-12 bg-white shadow-md rounded-lg hover:bg-gray-100 text-center;
 
     &.index-header {
-      @apply w-full grid grid-cols-3 items-center p-4 gap-12 bg-blue-400 text-white;
+      @apply w-full grid grid-cols-3 items-center p-4 gap-12 bg-gray-300;
     }
 
     &.index-header-4 {
-      @apply w-full grid grid-cols-4 items-center p-4 gap-12 bg-blue-400 text-white;
+      @apply w-full grid grid-cols-4 items-center p-4 gap-12 bg-gray-300;
     }
 
     .index-link {
@@ -108,6 +116,7 @@ ul {
     }
   }
 }
+
 
 .item {
   @apply flex flex-col;
