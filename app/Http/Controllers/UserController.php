@@ -115,8 +115,8 @@ class UserController extends Controller {
             // Neues Passwort festlegen, falls angegeben
             if( !empty($data['new_password'])){
                 // Überprüfen, ob das aktuelle Passwort korrekt ist
-                if( !Hash::check($request->current_password, $user->password)){
-                    return back()->withErrors(['current_password' => 'Das aktuelle Passwort ist nicht korrekt.']);
+                if( !$request->user()->isAdmin() && !Hash::check($request->current_password, $user->password)){
+                    return back()->withErrors(['current_password' => __('app.the_password_is_incorrect')]);
                 }else{
                     $data['password'] = bcrypt($data['new_password']); // Passwort verschlüsseln
                 }
