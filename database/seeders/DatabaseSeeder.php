@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder {
             'password'  => Hash::make('password'),
         ]);
 
-        $customers = Customer::factory(30)->create();
+        $customers = Customer::factory(10)->create();
         $contracts = Contract::factory(10)->create();
         $services = Service::factory(10)->create();
 
@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder {
                         // Überprüfe, ob die Kombination bereits existiert
                         if( !$contract->services()->where('service_id', $service->id)->exists()){
                             $contract->services()->attach($service->id, [
-                                'hours'      => rand(10, 100), // Zufällige Stunden pro Service
+                                'hours'      => rand(1, 10), // Zufällige Stunden pro Service
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ]);
