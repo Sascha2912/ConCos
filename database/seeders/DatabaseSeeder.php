@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder {
             'password'  => Hash::make('password'),
         ]);
 
-        $customers = Customer::factory(10)->create();
-        $contracts = Contract::factory(5)->create();
+        $customers = Customer::factory(30)->create();
+        $contracts = Contract::factory(10)->create();
         $services = Service::factory(10)->create();
 
         // Kunden den Verträgen zuweisen mit zufälligen `start_date` und `end_date`

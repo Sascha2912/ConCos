@@ -13,8 +13,10 @@ class ContractFactory extends Factory {
     protected $model = Contract::class;
 
     public function definition(): array {
+        $index = $this->faker->unique()->numberBetween(1, 1000);
+
         return [
-            'name'          => $this->faker->jobTitle().' Contract',
+            'name'          => ' Contract '.$index,
             'monthly_costs' => $this->faker->optional()->randomFloat(2, 100, 1000) ?? 0,
             'flatrate'      => $this->faker->boolean,
             'created_at'    => now(),

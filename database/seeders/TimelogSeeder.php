@@ -11,6 +11,6 @@ class TimelogSeeder extends Seeder {
      * Run the database seeds.
      */
     public function run(): void {
-        Timelog::factory(20)->create();
+        Timelog::factory(200)->create();
     }
 }
