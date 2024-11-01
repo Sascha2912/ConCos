@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Customers;
 
+use App\Http\Controllers\CustomerController;
 use App\Models\Customer;
 use Carbon\Carbon;
 
@@ -14,10 +15,10 @@ class Edit extends FormBase {
     }
 
     public function save() {
-        $this->validateCustomerData();
+        $this->validateCustomer();
 
         // Aktualisiere die Kundendaten
-        $this->customer->update([
+        $data = [
             'name'              => $this->name,
             'managing_director' => $this->managing_director,
             'phone'             => $this->phone,
@@ -26,41 +27,29 @@ class Edit extends FormBase {
             'house_number'      => $this->house_number,
             'city'              => $this->city,
             'zip_code'          => $this->zip_code,
-        ]);
+        ];
 
-        // Bereite die Vertragsdaten für die Pivot-Tabelle vor
-        $contractsWithDates = [];
-        foreach($this->tmpContracts as $contract){
-            $start_date = $this->contractDates[$contract['id']]['start_date'];
-            if( !$start_date){
-                session()->flash('error', 'Start date is required for all contracts.');
+        // Aktualisiere die Daten
+        $contractsData = [
+            'contracts'      => $this->tmpContracts,
+            'contract_dates' => $this->contractDates,
+        ];
 
-                return;
-            }
-            $end_date = $this->contractDates[$contract['id']]['end_date'] ?? Carbon::parse($start_date)->addYears(2)->format('Y-m-d');
+        // Speicher den Vertrag über den ContractController
+        try{
+            $customerController = app(CustomerController::class);
+            $customerController->update(new \Illuminate\Http\Request($data), $this->customer, $contractsData);
 
-            $contractsWithDates[$contract['id']] = [
-                'create_date' => $this->contractDates[$contract['id']]['create_date'] ?? now()->format('Y-m-d'),
-                'start_date'  => $start_date,
-                'end_date'    => $end_date,
-            ];
+            session()->flash('message', __('app.customer_updated_successfully'));
+        }catch(\Exception $e){
+            // Fehlerbehandlung
+            session()->flash('error', __('app.update_customer_failed'));
         }
-
-        // Debugging-Statement
-        \Log::info('Contracts with Dates', $contractsWithDates);
-
-        // Synchronisiere die Vertragsdaten mit der Pivot-Tabelle
-        $this->customer->contracts()->sync($contractsWithDates);
-
-        session()->flash('message', 'Customer updated successfully.');
-
-        return redirect()->route('customers.edit', $this->customer);
     }
 
     public function deleteCustomer() {
-        $this->customer->delete();
-
-        return redirect(route('customers.index'));
+        $customerController = app(CustomerController::class);
+        $customerController->destroy($this->customer);
     }
 
     public function render() {

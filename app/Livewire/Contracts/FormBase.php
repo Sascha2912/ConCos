@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Contracts;
 
+use App\Http\Controllers\ContractController;
 use App\Models\Service;
 use Livewire\Component;
 
@@ -11,8 +12,8 @@ abstract class FormBase extends Component {
     public $monthly_costs;
     public $flatrate;
     public $tmpServices = [];
-    public $serviceHours = []; // Stunden für jeden Service
-    public $availableServices;
+    public $serviceHours = [];      // Stunden für jeden Service
+    public $availableServices = []; // Initialisiert als leeres Array
     public $selectedServiceId = null;
 
     public function mountBase($contract = null) {
@@ -29,9 +30,9 @@ abstract class FormBase extends Component {
                 ];
             })->toArray();
             $this->availableServices = Service::whereNotIn('id', array_column($this->tmpServices, 'id'))->get();
-        }else{
-            // Falls es keinen Vertrag gibt, sind alle Services verfügbar.
-            $this->availableServices = Service::all();
+
+            // Setze $selectedServiceId auf null, wenn ein Vertrag geladen wird
+            $this->selectedServiceId = null; // Oder setze es auf den Wert des gewünschten Services, wenn du einen Default-Wert haben möchtest
         }
 
         // Initialisiere die Stunden für jeden Service im Array $serviceHours

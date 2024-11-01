@@ -1,10 +1,28 @@
 <div class="wrapper">
-    <h1 class="text-4xl mb-4">{{ __('app.monthly_report_for'). ' - ' . $month . '/'. $year }}</h1>
-    <h2 class="text-center p-0 m-0 text-3xl">
-        {{ __('app.customer') }}: {{ $customer->name }}
-    </h2>
+    <div class="flex justify-center mb-4 w-full">
+        <select wire:model="year" wire:change="loadMonthlyReport()" class="h-8 w-2/12">
+            @foreach(range($customer->contracts()->withPivot('start_date')->get()->min('start_date') ? Carbon::parse($customer->contracts()->withPivot('start_date')->get()->min('start_date'))->year : now()->year, now()->year) as $yearOption)
+                <option value="{{ $yearOption }}">{{ $yearOption }}</option>
+            @endforeach
+        </select>
 
-    @if(isset($reportData['contracts']) && count($reportData['contracts']) > 0)
+    </div>
+
+    <div class="grid grid-cols-12  gap-4 mt-4 mb-12">
+        @foreach(range(1, 12) as $monthOption)
+            <div wire:click="loadMonthlyReport({{ $monthOption }}, {{ $year }})"
+                 class="cursor-pointer p-2 rounded border text-center {{ $monthOption == $month ? 'bg-blue-400 text-white' : 'bg-gray-200' }}">
+                {{ __('app.' . strtolower(DateTime::createFromFormat('!m', $monthOption)->format('F')))  }}
+            </div>
+        @endforeach
+    </div>
+
+    <h1 class="text-4xl mb-4">{{ __('app.monthly_report_for'). ' - ' . $month . '/'. $year }}</h1>
+
+    @if($reportData)
+        <h2 class="text-center p-0 m-0 text-3xl">
+            {{ __('app.customer') }}: {{ $customer->name }}
+        </h2>
         @foreach($reportData['contracts']  as $contract)
             <div class="mb-12">
 
@@ -66,6 +84,6 @@
             <button wire:click="downloadPdf">{{ __('app.download_pdf') }}</button>
         </div>
     @else
-        <h2 class="text-2xl mt-12 mb-4">{{ __('app.no_contracts_available') }}</h2>
+        <h2 class="text-2xl mt-12 mb-4">{{ __('app.no_report_data_available') }}</h2>
     @endif
 </div>

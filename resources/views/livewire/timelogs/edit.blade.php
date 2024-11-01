@@ -32,7 +32,7 @@
         />
     </form>
     <div class="button-bottom-bar">
-        <x-partials.action-link href="{{ route('timelogs.index', $timelog->customer->id) }}"
+        <x-partials.action-link href="{{ route('customers.timelogs.index', $timelog->customer->id) }}"
                                 class="back">{{ __('app.back') }}</x-partials.action-link>
         <button class="delete"
                 wire:click="deleteTimelog({{ $timelog->id }})">

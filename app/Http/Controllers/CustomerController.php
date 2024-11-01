@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Contract;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Repositories\CustomerRepository;
 
@@ -29,10 +30,10 @@ class CustomerController extends Controller {
      * Show the forms for creating a new resource.
      */
     public function create() {
-        $contracts = Contract::paginate();
+        $contracts = Contract::all();
 
         return view('customers.create',
-            ['customer' => new Customer(), 'contracts' => $contracts]);
+            ['contracts' => $contracts]);
     }
 
     /**
@@ -47,8 +48,9 @@ class CustomerController extends Controller {
 
             return redirect()->back()->with('success', 'Vertrag wurde dem Kunden erfolgreich hinzugefügt.');
         }
-        if($request->contract_id){
-            $customer->contracts()->attach($request->contract_id);
+        // Synchronisiere die Vertragsdaten
+        if($request->has('contracts')){
+            $customer->contracts()->sync($request->input('contracts'));
         }
 
         if($request->expectsJson()){
@@ -66,49 +68,28 @@ class CustomerController extends Controller {
      * Display the specified resource.
      */
     public function show(Request $request, Customer $customer) {
-        $customerContracts = $customer->contracts()->get();
-        $contracts = Contract::all();
-
-        $usedHours = $customer->timelogs()->sum('hours');
-        $contractHours = $customer->contracts->sum('hours');
-        $monthlyCosts = $customer->contracts->sum('monthly_costs');
-
-        $extraCosts = 0;
-        foreach($customer->timelogs as $timelog){
-            $contract = $timelog->contract;
-            $service = $timelog->service;
-
-            if( !$contract || !$contract->services->contains($service->id)){
-                $extraCosts += $service->cost_per_hour * $timelog->hours;
-            }
-
-            if($usedHours > $contractHours){
-                $overtime = $usedHours - $contractHours;
-                $extraCosts += $overtime * $service->cost_per_hour;
-            }
-        }
+        $contracts = $customer->contracts()->withPivot('start_date', 'end_date')->get();
 
         if($request->expectsJson()){
 
             return response([
-                'customer'          => $customer,
-                'customerContracts' => $customerContracts,
-                'usedHours'         => $usedHours,
-                'contractHours'     => $contractHours,
-                'monthlyCosts'      => $monthlyCosts,
-                'extraCosts'        => $extraCosts,
-                'contracts'         => $contracts,
+                'customer'  => $customer,
+                'contracts' => $contracts,
             ]);
         }
 
-        return view('customers.show', [
-            'customer'      => $customer,
-            'usedHours'     => $usedHours,
-            'contractHours' => $contractHours,
-            'monthlyCosts'  => $monthlyCosts,
-            'extraCosts'    => $extraCosts,
-            'contracts'     => $contracts,
-        ]);
+        if($request->routeIs('monthly.report.show')){
+
+            return view('customers.monthly-report', [
+                'customer'  => $customer,
+                'contracts' => $contracts,
+            ]);
+        }else{
+            return view('customers.show', [
+                'customer'  => $customer,
+                'contracts' => $contracts,
+            ]);
+        }
     }
 
     /**
@@ -123,13 +104,29 @@ class CustomerController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer) {
+    public function update(Request $request, Customer $customer, array $contractsData) {
         $data = $this->validate($request, Customer::validationRules());
         $customer = $this->customerRepository->updateOrCreate($data, $customer);
 
-        if($request->contract_id){
-            $customer->contracts()->sync($request->contract_id);
+        // Bereite die Vertragsdaten für die Pivot-Tabelle vor
+        $contractsWithDates = [];
+        foreach($contractsData['contracts'] as $contract){
+            $start_date = $contractsData['contract_dates'][$contract['id']]['start_date'] ?? null;
+            if( !$start_date){
+                return redirect()->back()->with('error', 'Start date is required for all contracts.');
+            }
+
+            $end_date = $contractsData['contract_dates'][$contract['id']]['end_date'] ?? Carbon::parse($start_date)->addYears(2)->format('Y-m-d');
+
+            $contractsWithDates[$contract['id']] = [
+                'create_date' => $contractsData['contract_dates'][$contract['id']]['create_date'] ?? now()->format('Y-m-d'),
+                'start_date'  => $start_date,
+                'end_date'    => $end_date,
+            ];
         }
+
+        // Synchronisiere die Vertragsdaten mit der Pivot-Tabelle
+        $customer->contracts()->sync($contractsWithDates);
 
         return redirect(route('customers.edit', ['customer' => $customer]));
     }
@@ -137,7 +134,7 @@ class CustomerController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, Customer $customer, Contract $contract = null) {
+    public function destroy(Customer $customer) {
         $customer->delete();
 
         return redirect(route('customers.index'));

@@ -2,14 +2,22 @@
     <h1>{{ __('app.customer_section') }}</h1>
     <nav class="customer-nav">
         <x-partials.nav-link
-                href="{{ route('customers.show', $customer->id) }}"
-                :active="request()->routeIs('customers.show')"
+                href="{{ route('monthly.report.show', $customer->id) }}"
+                :active="request()->routeIs('monthly.report.show')"
         >
             {{ __('app.customer_overview') }}
         </x-partials.nav-link>
 
-        <x-partials.nav-link href="{{ route('timelogs.index', $customer->id) }}" :active="request()->is('timelogs')">
+        <x-partials.nav-link href="{{ route('customers.timelogs.index', $customer->id) }}"
+                             :active="request()->is('customers.timelogs')">
             {{ __('app.time_logs') }}
+        </x-partials.nav-link>
+
+        <x-partials.nav-link
+                href="{{ route('customers.show', $customer->id) }}"
+                :active="request()->routeIs('customers.show')"
+        >
+            {{ __('app.customer_data') }}
         </x-partials.nav-link>
 
         <x-partials.nav-link

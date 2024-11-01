@@ -21,7 +21,8 @@ class TimelogController extends Controller {
     /**
      * Display a listing of the resource.
      */
-    public function index(Customer $customer) {
+    public function index($customer_id) {
+        $customer = Customer::findOrFail($customer_id);
         $timelogs = $customer->timelogs()->orderBy('created_at', 'desc')->simplePaginate(5);
 
         return view('timelogs.index', [
@@ -33,18 +34,16 @@ class TimelogController extends Controller {
     /**
      * Show the forms for creating a new resource.
      */
-    public function create() {
-        $contracts = Contract::paginate();
-        $customers = Customer::paginate();
-        $services = Service::paginate();
+    public function create($customer_id) {
+        $customer = Customer::findOrFail($customer_id);
+        $contracts = $customer->contracts; // Lade nur Verträge für diesen Kunden
+        $services = Service::all();        // Alternativ kannst du Services auch spezifisch laden
 
-        return view('timelogs.create',
-            [
-                'timelog'   => new Timelog(),
-                'contracts' => $contracts,
-                'customers' => $customers,
-                'services'  => $services,
-            ]);
+        return view('timelogs.create', [
+            'customer'  => $customer,
+            'contracts' => $contracts,
+            'services'  => $services,
+        ]);
     }
 
     /**
@@ -138,9 +137,9 @@ class TimelogController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Timelog $timelog) {
+    public function destroy(Timelog $timelog, $customer_id) {
         $timelog->delete();
 
-        return redirect(route('timelogs.index'));
+        return redirect(route('customers.timelogs.index', $customer_id));
     }
 }

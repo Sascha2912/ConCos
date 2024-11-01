@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel {
     protected function schedule(Schedule $schedule) {
         // Hier die geplanten Aufgaben hinzufügen
         // Geplanten Command hinzufügen, der am letzten Tag des Monats um Mitternacht ausgeführt wird
-        $schedule->command('reports:generate-monthly')->monthlyOn(Carbon::now()->endOfMonth()->day, '00:00');
+        $schedule->command('report:generate-monthly')->monthlyOn(Carbon::now()->endOfMonth()->day, '00:00');
     }
 
     /**

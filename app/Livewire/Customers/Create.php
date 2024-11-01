@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Customers;
 
+use App\Http\Controllers\CustomerController;
 use App\Models\Customer;
 use Carbon\Carbon;
 
@@ -12,9 +13,9 @@ class Create extends FormBase {
     }
 
     public function save() {
-        $this->validateCustomerData(); // Validierung der Kundendaten
+        $this->validateCustomer(); // Validierung der Kundendaten
 
-        $customer = Customer::create([
+        $data = [
             'name'              => $this->name,
             'managing_director' => $this->managing_director,
             'phone'             => $this->phone,
@@ -23,14 +24,14 @@ class Create extends FormBase {
             'house_number'      => $this->house_number,
             'city'              => $this->city,
             'zip_code'          => $this->zip_code,
-        ]);
+        ];
 
         // Bereite die Vertragsdaten für die Pivot-Tabelle vor
         $contractsWithDates = [];
         foreach($this->tmpContracts as $contract){
             $start_date = $this->contractDates[$contract['id']]['start_date'];
             if( !$start_date){
-                session()->flash('error', 'Start date is required for all contracts.');
+                session()->flash('error', __('app.start_date_is_required_for_all_contracts'));
 
                 return;
             }
@@ -44,12 +45,16 @@ class Create extends FormBase {
             ];
         }
 
-        // Synchronisiere die Vertragsdaten mit der Pivot-Tabelle
-        $customer->contracts()->sync($contractsWithDates);
+        // Speicher den Vertrag über den ContractController
+        try{
+            $customerController = app(CustomerController::class);
+            $customerController->store(new \Illuminate\Http\Request($data, ['contracts' => $contractsWithDates]));
 
-        session()->flash('message', 'Customer created successfully.');
-
-        return redirect()->route('customers.edit', $customer);
+            session()->flash('message', __('app.customer_created_successfully'));
+        }catch(\Exception $e){
+            // Fehlerbehandlung
+            session()->flash('error', __('app.create_customer_failed'));
+        }
     }
 
     public function render() {

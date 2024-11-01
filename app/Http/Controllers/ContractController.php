@@ -30,11 +30,12 @@ class ContractController extends Controller {
      * Show the forms for creating a new resource.
      */
     public function create() {
-        $services = Service::all();
-        $customers = Customer::all();
 
-        return view('contracts.create',
-            ['contract' => new Contract(), 'services' => $services, 'customers' => $customers]);
+        // Lade die benötigten Services und andere Daten für die Komponente
+        $services = Service::all();
+
+        // Übergib die Daten an die Blade-View, die die Livewire-Komponente einbindet
+        return view('contracts.create', ['services' => $services]);
     }
 
     /**
@@ -44,8 +45,9 @@ class ContractController extends Controller {
         $data = $this->validate($request, Contract::validationRules(true));
         $contract = $this->contractRepository->updateOrCreate($data);
 
-        if($request->service_id){
-            $contract->services()->attach($request->service_id);
+        // Füge die Services zum Vertrag hinzu
+        foreach($request->input('services') as $serviceId => $serviceData){
+            $contract->services()->attach($serviceId, ['hours' => $serviceData['hours']]);
         }
 
         if($request->expectsJson()){
@@ -63,25 +65,39 @@ class ContractController extends Controller {
      * Display the specified resource.
      */
     public function show(Request $request, Contract $contract) {
-        $services = Service::paginate();
+        $services = $contract->services()->withPivot('hours')->get();
+        $availableServices = Service::whereNotIn('id', $services->pluck('id'))->get();
+
         if($request->expectsJson()){
 
             return response([
-                'contract' => $contract,
-                'services' => $services,
+                'contract'          => $contract,
+                'services'          => $services,
+                'availableServices' => $availableServices,
             ]);
         }
 
-        return view('contracts.edit', ['contract' => $contract, 'services' => $services]);
+        return view('contracts.edit',
+            [
+                'contract'          => $contract,
+                'services'          => $services,
+                'availableServices' => $availableServices,
+            ]);
     }
 
     /**
      * Show the forms for editing the specified resource.
      */
     public function edit(Contract $contract) {
-        $services = Service::paginate();
+        $services = $contract->services()->withPivot('hours')->get();
+        $availableServices = Service::whereNotIn('id', $services->pluck('id'))->get();
 
-        return view('contracts.edit', ['contract' => $contract, 'services' => $services]);
+        return view('contracts.edit',
+            [
+                'contract'          => $contract,
+                'services'          => $services,
+                'availableServices' => $availableServices,
+            ]);
     }
 
     /**
@@ -91,11 +107,18 @@ class ContractController extends Controller {
         $data = $this->validate($request, Contract::validationRules());
         $contract = $this->contractRepository->updateOrCreate($data, $contract);
 
-        if($request->service_id){
-            $contract->services()->attach($request->service_id);
+        // Synchronisiere die Services und Stunden
+        $this->syncServices($contract, $request->input('services', []));
+
+        if($request->expectsJson()){
+
+            return response([
+                'success'  => true,
+                'contract' => $contract,
+            ]);
         }
 
-        return redirect(route('contracts.edit', ['contract' => $contract]));
+        return redirect()->route('contracts.edit', $contract)->with('success', 'Contract updated successfully.');
     }
 
     /**
@@ -105,5 +128,13 @@ class ContractController extends Controller {
         $contract->delete();
 
         return redirect(route('contracts.index'));
+    }
+
+    protected function syncServices(Contract $contract, array $services) {
+        $servicesWithHours = [];
+        foreach($services as $serviceId => $data){
+            $servicesWithHours[$serviceId] = ['hours' => (int) $data['hours']];
+        }
+        $contract->services()->sync($servicesWithHours);
     }
 }

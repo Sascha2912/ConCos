@@ -9,6 +9,6 @@
     <p>{{ __('app.hours') }}: {{ $timelog->hours }}</p>
     <p>{{ __('app.date') }}: {{ $timelog->date }}</p>
 
-    <a href="{{ route('timelogs.edit', $timelog->id) }}">{{ __('app.edit_time_entry') }}</a>
+    <a href="{{ route('customers.timelogs.edit', $timelog->id) }}">{{ __('app.edit_time_entry') }}</a>
 
 </x-app-layout>

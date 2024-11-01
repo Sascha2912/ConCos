@@ -105,7 +105,7 @@ abstract class FormBase extends Component {
         }
     }
 
-    public function validateCustomerData() {
+    public function validateCustomer() {
         $this->validate([
             'name'              => 'required|string',
             'managing_director' => 'required|string',

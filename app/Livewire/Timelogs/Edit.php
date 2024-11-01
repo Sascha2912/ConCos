@@ -2,40 +2,54 @@
 
 namespace App\Livewire\Timelogs;
 
+use App\Http\Controllers\TimelogController;
+use App\Models\Customer;
 use App\Models\Timelog;
 use Livewire\Component;
 
 class Edit extends FormBase {
 
     public $timelog;
-    public $customer_id;
-    public $contract_id;
-    public $service_id;
+    public $customer;
 
-    public function mount(Timelog $timelog) {
+    public function mount(Customer $customer, Timelog $timelog) {
+        $this->customer = $customer;
+        $this->customer_id = $customer->id;
         $this->timelog = $timelog;
-        $this->customer_id = $timelog->customer->id;
-        $this->contract_id = $timelog->contract->id;
-        $this->service_id = $timelog->service->id;
+
         $this->mountBase($timelog);
         $this->loadCustomerData();
+
+        $this->selectedContractId = $timelog->contract_id;
+        $this->selectedServiceId = $timelog->service_id;
+        $this->hours = $timelog->hours;
+        $this->date = $timelog->date;
+        $this->description = $timelog->description;
     }
 
     public function save() {
         $this->validateTimelog();
 
-        $this->timelog->update([
+        // Sammeln der aktualisierten Daten für das Timelog
+        $data = [
             'customer_id' => $this->customer_id,
-            'contract_id' => $this->contract_id,
-            'service_id'  => $this->service_id,
+            'contract_id' => $this->selectedContractId,
+            'service_id'  => $this->selectedServiceId,
             'hours'       => $this->hours,
             'date'        => $this->date,
             'description' => $this->description,
-        ]);
+        ];
 
-        session()->flash('message', 'Timelog updated successfully.');
+        // Aufruf des TimelogControllers zur Aktualisierung
+        try{
+            $timelogController = app(TimelogController::class);
+            $timelogController->update(new \Illuminate\Http\Request($data), $this->timelog);
 
-        return redirect(route('timelogs.index', $this->customer_id));
+            session()->flash('message', __('app.timelog_updated_successfully'));
+        }catch(\Exception $e){
+            // Fehlerbehandlung
+            session()->flash('error', __('app.update_timelog_failed'));
+        }
     }
 
     public function loadCustomerData() {
@@ -62,9 +76,9 @@ class Edit extends FormBase {
     }
 
     public function deleteTimelog() {
-        $this->timelog->delete();
+        $timelogController = app(TimelogController::class);
+        $timelogController->destroy($this->timelog, $this->customer_id);
 
-        return redirect(route('timelogs.index', $this->customer_id));
     }
 
     public function render() {

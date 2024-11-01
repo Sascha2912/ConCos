@@ -96,7 +96,7 @@
                                 wireModel="contractDates.{{ $contract['id'] }}.end_date"/>
 
                         <!-- Delete Button -->
-                        <x-dropdown.delete-button
+                        <x-item.delete-button
                                 wire:click="removeContract({{ $contract['id'] }})"/>
                     </div>
                 </li>
