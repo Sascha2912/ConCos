@@ -23,7 +23,6 @@
                 name="flatrate"
                 label="{{ __('app.flatrate') }}"
                 type="checkbox"
-
                 wireModel="flatrate"/>
 
         <!-- Service Dropdown -->

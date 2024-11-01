@@ -41,26 +41,43 @@ class MonthlyReport extends Component {
             $contractTotalCost = $contract->monthly_costs;
 
             foreach($contract->services as $service){
+
                 $timelogHours = $this->customer->timelogs()
                     ->where('contract_id', $contract->id)
                     ->where('service_id', $service->id)
                     ->whereBetween('date', [$starDate, $endDate])
                     ->sum('hours');
+                if( !$contract->flatrate){
 
-                $additionalHours = max(0, $timelogHours - $service->pivot->hours);
-                $additionalCost = $additionalHours * $service->costs_per_hour;
 
-                $contractData['services'][] = [
-                    'service_name'     => $service->name,
-                    'agreed_hours'     => $service->pivot->hours,
-                    'used_hours'       => $timelogHours,
-                    'additional_hours' => $additionalHours,
-                    'additional_cost'  => $additionalCost,
-                    'costs_per_hour'   => $service->costs_per_hour,
-                ];
+                    $additionalHours = max(0, $timelogHours - $service->pivot->hours);
+                    $additionalCost = $additionalHours * $service->costs_per_hour;
 
-                // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
-                $contractTotalCost += $additionalCost;
+                    $contractData['services'][] = [
+                        'service_name'     => $service->name,
+                        'agreed_hours'     => $service->pivot->hours,
+                        'used_hours'       => $timelogHours,
+                        'additional_hours' => $additionalHours,
+                        'additional_cost'  => $additionalCost,
+                        'costs_per_hour'   => $service->costs_per_hour,
+                    ];
+
+                    // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
+                    $contractTotalCost += $additionalCost;
+                }else{
+
+                    $contractData['services'][] = [
+                        'service_name'     => $service->name,
+                        'agreed_hours'     => 'flatrate',
+                        'used_hours'       => $timelogHours,
+                        'additional_hours' => 0,
+                        'additional_cost'  => 0,
+                        'costs_per_hour'   => $service->costs_per_hour,
+                    ];
+
+                    // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
+                    $contractTotalCost = 0;
+                }
             }
 
             //Speichern der Gesamtkosten für diesen Vertrag in 'contractData

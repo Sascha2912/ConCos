@@ -22,13 +22,24 @@ abstract class FormBase extends Component {
             $this->monthly_costs = $contract->monthly_costs;
             $this->flatrate = $contract->flatrate;
 
-            $this->tmpServices = $contract->services()->withPivot('hours')->get()->map(function($service) {
-                return [
-                    'id'    => $service->id,
-                    'name'  => $service->name,
-                    'hours' => $service->pivot->hours, // Lade die Stunden aus der Pivot-Tabelle
-                ];
-            })->toArray();
+            if( !$contract->flatrate){
+                $this->tmpServices = $contract->services()->withPivot('hours')->get()->map(function($service) {
+                    return [
+                        'id'    => $service->id,
+                        'name'  => $service->name,
+                        'hours' => $service->pivot->hours, // Lade die Stunden aus der Pivot-Tabelle
+                    ];
+                })->toArray();
+            }else{
+                $this->tmpServices = $contract->services()->get()->map(function($service) {
+                    return [
+                        'id'    => $service->id,
+                        'name'  => $service->name,
+                        'hours' => '', // Lade die Stunden aus der Pivot-Tabelle
+                    ];
+                })->toArray();
+            }
+
             $this->availableServices = Service::whereNotIn('id', array_column($this->tmpServices, 'id'))->get();
 
             // Setze $selectedServiceId auf null, wenn ein Vertrag geladen wird

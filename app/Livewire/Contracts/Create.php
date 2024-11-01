@@ -24,7 +24,9 @@ class Create extends FormBase {
             'name'          => $this->name,
             'monthly_costs' => $this->monthly_costs,
             'flatrate'      => $flatrateValue,
-            'services'      => collect($this->tmpServices)->mapWithKeys(function($service) {
+            'services'      => $flatrateValue ? collect($this->tmpServices)->mapWithKeys(function($service) {
+                return [$service['id'] => ['hours' => '']];
+            })->toArray() : collect($this->tmpServices)->mapWithKeys(function($service) {
                 return [$service['id'] => ['hours' => $this->serviceHours[$service['id']] ?? 0]];
             })->toArray(),
         ];

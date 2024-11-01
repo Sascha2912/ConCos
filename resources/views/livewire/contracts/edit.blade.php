@@ -21,6 +21,7 @@
                 name="flatrate"
                 label="{{ __('app.flatrate') }}"
                 type="checkbox"
+                :value="$flatrate"
                 wireModel="flatrate"/>
 
         <!-- Service Dropdown -->
@@ -56,7 +57,8 @@
                                 label="{{ __('app.service_hours') }}"
                                 type="text"
                                 :required="true"
-                                wireModel="serviceHours.{{ $service['id'] }}"/>
+                                wireModel="serviceHours.{{ $service['id'] }}"
+                                :disabled="$flatrate"/>
 
                         <!-- Delete Button -->
                         <x-item.delete-button

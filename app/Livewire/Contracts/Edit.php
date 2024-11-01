@@ -15,18 +15,23 @@ class Edit extends FormBase {
         $this->contract = $contract;
         $this->mountBase($contract);                               // Lädt den bestehenden Vertrag und die Services.
         $this->availableServices = Service::whereNotIn('id',
-            array_column($this->tmpServices, 'id'))->get();        // Initialisiere die verfügbaren Services hier
+            array_column($this->tmpServices, 'id'))->get(); // Initialisiere die verfügbaren Services hier
     }
 
     public function save() {
         $this->validateContract();
 
+        $flatrateValue = $this->flatrate ?? false;
+
+        // Bereite die Daten für den Request vor
         $data = [
             'name'          => $this->name,
             'monthly_costs' => $this->monthly_costs,
-            'flatrate'      => $this->flatrate,
-            'services'      => collect($this->tmpServices)->mapWithKeys(function($service) {
-                return [$service['id'] => ['hours' => (int) $this->serviceHours[$service['id']] ?? 0]];
+            'flatrate'      => $flatrateValue,
+            'services'      => $flatrateValue ? collect($this->tmpServices)->mapWithKeys(function($service) {
+                return [$service['id'] => ['hours' => '']];
+            })->toArray() : collect($this->tmpServices)->mapWithKeys(function($service) {
+                return [$service['id'] => ['hours' => $this->serviceHours[$service['id']] ?? 0]];
             })->toArray(),
         ];
 
