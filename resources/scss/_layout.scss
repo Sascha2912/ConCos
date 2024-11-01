@@ -4,7 +4,7 @@ body {
 }
 
 main {
-  @apply sm:container sm:mx-auto grid grid-cols-1 justify-center justify-items-center ;
+  @apply sm:container sm:mx-auto grid grid-cols-1 gap-y-10 justify-center justify-items-center ;
 }
 
 .wrapper {
@@ -161,6 +161,20 @@ ul {
 .info-box {
   @apply p-4;
 }
+
+.message-box {
+  @apply p-5 border border-gray-300 w-3/4 mx-auto text-center rounded-lg;
+
+  &.success {
+    @apply h-full w-full text-green-500;
+  }
+
+  &.error {
+    @apply h-full w-full text-red-500;
+  }
+}
+
+
 
 
 

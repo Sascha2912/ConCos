@@ -14,6 +14,7 @@
 <x-navigation/>
 
 <main>
+    <x-message-box/>
     {{ $slot }}
     @livewireScripts
 </main>
