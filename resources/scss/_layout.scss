@@ -5,10 +5,14 @@ body {
 
 main {
   @apply sm:container sm:mx-auto grid grid-cols-1 justify-center justify-items-center ;
+}
 
-  .wrapper {
-    @apply w-full p-12 shadow-md rounded-lg border-t border-gray-200;
-  }
+.wrapper {
+  @apply w-full p-12 shadow-md rounded-lg border-t border-gray-200;
+}
+
+.inner-wrapper {
+  @apply w-full p-12 shadow-md rounded-lg border-t border-gray-200;
 }
 
 /** Überschriften **/
