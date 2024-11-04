@@ -1,8 +1,3 @@
-@php
-    $month = now()->month;
-    $year = now()->year;
-@endphp
-
 <x-app-layout>
 
     <div class="wrapper">
@@ -36,7 +31,7 @@
 
         </nav>
 
-        <livewire:customers.monthly-report :customerId="$customer->id" :month="$month" :year="$year"/>
+        <livewire:customers.monthly-report :customerId="$customer->id"/>
     </div>
 
 </x-app-layout>

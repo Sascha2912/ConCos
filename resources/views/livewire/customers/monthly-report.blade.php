@@ -1,7 +1,7 @@
 <div class="wrapper">
     <div class="flex justify-center mb-4 w-full">
         <select wire:model="year" wire:change="loadMonthlyReport()" class="h-8 w-2/12">
-            @foreach(range($customer->contracts()->withPivot('start_date')->get()->min('start_date') ? Carbon::parse($customer->contracts()->withPivot('start_date')->get()->min('start_date'))->year : now()->year, now()->year) as $yearOption)
+            @foreach($availableYears as $yearOption)
                 <option value="{{ $yearOption }}">{{ $yearOption }}</option>
             @endforeach
         </select>
@@ -10,7 +10,7 @@
 
     <div class="grid grid-cols-12  gap-4 mt-4 mb-12">
         @foreach(range(1, 12) as $monthOption)
-            <div wire:click="loadMonthlyReport({{ $monthOption }}, {{ $year }})"
+            <div wire:click="setMonth({{ $monthOption }})"
                  class="cursor-pointer p-2 rounded border text-center {{ $monthOption == $month ? 'bg-blue-400 text-white' : 'bg-gray-200' }}">
                 {{ __('app.' . strtolower(DateTime::createFromFormat('!m', $monthOption)->format('F')))  }}
             </div>

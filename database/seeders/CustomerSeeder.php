@@ -37,7 +37,7 @@ class CustomerSeeder extends Seeder {
                     $startDate = now()->subMonths(rand(1, 36)); // Random Startdatum in den letzten 3 Jahren
                     $createDate = $startDate->subMonths(rand(0,
                         1));                                    // Random Create-Datum maximal 1 Monat vor Vertragsbeginn
-                    $endDate = $startDate->copy()->addYear(rand(1, 3));
+                    $endDate = now();
 
                     // Customer-Contract-Verknüpfung mit Pivot-Werten
                     $customer->contracts()->attach($contract->id, [

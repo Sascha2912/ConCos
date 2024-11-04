@@ -12,13 +12,32 @@ class MonthlyReport extends Component {
     public $customer;
     public $month;
     public $year;
+
+    public $currentYear;
     public $reportData = [];
     public $totalCost = 0;
+    public $availableYears = []; // Verfügbare Jahre für die Dropdown-Auswahl
 
-    public function mount($customerId, $month, $year) {
+    public function mount($customerId) {
         $this->customer = Customer::findOrfail($customerId);
-        $this->month = $month;
-        $this->year = $year;
+
+        // Setze den aktuellen Monat und das Jahr als Standardwerte
+        $this->month = now()->month;
+        $this->year = now()->year;
+
+        $earliestCreateDate = $this->customer->contracts()
+            ->withPivot('create_date')
+            ->min('contract_customer.create_date');
+
+        if($earliestCreateDate){
+            $earliestContractCustomerCreatedYear = \Carbon\Carbon::parse($earliestCreateDate)->year;
+        }else{
+            $earliestContractCustomerCreatedYear = null; // oder ein anderer Standardwert
+        }
+
+        $this->currentYear = now()->year;
+        $this->availableYears = range($earliestContractCustomerCreatedYear, $this->currentYear);
+
         $this->loadMonthlyReport();
     }
 
@@ -133,6 +152,11 @@ class MonthlyReport extends Component {
             // Nur einmal die berechneten Gesamtkosten des Vertrags zu den totalen Gesamtkosten hinzufügen
             $this->totalCost += $contractTotalCost;
         }
+    }
+
+    public function setMonth($month) {
+        $this->month = $month;
+        $this->loadMonthlyReport();
     }
 
     public function downloadPdf() {
