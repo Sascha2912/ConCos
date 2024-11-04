@@ -50,6 +50,10 @@
             @endforeach
         </ul>
 
+        <div class="mt-4">
+            {{ $timelogs->links() }}
+        </div>
+
         <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('customers.timelogs.create', $customer->id) }}">{{ __('app.create_new_time_log') }}

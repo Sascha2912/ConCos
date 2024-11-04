@@ -21,7 +21,7 @@ class CustomerController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $customers = Customer::paginate(50);
+        $customers = Customer::paginate(5);
 
         return view('customers.index', ['customers' => $customers]);
     }

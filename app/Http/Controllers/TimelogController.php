@@ -23,7 +23,7 @@ class TimelogController extends Controller {
      */
     public function index($customer_id) {
         $customer = Customer::findOrFail($customer_id);
-        $timelogs = $customer->timelogs()->orderBy('created_at', 'desc')->simplePaginate(5);
+        $timelogs = $customer->timelogs()->orderBy('created_at', 'desc')->paginate(10);
 
         return view('timelogs.index', [
             'timelogs' => $timelogs,

@@ -20,6 +20,12 @@
                 </li>
             @endforeach
         </ul>
+
+        {{-- Pagination Links --}}
+        <div class="mt-4">
+            {{ $customers->links() }}
+        </div>
+
         <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('customers.create') }}">{{ __('app.create_new_customer') }}

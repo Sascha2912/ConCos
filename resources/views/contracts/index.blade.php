@@ -20,6 +20,10 @@
             @endforeach
         </ul>
 
+        <div class="mt-4">
+            {{ $contracts->links() }}
+        </div>
+
         <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}

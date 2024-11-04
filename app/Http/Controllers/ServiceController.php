@@ -19,7 +19,7 @@ class ServiceController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $services = Service::paginate(50);
+        $services = Service::paginate(10);
 
         return view('services.index', ['services' => $services]);
     }

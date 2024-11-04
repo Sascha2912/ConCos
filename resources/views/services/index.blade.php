@@ -21,6 +21,10 @@
             @endforeach
         </ul>
 
+        <div class="mt-4">
+            {{ $services->links() }}
+        </div>
+
         <div class="button-bottom-bar">
             <x-partials.action-link
                     href="{{ route('services.create') }}">{{ __('app.create_new_service') }}

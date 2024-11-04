@@ -21,7 +21,7 @@ class ContractController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $contracts = Contract::paginate(50);
+        $contracts = Contract::paginate(10);
 
         return view('contracts.index', ['contracts' => $contracts]);
     }
