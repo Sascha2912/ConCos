@@ -25,4 +25,5 @@ class CustomerFactory extends Factory {
             'updated_at'        => now(),
         ];
     }
+
 }

@@ -21,7 +21,7 @@ class CustomerController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $customers = Customer::paginate(30);
+        $customers = Customer::paginate(50);
 
         return view('customers.index', ['customers' => $customers]);
     }
@@ -43,14 +43,19 @@ class CustomerController extends Controller {
         $data = $this->validate($request, Customer::validationRules(true));
         $customer = $this->customerRepository->updateOrCreate($data);
 
-        if($request->routeIs('customer.contracts.destroy')){
-            $customer->contracts()->attach($request->contract_id);
-
-            return redirect()->back()->with('success', 'Vertrag wurde dem Kunden erfolgreich hinzugefügt.');
-        }
         // Synchronisiere die Vertragsdaten
         if($request->has('contracts')){
             $customer->contracts()->sync($request->input('contracts'));
+        }
+
+
+        // Hole den Standardvertrag '-' und weise ihn dem neuen Service zu
+        $defaultContract = Contract::where('name', '-')->first();
+        if($defaultContract){
+            $customer->contracts()->attach($defaultContract->id, [
+                'start_date'  => Carbon::now(),
+                'create_date' => Carbon::now(),
+            ]);
         }
 
         if($request->expectsJson()){

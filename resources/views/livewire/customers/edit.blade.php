@@ -101,35 +101,37 @@
         <h2 class="item-heading">{{ __('app.current_contracts') }}:</h2>
         <ul class="item-wrapper">
             @foreach($tmpContracts as $contract)
-                <li wire:key="contract-{{ $contract['id'] }}">
-                    <!-- Contract Information -->
+                @if($contract['name'] != '-')
+                    <li wire:key="contract-{{ $contract['id'] }}">
+                        <!-- Contract Information -->
 
-                    <div class="item">
-                        <span class="item-text">{{ $contract['name'] }}</span>
-                    </div>
-                    <div class="item-edit">
+                        <div class="item">
+                            <span class="item-text">{{ $contract['name'] }}</span>
+                        </div>
+                        <div class="item-edit">
 
-                        <x-forms.input-field
-                                name="start_date"
-                                id="start_date_{{ $contract['id'] }}"
-                                label="{{ __('app.start_date') }}"
-                                type="date"
-                                :required="true"
-                                wireModel="contractDates.{{ $contract['id'] }}.start_date"/>
+                            <x-forms.input-field
+                                    name="start_date"
+                                    id="start_date_{{ $contract['id'] }}"
+                                    label="{{ __('app.start_date') }}"
+                                    type="date"
+                                    :required="true"
+                                    wireModel="contractDates.{{ $contract['id'] }}.start_date"/>
 
-                        <x-forms.input-field
-                                name="end_date"
-                                id="end_date_{{ $contract['id'] }}"
-                                label="{{ __('app.end_date') }}"
-                                type="date"
-                                wireModel="contractDates.{{ $contract['id'] }}.end_date"/>
+                            <x-forms.input-field
+                                    name="end_date"
+                                    id="end_date_{{ $contract['id'] }}"
+                                    label="{{ __('app.end_date') }}"
+                                    type="date"
+                                    wireModel="contractDates.{{ $contract['id'] }}.end_date"/>
 
-                        <!-- Delete Button -->
-                        <x-item.delete-button
-                                wire:click="removeContract({{ $contract['id'] }})"/>
-                    </div>
+                            <!-- Delete Button -->
+                            <x-item.delete-button
+                                    wire:click="removeContract({{ $contract['id'] }})"/>
+                        </div>
 
-                </li>
+                    </li>
+                @endif
             @endforeach
         </ul>
     </div>

@@ -11,6 +11,6 @@ class ServiceSeeder extends Seeder {
      * Run the database seeds.
      */
     public function run(): void {
-        Service::factory(10)->create();
+        Service::factory(20)->create();
     }
 }

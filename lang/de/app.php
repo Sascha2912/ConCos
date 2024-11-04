@@ -63,6 +63,7 @@ return [
     'contracts'                                => 'Verträge',
     'contract_details'                         => 'Vertragsdetails',
     'contract_name'                            => 'Vertragsname',
+    'without_contract'                         => 'Ohne Vertrag',
     'contract_number'                          => 'Vertragsnummer',
     'linked_contracts'                         => 'Verknüpfte Verträge',
     'no_contracts_available'                   => 'Keine Verträge Vorhanden',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contract;
 use App\Models\Service;
 use App\Repositories\ServiceRepository;
 use Illuminate\Http\Request;
@@ -37,6 +38,12 @@ class ServiceController extends Controller {
     public function store(Request $request) {
         $data = $this->validate($request, Service::validationRules());
         $service = $this->serviceRepository->updateOrCreate($data);
+
+        // Hole den Standardvertrag '-' und weise ihn dem neuen Service zu
+        $defaultContract = Contract::where('name', '-')->first();
+        if($defaultContract){
+            $service->contracts()->attach($defaultContract->id);
+        }
 
         if($request->expectsJson()){
 
@@ -77,6 +84,12 @@ class ServiceController extends Controller {
     public function update(Request $request, Service $service) {
         $data = $this->validate($request, Service::validationRules());
         $service = $this->serviceRepository->updateOrCreate($data, $service);
+
+        // Stelle sicher, dass der Service immer dem Standardvertrag zugeordnet bleibt
+        $defaultContract = Contract::where('name', '-')->first();
+        if($defaultContract && !$service->contracts()->where('contract_id', $defaultContract->id)->exists()){
+            $service->contracts()->attach($defaultContract->id);
+        }
 
         return redirect(route('services.edit', ['service' => $service]));
     }

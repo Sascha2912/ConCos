@@ -3,6 +3,7 @@
 namespace App\Livewire\Customers;
 
 use App\Http\Controllers\CustomerController;
+use App\Models\Contract;
 use App\Models\Customer;
 use Carbon\Carbon;
 
@@ -26,6 +27,7 @@ class Create extends FormBase {
             'zip_code'          => $this->zip_code,
         ];
 
+
         // Bereite die Vertragsdaten für die Pivot-Tabelle vor
         $contractsWithDates = [];
         foreach($this->tmpContracts as $contract){
@@ -44,6 +46,7 @@ class Create extends FormBase {
                 'end_date'    => $end_date,
             ];
         }
+
 
         // Speicher den Vertrag über den ContractController
         try{

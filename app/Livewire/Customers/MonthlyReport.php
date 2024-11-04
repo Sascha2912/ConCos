@@ -40,48 +40,93 @@ class MonthlyReport extends Component {
             // Setze die Vertragskosten für diesen Vertrag in einer separaten Variable
             $contractTotalCost = $contract->monthly_costs;
 
-            foreach($contract->services as $service){
+            // Erstellen eines Maps, um Duplikate zu vermeiden
+            $servicesMap = [];
 
-                $timelogHours = $this->customer->timelogs()
-                    ->where('contract_id', $contract->id)
-                    ->where('service_id', $service->id)
-                    ->whereBetween('date', [$starDate, $endDate])
-                    ->sum('hours');
-                if( !$contract->flatrate){
+            if($contract->name === '-'){
+
+                foreach($contract->services as $service){
+
+                    $timelogHours = $this->customer->timelogs()
+                        ->where('contract_id', $contract->id)
+                        ->where('service_id', $service->id)
+                        ->whereBetween('date', [$starDate, $endDate])
+                        ->sum('hours');
+
+                    if($timelogHours > 0){
+                        $additionalHours = max(0, $timelogHours - $service->pivot->hours);
+                        $additionalCost = $additionalHours * $service->costs_per_hour;
+
+                        // Füge nur hinzu, wenn der Service nicht bereits in servicesMap ist
+                        if( !isset($servicesMap[$service->id])){
+                            $servicesMap[$service->id] = [
+                                'service_name'     => $service->name,
+                                'agreed_hours'     => $service->pivot->hours,
+                                'used_hours'       => $timelogHours,
+                                'additional_hours' => $additionalHours,
+                                'additional_cost'  => $additionalCost,
+                                'costs_per_hour'   => $service->costs_per_hour,
+                            ];
+
+                            // Zusatzkosten zu den Vertragsgesamtkosten hinzufügen
+                            $contractTotalCost += $additionalCost;
+                        }
+                    }
+                }
+
+            }else{
+                foreach($contract->services as $service){
+
+                    $timelogHours = $this->customer->timelogs()
+                        ->where('contract_id', $contract->id)
+                        ->where('service_id', $service->id)
+                        ->whereBetween('date', [$starDate, $endDate])
+                        ->sum('hours');
+                    if( !$contract->flatrate){
 
 
-                    $additionalHours = max(0, $timelogHours - $service->pivot->hours);
-                    $additionalCost = $additionalHours * $service->costs_per_hour;
+                        $additionalHours = max(0, $timelogHours - $service->pivot->hours);
+                        $additionalCost = $additionalHours * $service->costs_per_hour;
 
-                    $contractData['services'][] = [
-                        'service_name'     => $service->name,
-                        'agreed_hours'     => $service->pivot->hours,
-                        'used_hours'       => $timelogHours,
-                        'additional_hours' => $additionalHours,
-                        'additional_cost'  => $additionalCost,
-                        'costs_per_hour'   => $service->costs_per_hour,
-                    ];
+                        // Füge nur hinzu, wenn der Service nicht bereits in servicesMap ist
+                        if( !isset($servicesMap[$service->id])){
+                            $servicesMap[$service->id] = [
+                                'service_name'     => $service->name,
+                                'agreed_hours'     => $service->pivot->hours,
+                                'used_hours'       => $timelogHours,
+                                'additional_hours' => $additionalHours,
+                                'additional_cost'  => $additionalCost,
+                                'costs_per_hour'   => $service->costs_per_hour,
+                            ];
 
-                    // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
-                    $contractTotalCost += $additionalCost;
-                }else{
+                            // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
+                            $contractTotalCost += $additionalCost;
+                        }
+                    }else{
 
-                    $contractData['services'][] = [
-                        'service_name'     => $service->name,
-                        'agreed_hours'     => 'flatrate',
-                        'used_hours'       => $timelogHours,
-                        'additional_hours' => 0,
-                        'additional_cost'  => 0,
-                        'costs_per_hour'   => $service->costs_per_hour,
-                    ];
+                        // Flatrate-Handling: nur einmalig hinzufügen, falls noch nicht vorhanden
+                        if( !isset($servicesMap[$service->id])){
+                            $servicesMap[$service->id] = [
+                                'service_name'     => $service->name,
+                                'agreed_hours'     => 'flatrate',
+                                'used_hours'       => $timelogHours,
+                                'additional_hours' => 0,
+                                'additional_cost'  => 0,
+                                'costs_per_hour'   => $service->costs_per_hour,
+                            ];
 
-                    // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
-                    $contractTotalCost = 0;
+                            // Zusatzkosten zu den Vertraggesamtkosten hinzufügen
+                            $contractTotalCost = 0;
+                        }
+                    }
                 }
             }
 
             //Speichern der Gesamtkosten für diesen Vertrag in 'contractData
             $contractData['contract_total_cost'] = $contractTotalCost;
+
+            // Füge alle Services aus servicesMap zu contractData['services'] hinzu
+            $contractData['services'] = array_values($servicesMap);
 
             // Füge die Vertragsdaten dem Report hinzu
             $this->reportData['contracts'][] = $contractData;

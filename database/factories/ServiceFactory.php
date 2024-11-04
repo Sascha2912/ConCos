@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Contract;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,5 +22,17 @@ class ServiceFactory extends Factory {
             'created_at'     => now(),
             'updated_at'     => now(),
         ];
+    }
+
+    public function configure() {
+        return $this->afterCreating(function(Service $service) {
+            // Hole den Standardvertrag '-' aus der Datenbank
+            $defaultContract = Contract::where('name', '-')->first();
+
+            // Weise dem Service den Vertrag zu, falls gefunden
+            if($defaultContract){
+                $service->contracts()->attach($defaultContract->id);
+            }
+        });
     }
 }

@@ -63,6 +63,7 @@ return [
     'contracts'                                => 'Contracts',
     'contract_details'                         => 'Contract details',
     'contract_name'                            => 'Contract name',
+    'without_contract'                         => 'Without contract',
     'contract_number'                          => 'Contract number',
     'linked_contracts'                         => 'Linked contracts',
     'no_contracts_available'                   => 'No contracts available',

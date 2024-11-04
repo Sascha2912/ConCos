@@ -24,7 +24,7 @@ class TimelogFactory extends Factory {
             'service_id'  => $randomService->id,
             'contract_id' => $randomContract->id,
             'hours'       => $this->faker->numberBetween(1, 8),
-            'date'        => $this->faker->dateTimeBetween('2022-01-01', '2024-12-31')->format('Y-m-d'),
+            'date'        => $this->faker->dateTimeBetween('-3 years', 'now')->format('Y-m-d'),
             'description' => $this->faker->text(),
             'created_at'  => now(),
             'updated_at'  => now(),

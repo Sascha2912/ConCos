@@ -17,8 +17,8 @@ class ContractFactory extends Factory {
 
         return [
             'name'          => ' Contract '.$index,
-            'monthly_costs' => $this->faker->optional()->randomFloat(2, 100, 1000) ?? 0,
-            'flatrate'      => $this->faker->boolean,
+            'monthly_costs' => $this->faker->randomFloat(2, 50, 1000),
+            'flatrate'      => $this->faker->boolean(20),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
