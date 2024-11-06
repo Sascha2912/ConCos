@@ -34,37 +34,33 @@
     <div class="user-area">
         <div class="dropdown-wrapper">
             <form class="block" method="POST" action="{{ route('users.update.language', auth()->user()->id) }}"
-                  x-data
+                  x-data="{
+                  language: '{{ auth()->user()->preferred_language }}',
+                  translations: { en: '{{ __('app.en') }}', de: '{{ __('app.de') }}' },
+                  get alternativeLanguage() {
+                      return this.language === 'en' ? 'de' : 'en';
+                  }
+              }"
                   @submit.prevent="$refs.languageForm.submit()" x-ref="languageForm">
                 @csrf
                 @method('PUT')
 
-                <input type="hidden" name="preferred_language" x-ref="languageInput">
+                <input type="hidden" name="preferred_language" x-ref="languageInput" :value="language">
 
                 <x-dropdown.field align="left" width="48">
                     <x-slot name="trigger">
                         <x-dropdown.button>
-                            @if(auth()->user()->preferred_language === 'en')
-                                {{ __('app.en') }}
-                            @elseif(auth()->user()->preferred_language === 'de')
-                                {{ __('app.de') }}
-                            @endif
+                            <span x-text="translations[language]"></span>
                         </x-dropdown.button>
                     </x-slot>
 
                     <x-slot name="content">
-                        @if(auth()->user()->preferred_language !== 'en')
-                            <x-dropdown.link href="#" @click.prevent="$refs.languageForm.submit()"
-                                             @click="$refs.languageInput.value = 'en'">{{ __('app.en') }}</x-dropdown.link>
-                        @endif
-
-                        @if(auth()->user()->preferred_language !== 'de')
-                            <x-dropdown.link href="#" @click.prevent="$refs.languageForm.submit()"
-                                             @click="$refs.languageInput.value = 'de'">{{ __('app.de') }}</x-dropdown.link>
-                        @endif
+                        <x-dropdown.link href="#"
+                                         @click.prevent="language = alternativeLanguage; $refs.languageForm.submit()">
+                            <span x-text="translations[alternativeLanguage]"></span>
+                        </x-dropdown.link>
                     </x-slot>
                 </x-dropdown.field>
-
             </form>
             <x-partials.nav-link
                     href="{{ route('user.profile.edit', auth()->user()->id) }}"
