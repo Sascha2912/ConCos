@@ -3,6 +3,8 @@
     'label' => '',
     'options' => [],
     'selected' => null,
+    'readonly' => false,
+    'disabled' => false,
     'wireModel' => null,
     'wireKey' => null,
     'wireChange' => null,
@@ -14,6 +16,8 @@
         <select
                 id="{{ $name }}"
                 name="{{ $name }}"
+                @if($readonly) readonly @endif
+                @if($disabled) disabled @endif
                 @if($wireModel) wire:model="{{ $wireModel }}" @endif
                 @if($wireKey) wire:key="{{ $wireKey }}" @endif
                 @if($wireChange) wire:change="{{ $wireChange }}" @endif

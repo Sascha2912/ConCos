@@ -33,6 +33,8 @@
                     label="{{ __('app.role') }}"
                     :options="$roles"
                     selected="{{ $user->role }}"
+                    value="{{ $user->role }}"
+                    :disabled="!$user->isAdmin()"
             />
 
             <x-forms.input-field

@@ -15,19 +15,21 @@
                 {{ __('app.time_logs') }}
             </x-partials.nav-link>
 
-            <x-partials.nav-link
-                    href="{{ route('customers.show', $customer->id) }}"
-                    :active="request()->routeIs('customers.show')"
-            >
-                {{ __('app.customer_data') }}
-            </x-partials.nav-link>
-
-            <x-partials.nav-link
-                    href="{{ route('customers.edit', $customer->id) }}"
-                    :active="request()->routeIs('customers.edit')"
-            >
-                {{ __('app.edit_customer') }}
-            </x-partials.nav-link>
+            @can('update', $customer)
+                <x-partials.nav-link
+                        href="{{ route('customers.edit', $customer->id) }}"
+                        :active="request()->routeIs('customers.edit')"
+                >
+                    {{ __('app.edit_customer') }}
+                </x-partials.nav-link>
+            @else
+                <x-partials.nav-link
+                        href="{{ route('customers.show', $customer->id) }}"
+                        :active="request()->routeIs('customers.show')"
+                >
+                    {{ __('app.customer_data') }}
+                </x-partials.nav-link>
+            @endcan
 
         </nav>
         <form>

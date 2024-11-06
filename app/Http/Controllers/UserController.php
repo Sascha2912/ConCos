@@ -14,14 +14,14 @@ class UserController extends Controller {
 
     public function __construct(UserRepository $userRepository) {
         $this->userRepository = $userRepository;
-        // $this->authorizeResource(User::class);
+        $this->authorizeResource(User::class);
     }
 
     /**
      * Display a listing of the resource.
      */
     public function index() {
-        $users = User::paginate(50);
+        $users = User::paginate(10);
 
         return view('users.index', ['users' => $users]);
     }
@@ -77,12 +77,6 @@ class UserController extends Controller {
      * Show the forms for editing the specified resource.
      */
     public function edit(Request $request, User $user) {
-
-        if($request->routeIs('user.profile.edit')){
-            $user = Auth::user();
-
-            return view('users.edit', ['user' => $user, 'roles' => [$user->role]]);
-        }
 
         $roles = ['viewer', 'editor', 'admin'];
 

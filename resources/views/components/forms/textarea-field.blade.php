@@ -4,6 +4,8 @@
     'value' => null,
     'required' => false,
     'rows' => 3,
+    'readonly' => false,
+    'disabled' => false,
     'wireModel' => null,
     'id' => null,
 ])
@@ -16,6 +18,8 @@
                 id="{{ $id ?? $name }}"
                 rows="{{ $rows }}"
                 {{ $required ? 'required' : '' }}
+                @if($readonly) readonly @endif
+                @if($disabled) disabled @endif
                 @if($wireModel) wire:model="{{ $wireModel }}" @endif
         >{{ $value ?? old($name) }}</textarea>
     </div>

@@ -14,7 +14,7 @@ class ContractController extends Controller {
 
     public function __construct(ContractRepository $contractRepository) {
         $this->contractRepository = $contractRepository;
-        // $this->authorizeResource(Contract::class);
+        $this->authorizeResource(Contract::class);
     }
 
     /**
@@ -47,7 +47,12 @@ class ContractController extends Controller {
 
         // Füge die Services zum Vertrag hinzu
         foreach($request->input('services') as $serviceId => $serviceData){
-            $contract->services()->attach($serviceId, ['hours' => $serviceData['hours']]);
+            if($contract->flatrate === true){
+                $contract->services()->attach($serviceId, ['hours' => 0]);
+            }else{
+                $contract->services()->attach($serviceId, ['hours' => $serviceData['hours']]);
+            }
+
         }
 
         if($request->expectsJson()){
@@ -77,7 +82,7 @@ class ContractController extends Controller {
             ]);
         }
 
-        return view('contracts.edit',
+        return view('contracts.show',
             [
                 'contract'          => $contract,
                 'services'          => $services,

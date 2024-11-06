@@ -1,14 +1,38 @@
 <x-app-layout>
+    <div class="wrapper">
+        <h1>{{ __('app.time_log') }}</h1>
+        <form>
+            @csrf
+            <x-forms.input-field
+                    name="hours"
+                    label="{{ __('app.hours') }}"
+                    type="text"
+                    :value="$timelog->hours"
+                    :required="true"
+                    :disabled="true"
+            />
 
-    <x-slot:header>
-        {{ __('app.time_log') }}
-    </x-slot:header>
+            <x-forms.input-field
+                    name="date"
+                    label="{{ __('app.date') }}"
+                    type="date"
+                    :value="$timelog->date"
+                    :required="true"
+                    :disabled="true"
+            />
 
-    <p>{{ __('app.customer') }}: {{ $timelog->customer->name }}</p>
-    <p>{{ __('app.service') }}: {{ $timelog->service->name }}</p>
-    <p>{{ __('app.hours') }}: {{ $timelog->hours }}</p>
-    <p>{{ __('app.date') }}: {{ $timelog->date }}</p>
-
-    <a href="{{ route('customers.timelogs.edit', $timelog->id) }}">{{ __('app.edit_time_entry') }}</a>
-
+            <x-forms.textarea-field
+                    name="description"
+                    label="{{ __('app.description') }}"
+                    type="text"
+                    rows="9"
+                    :disabled="true"
+            />
+        </form>
+        <!-- Button-Bottom-Bar -->
+        <div class="button-bottom-bar">
+            <x-partials.action-link href="{{ route('customers.timelogs.index', $customer->id) }}"
+                                    class="back ">{{ __('app.back') }}</x-partials.action-link>
+        </div>
+    </div>
 </x-app-layout>

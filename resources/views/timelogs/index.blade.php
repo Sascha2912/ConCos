@@ -14,19 +14,21 @@
                 {{ __('app.time_logs') }}
             </x-partials.nav-link>
 
-            <x-partials.nav-link
-                    href="{{ route('customers.show', $customer->id) }}"
-                    :active="request()->routeIs('customers.show')"
-            >
-                {{ __('app.customer_data') }}
-            </x-partials.nav-link>
-
-            <x-partials.nav-link
-                    href="{{ route('customers.edit', $customer->id) }}"
-                    :active="request()->routeIs('customers.edit')"
-            >
-                {{ __('app.edit_customer') }}
-            </x-partials.nav-link>
+            @can('update', $customer)
+                <x-partials.nav-link
+                        href="{{ route('customers.edit', $customer->id) }}"
+                        :active="request()->routeIs('customers.edit')"
+                >
+                    {{ __('app.edit_customer') }}
+                </x-partials.nav-link>
+            @else
+                <x-partials.nav-link
+                        href="{{ route('customers.show', $customer->id) }}"
+                        :active="request()->routeIs('customers.show')"
+                >
+                    {{ __('app.customer_data') }}
+                </x-partials.nav-link>
+            @endcan
 
         </nav>
 
@@ -39,13 +41,23 @@
             </li>
             @foreach($timelogs as $timelog)
                 <li>
-                    <a class="index-link-4"
-                       href="{{ route('timelogs.edit', $timelog->id) }}">
-                        <p>{{ $timelog->customer->name }}</p>
-                        <p>{{ $timelog->service->name }}</p>
-                        <p>{{ $timelog->hours }}</p>
-                        <p>{{ $timelog->date }}</p>
-                    </a>
+                    @can('update', $timelog)
+                        <a class="index-link-4"
+                           href="{{ route('timelogs.edit', $timelog->id) }}">
+                            <p>{{ $timelog->customer->name }}</p>
+                            <p>{{ $timelog->service->name }}</p>
+                            <p>{{ $timelog->hours }}</p>
+                            <p>{{ $timelog->date }}</p>
+                        </a>
+                    @else
+                        <a class="index-link-4"
+                           href="{{ route('timelogs.show', $timelog->id) }}">
+                            <p>{{ $timelog->customer->name }}</p>
+                            <p>{{ $timelog->service->name }}</p>
+                            <p>{{ $timelog->hours }}</p>
+                            <p>{{ $timelog->date }}</p>
+                        </a>
+                    @endcan
                 </li>
             @endforeach
         </ul>
@@ -54,11 +66,13 @@
             {{ $timelogs->links() }}
         </div>
 
-        <div class="button-bottom-bar">
-            <x-partials.action-link
-                    href="{{ route('customers.timelogs.create', $customer->id) }}">{{ __('app.create_new_time_log') }}
-            </x-partials.action-link>
-        </div>
+        @can('create', $timelog)
+            <div class="button-bottom-bar">
+                <x-partials.action-link
+                        href="{{ route('customers.timelogs.create', $customer->id) }}">{{ __('app.create_new_time_log') }}
+                </x-partials.action-link>
+            </div>
+        @endcan
     </div>
 
 </x-app-layout>

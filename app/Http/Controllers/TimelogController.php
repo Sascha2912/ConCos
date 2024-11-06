@@ -15,7 +15,7 @@ class TimelogController extends Controller {
 
     public function __construct(TimelogRepository $timelogRepository) {
         $this->timelogRepository = $timelogRepository;
-        // $this->authorizeResource(timelog::class);
+        $this->authorizeResource(timelog::class);
     }
 
     /**
@@ -73,7 +73,7 @@ class TimelogController extends Controller {
 
 
         $contracts = $customer ? $customer->contracts()->get() : collect();
-        $services = $contract->services->get();
+        $services = $contract->services()->get();
 
         if($request->expectsJson()){
 

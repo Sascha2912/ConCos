@@ -14,14 +14,14 @@ class CustomerController extends Controller {
 
     public function __construct(CustomerRepository $customerRepository) {
         $this->customerRepository = $customerRepository;
-        // $this->authorizeResource(Customer::class);
+        $this->authorizeResource(Customer::class);
     }
 
     /**
      * Display a listing of the resource.
      */
     public function index() {
-        $customers = Customer::paginate(5);
+        $customers = Customer::paginate(10);
 
         return view('customers.index', ['customers' => $customers]);
     }

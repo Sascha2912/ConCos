@@ -12,24 +12,35 @@
             </li>
             @foreach($services as $service)
                 <li>
-                    <a class="index-link" href="{{ route('services.show', $service->id) }}">
-                        <p>{{ $service->name }}</p>
-                        <p>{{ $service->costs_per_hour }} €</p>
-                        <p>{{ $service->id }}</p>
-                    </a>
+                    @can('update', $service)
+                        <a class="index-link" href="{{ route('services.edit', $service->id) }}">
+                            <p>{{ $service->name }}</p>
+                            <p>{{ $service->costs_per_hour }} €</p>
+                            <p>{{ $service->id }}</p>
+                        </a>
+                    @else
+                        <a class="index-link" href="{{ route('services.show', $service->id) }}">
+                            <p>{{ $service->name }}</p>
+                            <p>{{ $service->costs_per_hour }} €</p>
+                            <p>{{ $service->id }}</p>
+                        </a>
+                    @endcan
                 </li>
             @endforeach
+
         </ul>
 
         <div class="mt-4">
             {{ $services->links() }}
         </div>
 
-        <div class="button-bottom-bar">
-            <x-partials.action-link
-                    href="{{ route('services.create') }}">{{ __('app.create_new_service') }}
-            </x-partials.action-link>
-        </div>
+        @can('create', $service)
+            <div class="button-bottom-bar">
+                <x-partials.action-link
+                        href="{{ route('services.create') }}">{{ __('app.create_new_service') }}
+                </x-partials.action-link>
+            </div>
+        @endcan
     </div>
 
 </x-app-layout>

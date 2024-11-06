@@ -1,23 +1,63 @@
 <x-app-layout>
 
-    <x-slot:header>
-        {{ __('app.contract') }} ID: {{ $contract->id }}
-    </x-slot:header>
+    <div class="wrapper">
+        <h1>{{ __('app.edit_contract') }}</h1>
+        <form>
+            @csrf
+            <!-- Form Input Fields -->
+            <x-forms.input-field
+                    name="name"
+                    label="{{ __('app.contract_name') }}"
+                    type="text"
+                    :value="$contract->name"
+                    :required="true"
+                    :disabled="true"/>
 
-    <p>{{ __('app.name') }}: {{ $contract->name }}</p>
-    <p>{{ __('app.hours') }}: {{ $contract->hours }}</p>
-    <p>{{ __('app.monthly_costs') }}: {{ $contract->monthly_costs }}</p>
-    <p>{{ __('app.flatrate') }}: {{ $contract->flatrate }}</p>
-    <p>{{ __('app.start_date') }}: {{ $contract->start_date }}</p>
-    <p>{{ __('app.end_date') }}: {{ $contract->end_date }}</p>
+            <x-forms.input-field
+                    name="monthly_costs"
+                    label="{{ __('app.monthly_price') }}"
+                    type="text"
+                    :value="$contract->monthly_costs"
+                    :required="true"
+                    :disabled="true"/>
 
-    <h2>{{ __('app.services') }}</h2>
-    <ul>
-        @foreach($contract->services as $service)
-            <li>{{ $service->name }}</li>
-        @endforeach
-    </ul>
+            <x-forms.input-field
+                    name="flatrate"
+                    label="{{ __('app.flatrate') }}"
+                    type="checkbox"
+                    :value="$contract->flatrate"
+                    :disabled="true"/>
+        </form>
 
-    <a href="{{ route('contracts.edit', $contract->id) }}">{{ __('app.edit_contract') }}</a>
+        <div>
+            <!-- Selected Services -->
+            <h2 class="item-heading">{{ __('app.current_services') }}:</h2>
+            <ul class="item-wrapper">
+                @foreach($services as $service)
+                    <li>
+                        <!-- Service Information -->
+                        <div>
+                            <span class="item-text">{{ $service['name'] }}</span>
+                        </div>
+
+                        <!-- Delete Button and Input for Service Hours -->
+                        <div class="item-edit">
+                            <x-forms.input-field
+                                    name="service_hours"
+                                    label="{{ __('app.service_hours') }}"
+                                    type="text"
+                                    :value="$service->pivot->hours"
+                                    :required="true"
+                                    :disabled="true"/>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+        <!-- Button-Bottom-Bar -->
+        <div class="button-bottom-bar">
+            <x-partials.action-link href="/contracts" class="back">{{ __('app.back') }}</x-partials.action-link>
+        </div>
+    </div>
 
 </x-app-layout>

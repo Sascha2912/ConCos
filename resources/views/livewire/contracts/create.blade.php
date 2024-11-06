@@ -1,5 +1,4 @@
-<div>
-
+<div class="wrapper">
     <h1>{{ __('app.create_contract') }}</h1>
     <form wire:submit.prevent="save" id="contract-form">
         @csrf

@@ -26,11 +26,13 @@
             {{ $users->links() }}
         </div>
 
-        <div class="button-bottom-bar">
-            <x-partials.action-link
-                    href="{{ route('users.create') }}">{{ __('app.create_new_user') }}
-            </x-partials.action-link>
-        </div>
+        @can('create', $user)
+            <div class="button-bottom-bar">
+                <x-partials.action-link
+                        href="{{ route('users.create') }}">{{ __('app.create_new_user') }}
+                </x-partials.action-link>
+            </div>
+        @endcan
     </div>
 
 </x-app-layout>

@@ -12,7 +12,7 @@ class ServiceController extends Controller {
 
     public function __construct(ServiceRepository $serviceRepository) {
         $this->serviceRepository = $serviceRepository;
-        // $this->authorizeResource(Service::class);
+        $this->authorizeResource(Service::class);
     }
 
     /**
@@ -53,6 +53,8 @@ class ServiceController extends Controller {
             ]);
         }
 
+        session()->flash('message', __('app.service_created_successfully'));
+
         return redirect(route('services.edit', ['service' => $service]));
     }
 
@@ -67,7 +69,7 @@ class ServiceController extends Controller {
             ]);
         }
 
-        return view('services.edit', ['service' => $service]);
+        return view('services.show', ['service' => $service]);
     }
 
     /**
@@ -90,6 +92,8 @@ class ServiceController extends Controller {
         if($defaultContract && !$service->contracts()->where('contract_id', $defaultContract->id)->exists()){
             $service->contracts()->attach($defaultContract->id);
         }
+
+        session()->flash('message', __('app.service_updated_successfully'));
 
         return redirect(route('services.edit', ['service' => $service]));
     }

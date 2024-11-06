@@ -11,11 +11,19 @@
             </li>
             @foreach($contracts as $contract)
                 <li>
-                    <a class="index-link" href="{{ route('contracts.edit', $contract->id) }}">
-                        <p>{{ $contract->name }}</p>
-                        <p>{{ $contract->monthly_costs }} €</p>
-                        <p>{{ $contract->id }}</p>
-                    </a>
+                    @can('update', $contract)
+                        <a class="index-link" href="{{ route('contracts.edit', $contract->id) }}">
+                            <p>{{ $contract->name }}</p>
+                            <p>{{ $contract->monthly_costs }} €</p>
+                            <p>{{ $contract->id }}</p>
+                        </a>
+                    @else
+                        <a class="index-link" href="{{ route('contracts.show', $contract->id) }}">
+                            <p>{{ $contract->name }}</p>
+                            <p>{{ $contract->monthly_costs }} €</p>
+                            <p>{{ $contract->id }}</p>
+                        </a>
+                    @endcan
                 </li>
             @endforeach
         </ul>
@@ -24,11 +32,13 @@
             {{ $contracts->links() }}
         </div>
 
-        <div class="button-bottom-bar">
-            <x-partials.action-link
-                    href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}
-            </x-partials.action-link>
-        </div>
+        @can('create', $contract)
+            <div class="button-bottom-bar">
+                <x-partials.action-link
+                        href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}
+                </x-partials.action-link>
+            </div>
+        @endcan
     </div>
 
 </x-app-layout>

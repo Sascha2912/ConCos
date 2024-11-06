@@ -21,12 +21,14 @@
             {{ __('app.services') }}
         </x-partials.nav-link>
 
-        <x-partials.nav-link
-                href="/users"
-                :active="request()->is('users*')"
-        >
-            {{ __('app.users') }}
-        </x-partials.nav-link>
+        @can('viewAny', \App\Models\User::class)
+            <x-partials.nav-link
+                    href="/users"
+                    :active="request()->is('users*')"
+            >
+                {{ __('app.users') }}
+            </x-partials.nav-link>
+        @endcan
     </div>
 
     <div class="user-area">
@@ -65,7 +67,7 @@
 
             </form>
             <x-partials.nav-link
-                    href="{{ route('user.profile.edit') }}"
+                    href="{{ route('user.profile.edit', auth()->user()->id) }}"
                     :active="request()->routeIs('user.profile.edit')"
             >
                 {{ __('app.profile') }}

@@ -29,7 +29,7 @@ button {
   @apply rounded-md shadow-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 leading-6;
 
   &.dropdown {
-    @apply flex gap-2 content-center bg-transparent shadow-none;
+    @apply flex gap-2 content-center bg-transparent shadow-none text-base;
   }
 
   &.delete {

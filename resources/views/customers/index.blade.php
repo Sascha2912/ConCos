@@ -26,11 +26,13 @@
             {{ $customers->links() }}
         </div>
 
-        <div class="button-bottom-bar">
-            <x-partials.action-link
-                    href="{{ route('customers.create') }}">{{ __('app.create_new_customer') }}
-            </x-partials.action-link>
-        </div>
+        @can('create', $customer)
+            <div class="button-bottom-bar">
+                <x-partials.action-link
+                        href="{{ route('customers.create') }}">{{ __('app.create_new_customer') }}
+                </x-partials.action-link>
+            </div>
+        @endcan
     </div>
 
 </x-app-layout>
