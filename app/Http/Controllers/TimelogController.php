@@ -137,9 +137,9 @@ class TimelogController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Timelog $timelog, $customer_id) {
+    public function destroy(Timelog $timelog) {
         $timelog->delete();
 
-        return redirect(route('customers.timelogs.index', $customer_id));
+        return redirect(route('customers.timelogs.index', $timelog->customer_id));
     }
 }

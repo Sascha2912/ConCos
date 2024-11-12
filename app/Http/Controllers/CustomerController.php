@@ -41,22 +41,8 @@ class CustomerController extends Controller {
      */
     public function store(Request $request) {
         $data = $this->validate($request, Customer::validationRules(true));
-        $customer = $this->customerRepository->updateOrCreate($data);
-
-        // Synchronisiere die Vertragsdaten
-        if($request->has('contracts')){
-            $customer->contracts()->sync($request->input('contracts'));
-        }
-
-
-        // Hole den Standardvertrag '-' und weise ihn dem neuen Service zu
-        $defaultContract = Contract::where('name', '-')->first();
-        if($defaultContract){
-            $customer->contracts()->attach($defaultContract->id, [
-                'start_date'  => Carbon::now(),
-                'create_date' => Carbon::now(),
-            ]);
-        }
+        
+        $customer = $this->customerRepository->updateOrCreate($data, $request);
 
         if($request->expectsJson()){
 
@@ -109,29 +95,10 @@ class CustomerController extends Controller {
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer, array $contractsData) {
+    public function update(Request $request, Customer $customer) {
         $data = $this->validate($request, Customer::validationRules());
-        $customer = $this->customerRepository->updateOrCreate($data, $customer);
 
-        // Bereite die Vertragsdaten für die Pivot-Tabelle vor
-        $contractsWithDates = [];
-        foreach($contractsData['contracts'] as $contract){
-            $start_date = $contractsData['contract_dates'][$contract['id']]['start_date'] ?? null;
-            if( !$start_date){
-                return redirect()->back()->with('error', 'Start date is required for all contracts.');
-            }
-
-            $end_date = $contractsData['contract_dates'][$contract['id']]['end_date'] ?? Carbon::parse($start_date)->addYears(2)->format('Y-m-d');
-
-            $contractsWithDates[$contract['id']] = [
-                'create_date' => $contractsData['contract_dates'][$contract['id']]['create_date'] ?? now()->format('Y-m-d'),
-                'start_date'  => $start_date,
-                'end_date'    => $end_date,
-            ];
-        }
-
-        // Synchronisiere die Vertragsdaten mit der Pivot-Tabelle
-        $customer->contracts()->sync($contractsWithDates);
+        $customer = $this->customerRepository->updateOrCreate($data, $request, $customer);
 
         return redirect(route('customers.edit', ['customer' => $customer]));
     }

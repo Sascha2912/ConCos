@@ -34,7 +34,7 @@
         <div class="button-bottom-bar">
             <x-partials.action-link href="/services"
                                     class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
-            <button class="delete" form="delete-form">
+            <button onclick="return confirm('{{ __('app.are_you_sure') }}');" class="delete" form="delete-form">
                 {{ $slot ?? __('app.delete') }}
             </button>
             <button form="service-form">

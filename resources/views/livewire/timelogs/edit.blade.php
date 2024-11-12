@@ -35,6 +35,7 @@
         <x-partials.action-link href="{{ route('customers.timelogs.index', $timelog->customer->id) }}"
                                 class="back">{{ __('app.back') }}</x-partials.action-link>
         <button class="delete"
+                onclick="return confirm('{{ __('app.are_you_sure') }}');"
                 wire:click="deleteTimelog({{ $timelog->id }})">
             {{ __('app.delete') }}
         </button>

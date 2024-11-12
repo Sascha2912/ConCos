@@ -26,7 +26,7 @@
             {{ $users->links() }}
         </div>
 
-        @can('create', $user)
+        @can('create', App\Models\User::class)
             <div class="button-bottom-bar">
                 <x-partials.action-link
                         href="{{ route('users.create') }}">{{ __('app.create_new_user') }}

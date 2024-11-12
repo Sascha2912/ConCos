@@ -26,7 +26,7 @@
             {{ $customers->links() }}
         </div>
 
-        @can('create', $customer)
+        @can('create', App\Models\Customer::class)
             <div class="button-bottom-bar">
                 <x-partials.action-link
                         href="{{ route('customers.create') }}">{{ __('app.create_new_customer') }}

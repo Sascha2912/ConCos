@@ -66,7 +66,7 @@
 
     </form>
     <div class="button-bottom-bar">
-        <x-partials.action-link href="/timelogs"
+        <x-partials.action-link href="{{ route('customers.timelogs.index', $customer->id) }}"
                                 class="back text-sm font-semibold leading-6 text-gray-900">{{ __('app.back') }}</x-partials.action-link>
         <button form="timelog-form">{{ __('app.log') }}</button>
     </div>

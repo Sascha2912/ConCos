@@ -72,6 +72,7 @@
     <div class="button-bottom-bar">
         <x-partials.action-link href="/contracts" class="back">{{ __('app.back') }}</x-partials.action-link>
         <button class="delete"
+                onclick="return confirm('{{ __('app.are_you_sure') }}');"
                 wire:click="deleteContract({{ $contract->id }})">
             {{ __('app.delete') }}
         </button>

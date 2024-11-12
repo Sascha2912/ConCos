@@ -66,7 +66,7 @@
             {{ $timelogs->links() }}
         </div>
 
-        @can('create', $timelog)
+        @can('create', App\Models\Timelog::class)
             <div class="button-bottom-bar">
                 <x-partials.action-link
                         href="{{ route('customers.timelogs.create', $customer->id) }}">{{ __('app.create_new_time_log') }}

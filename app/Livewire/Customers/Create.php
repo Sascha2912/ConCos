@@ -16,6 +16,7 @@ class Create extends FormBase {
     public function save() {
         $this->validateCustomer(); // Validierung der Kundendaten
 
+        // Kundendaten vorbereiten
         $data = [
             'name'              => $this->name,
             'managing_director' => $this->managing_director,
@@ -25,33 +26,14 @@ class Create extends FormBase {
             'house_number'      => $this->house_number,
             'city'              => $this->city,
             'zip_code'          => $this->zip_code,
+            'contracts'         => $this->tmpContracts,
+            'contract_dates'    => $this->contractDates,
         ];
-
-
-        // Bereite die Vertragsdaten für die Pivot-Tabelle vor
-        $contractsWithDates = [];
-        foreach($this->tmpContracts as $contract){
-            $start_date = $this->contractDates[$contract['id']]['start_date'];
-            if( !$start_date){
-                session()->flash('error', __('app.start_date_is_required_for_all_contracts'));
-
-                return;
-            }
-
-            $end_date = $this->contractDates[$contract['id']]['end_date'] ?? Carbon::parse($start_date)->addYears(2)->format('Y-m-d'); // Standardwert für Enddatum
-
-            $contractsWithDates[$contract['id']] = [
-                'create_date' => $this->contractDates[$contract['id']]['create_date'] ?? now()->format('Y-m-d'),
-                'start_date'  => $start_date,
-                'end_date'    => $end_date,
-            ];
-        }
-
 
         // Speicher den Vertrag über den ContractController
         try{
             $customerController = app(CustomerController::class);
-            $customerController->store(new \Illuminate\Http\Request($data, ['contracts' => $contractsWithDates]));
+            $customerController->store(new \Illuminate\Http\Request($data));
 
             session()->flash('message', __('app.customer_created_successfully'));
         }catch(\Exception $e){

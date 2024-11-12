@@ -32,7 +32,7 @@
             {{ $contracts->links() }}
         </div>
 
-        @can('create', $contract)
+        @can('create', App\Models\Contract::class)
             <div class="button-bottom-bar">
                 <x-partials.action-link
                         href="{{ route('contracts.create') }}">{{ __('app.create_new_contract') }}

@@ -42,7 +42,7 @@ class ServiceController extends Controller {
         // Hole den Standardvertrag '-' und weise ihn dem neuen Service zu
         $defaultContract = Contract::where('name', '-')->first();
         if($defaultContract){
-            $service->contracts()->attach($defaultContract->id);
+            $service->contracts()->attach($defaultContract, ['hours' => null]);
         }
 
         if($request->expectsJson()){
@@ -90,7 +90,7 @@ class ServiceController extends Controller {
         // Stelle sicher, dass der Service immer dem Standardvertrag zugeordnet bleibt
         $defaultContract = Contract::where('name', '-')->first();
         if($defaultContract && !$service->contracts()->where('contract_id', $defaultContract->id)->exists()){
-            $service->contracts()->attach($defaultContract->id);
+            $service->contracts()->sync($defaultContract->id);
         }
 
         session()->flash('message', __('app.service_updated_successfully'));

@@ -34,7 +34,7 @@
             {{ $services->links() }}
         </div>
 
-        @can('create', $service)
+        @can('create', App\Models\Service::class)
             <div class="button-bottom-bar">
                 <x-partials.action-link
                         href="{{ route('services.create') }}">{{ __('app.create_new_service') }}

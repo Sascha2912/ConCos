@@ -43,17 +43,7 @@ class ContractController extends Controller {
      */
     public function store(Request $request) {
         $data = $this->validate($request, Contract::validationRules(true));
-        $contract = $this->contractRepository->updateOrCreate($data);
-
-        // Füge die Services zum Vertrag hinzu
-        foreach($request->input('services') as $serviceId => $serviceData){
-            if($contract->flatrate === true){
-                $contract->services()->attach($serviceId, ['hours' => 0]);
-            }else{
-                $contract->services()->attach($serviceId, ['hours' => $serviceData['hours']]);
-            }
-
-        }
+        $contract = $this->contractRepository->updateOrCreate($data, $request);
 
         if($request->expectsJson()){
 
@@ -110,10 +100,7 @@ class ContractController extends Controller {
      */
     public function update(Request $request, Contract $contract) {
         $data = $this->validate($request, Contract::validationRules());
-        $contract = $this->contractRepository->updateOrCreate($data, $contract);
-
-        // Synchronisiere die Services und Stunden
-        $this->syncServices($contract, $request->input('services', []));
+        $contract = $this->contractRepository->updateOrCreate($data, $request, $contract);
 
         if($request->expectsJson()){
 
@@ -133,13 +120,5 @@ class ContractController extends Controller {
         $contract->delete();
 
         return redirect(route('contracts.index'));
-    }
-
-    protected function syncServices(Contract $contract, array $services) {
-        $servicesWithHours = [];
-        foreach($services as $serviceId => $data){
-            $servicesWithHours[$serviceId] = ['hours' => (int) $data['hours']];
-        }
-        $contract->services()->sync($servicesWithHours);
     }
 }

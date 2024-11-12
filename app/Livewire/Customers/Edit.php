@@ -27,18 +27,14 @@ class Edit extends FormBase {
             'house_number'      => $this->house_number,
             'city'              => $this->city,
             'zip_code'          => $this->zip_code,
-        ];
-
-        // Aktualisiere die Daten
-        $contractsData = [
-            'contracts'      => $this->tmpContracts,
-            'contract_dates' => $this->contractDates,
+            'contracts'         => $this->tmpContracts,
+            'contract_dates'    => $this->contractDates,
         ];
 
         // Speicher den Vertrag über den ContractController
         try{
             $customerController = app(CustomerController::class);
-            $customerController->update(new \Illuminate\Http\Request($data), $this->customer, $contractsData);
+            $customerController->update(new \Illuminate\Http\Request($data), $this->customer);
 
             session()->flash('message', __('app.customer_updated_successfully'));
         }catch(\Exception $e){
