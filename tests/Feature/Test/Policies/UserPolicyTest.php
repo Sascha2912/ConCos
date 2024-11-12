@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Test\Policies;
 
 use App\Models\User;
 use App\Policies\UserPolicy;
@@ -8,11 +8,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserPolicyTest extends TestCase {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
-    use RefreshDatabase;
-
     protected function setUp(): void {
         parent::setUp();
         $this->policy = new UserPolicy();
@@ -93,4 +93,25 @@ class UserPolicyTest extends TestCase {
         $this->assertFalse($this->policy->delete($this->user, $otherUser)->allowed());
     }
 
+    // ########## Tests for restore ##########
+    public function test_admin_can_restore_user() {
+        $otherUser = User::factory()->create();
+        $this->assertTrue($this->policy->restore($this->admin, $otherUser)->allowed());
+    }
+
+    public function test_non_admin_cannot_restore_user() {
+        $otherUser = User::factory()->create();
+        $this->assertFalse($this->policy->restore($this->user, $otherUser)->allowed());
+    }
+
+    // ########## Tests for forceDelete ##########
+    public function test_admin_can_force_delete_user() {
+        $otherUser = User::factory()->create();
+        $this->assertTrue($this->policy->forceDelete($this->admin, $otherUser)->allowed());
+    }
+
+    public function test_non_admin_cannot_force_delete_user() {
+        $otherUser = User::factory()->create();
+        $this->assertFalse($this->policy->forceDelete($this->user, $otherUser)->allowed());
+    }
 }
