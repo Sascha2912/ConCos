@@ -122,8 +122,6 @@ class TimelogControllerTest extends TestCase {
         $response->assertViewIs('timelogs.show');
         $response->assertViewHas('timelog', $timelog);
         $response->assertViewHas('customer', $customer);
-        $response->assertViewHas('contracts');
-        $response->assertViewHas('services');
     }
 
     // ########## Tests for edit ##########
@@ -146,9 +144,6 @@ class TimelogControllerTest extends TestCase {
         $response->assertViewIs('timelogs.edit');
         $response->assertViewHas('timelog', $timelog);
         $response->assertViewHas('customer', $customer);
-        $response->assertViewHas('contracts');
-        $response->assertViewHas('services');
-        $response->assertViewHas('serviceContractMap');
     }
 
     // ########## Tests for update ##########

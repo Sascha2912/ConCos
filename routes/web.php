@@ -7,7 +7,6 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SetUserLocale;
 
 // ########## Group Routes for Authentication ##########

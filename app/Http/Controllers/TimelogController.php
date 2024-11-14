@@ -69,31 +69,20 @@ class TimelogController extends Controller {
      */
     public function show(Request $request, Timelog $timelog) {
         $customer = $timelog->customer;
-        $contract = $timelog->contract;
-
-
-        $contracts = $customer ? $customer->contracts()->get() : collect();
-        $services = $contract->services()->get();
 
         if($request->expectsJson()){
 
             return response([
-
-                'timelog'   => $timelog,
-                'customer'  => $customer,
-                'contracts' => $contracts,
-                'services'  => $services,
-
+                'customer' => $customer,
+                'timelog'  => $timelog,
+                'success'  => true,
             ]);
         }
 
-        return view('timelogs.show',
-            [
-                'timelog'   => $timelog,
-                'customer'  => $customer,
-                'contracts' => $contracts,
-                'services'  => $services,
-            ]);
+        return view('timelogs.show', [
+            'customer' => $customer,
+            'timelog'  => $timelog,
+        ]);
     }
 
     /**
@@ -101,26 +90,11 @@ class TimelogController extends Controller {
      */
     public function edit(Timelog $timelog) {
         $customer = $timelog->customer;
-        $contract = $timelog->contract;
-
-
-        $contracts = $customer->contracts;
-        $services = $contract->services;
-
-        // Erzeuge ein Mapping von Service-ID zu Contract-ID
-        $serviceContractMap = $contracts->flatMap(function($contract) {
-            return $contract->services->mapWithKeys(function($service) use ($contract) {
-                return [$service->id => $contract->id];
-            });
-        });
 
         return view('timelogs.edit',
             [
-                'timelog'            => $timelog,
-                'customer'           => $customer,
-                'contracts'          => $contracts,
-                'services'           => $services,
-                'serviceContractMap' => $serviceContractMap,
+                'timelog'  => $timelog,
+                'customer' => $customer,
             ]);
     }
 
