@@ -20,7 +20,9 @@
 </main>
 
 <footer>
-    Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+    Abschlussprojekt (KWV), von Sascha Holzigel, 2024, umgesetzt mit Laravel
+    v{{ Illuminate\Foundation\Application::VERSION }} (PHP
+    v{{ PHP_VERSION }})
 </footer>
 
 </body>
