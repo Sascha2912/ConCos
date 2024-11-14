@@ -28,14 +28,16 @@
                     :required="true"/>
 
             <!-- Dropdown für Rolle -->
-            <x-forms.select-field
-                    name="role"
-                    label="{{ __('app.role') }}"
-                    :options="$roles"
-                    selected="{{ $user->role }}"
-                    value="{{ $user->role }}"
-                    :disabled="!$user->isAdmin()"
-            />
+            @can('update', $user)
+                <x-forms.select-field
+                        name="role"
+                        label="{{ __('app.role') }}"
+                        :options="$roles"
+                        selected="{{ $user->role }}"
+                        value="{{ $user->role }}"
+                        :disabled="!auth()->user()->isAdmin()"
+                />
+            @endcannot
 
             <x-forms.input-field
                     name="current_password"

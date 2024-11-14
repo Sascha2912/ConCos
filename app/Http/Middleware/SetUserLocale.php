@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class SetUserLocale {
     /**
@@ -14,7 +15,7 @@ class SetUserLocale {
      */
     public function handle(Request $request, Closure $next): Response {
 
-        \Log::info('SetUserLocale Middleware wurde aufgerufen');
+        Log::info('SetUserLocale Middleware wurde aufgerufen');
 
         // Prüfen, ob der Benutzer authentifiziert ist
         if(auth()->check()){
