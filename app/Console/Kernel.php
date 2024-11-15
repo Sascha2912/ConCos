@@ -14,9 +14,14 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        // Hier die geplanten Aufgaben hinzufügen
-        // Geplanten Command hinzufügen, der am letzten Tag des Monats um Mitternacht ausgeführt wird
+        // Hier geplanten Aufgaben hinzufügen
+
+        // Generiert am letzten Tag des Monats für jeden Kunden, einen PDF-Monatsbericht
         $schedule->command('report:generate-monthly')->monthlyOn(Carbon::now()->endOfMonth()->day, '00:00');
+        // Jedes halbe Jahr werden alle PDF-Monatsberichte auf ihre existenz geprüft, wenn welche fehlen werden sie neu generiert
+        if(in_array(now()->month, [1, 7])){
+            $schedule->command('report:generate-historical-customer-monthly-reports')->monthlyOn(1, '00:00');
+        }
     }
 
     /**
